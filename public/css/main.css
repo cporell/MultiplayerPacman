@@ -1,0 +1,152 @@
+/* Main.css created by Connor Porell for CS4241 Project 6*/
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+@import url(https://fonts.googleapis.com/css?family=Raleway);
+@import url(https://fonts.googleapis.com/css?family=Lobster);
+
+body
+{
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", 'Montserrat', ssans-serif, 'Raleway', sans-serif, 'Lobster', cursive;
+  background-color: #D8CAA8;
+}
+
+body > article
+{
+    text-align: center;
+}
+
+header, footer
+{
+    background-color: #7CAC2F; 
+}
+
+hr
+{
+     padding: 0; 
+     border: none; 
+     border-top: medium double #333; 
+     color: #333; 
+     text-align: center;
+     /* CSS code for <hr> from https://css-tricks.com/examples/hrs/ */
+}
+
+h1
+{
+  margin: 10px 0;
+  font-size: 3em;
+  font-family: 'Lobster';
+  color: #382513;
+}
+
+h2
+{
+    margin: 3px 3px 3px 3px;
+    font-family: 'Lobster';
+    font-size: 1.7em;
+    color: #382513;
+}
+
+.header-note
+{
+  margin: 5px 0 0 0;
+  font-family: 'Raleway';
+  color: #284907;
+  font-size: 1.25em;
+}
+
+.copyright
+{
+    text-align:center;
+  font-size: 1em;
+  margin: 3px 0 0 0;
+}
+
+.center
+{
+    text-align : center;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.picCenter
+{
+    margin-left:auto;
+    margin-right:auto;
+    display:block;
+}
+
+.tableCenter
+{
+    margin-left : auto;
+    margin-right : auto;
+}
+
+table
+{
+    border: groove;
+    border-collapse:collapse;
+    width: 60%;
+}
+
+thead
+{
+    font-family: 'Montserrat';
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+th
+{
+    border:double;
+    border-width:medium;
+    padding: 2px 5px 2px 5px;
+}
+
+td
+{
+    border:groove;
+    border-width:thin;
+    padding: 2px 5px 2px 5px;
+}
+
+tr
+{
+    font-family: 'Raleway';
+}
+
+a
+{
+    color: #382513;
+    text-decoration: none;
+    font-variant: normal;
+    font-style:normal;
+}
+
+p
+{
+    font-family: 'Raleway'
+}
+
+span
+{
+    font-family: 'Montserrat';
+    color: #7CAC2F;
+    padding-bottom:8px;
+    padding-top:0px;
+}
+
+.bgColor1
+{
+    background-color: #284907;
+    text-decoration:none;
+    color: #FFFFFF;
+}
+
+input
+{
+    font-family: "Montserrat";
+}
+
+input.fullList
+{
+    font-size: 1.5em;
+}

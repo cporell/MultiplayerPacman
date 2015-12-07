@@ -1,0 +1,18 @@
+{
+  "name": "GFP-4241-node",
+  "version": "0.0.1",
+  "description": "WPI CS 4241 assignment 3",
+  "author": "Connor Porell",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "1.14.1",
+    "json":  "9.0.3",
+    "csv": "0.4.6",
+    "express": "4.9.0",
+    "multer": "^1.1.0",
+    "ya-csv": "0.9.4"
+  }
+}
