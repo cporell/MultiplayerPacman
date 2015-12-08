@@ -84,7 +84,7 @@ table
 {
     border: groove;
     border-collapse:collapse;
-    width: 60%;
+    width: auto;
 }
 
 thead
@@ -98,14 +98,12 @@ th
 {
     border:double;
     border-width:medium;
-    padding: 2px 5px 2px 5px;
 }
 
 td
 {
     border:groove;
     border-width:thin;
-    padding: 2px 5px 2px 5px;
 }
 
 tr
@@ -149,4 +147,20 @@ input
 input.fullList
 {
     font-size: 1.5em;
+}
+
+.grid-square
+{
+    height: 30px;
+    width: 30px;
+}
+
+.wall
+{
+    background-color: darkblue;
+}
+
+.floor
+{
+    background-color: #333333;
 }
