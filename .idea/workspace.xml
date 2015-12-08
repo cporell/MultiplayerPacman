@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d4f20047-f73e-4b59-9882-30be6e7dea5d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/index.html" afterPath="$PROJECT_DIR$/public/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/index.js" afterPath="$PROJECT_DIR$/public/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/css/main.css" afterPath="$PROJECT_DIR$/public/css/main.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js" afterPath="$PROJECT_DIR$/server.js" />
     </list>
     <ignored path="MultiplayerPacman.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,8 +31,8 @@
       <file leaf-file-name="server.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="38" max-vertical-offset="663">
-              <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="735" max-vertical-offset="1377">
+              <caret line="73" column="5" selection-start-line="73" selection-start-column="5" selection-end-line="73" selection-end-column="5" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -43,8 +43,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.4194078" vertical-offset="514" max-vertical-offset="1751">
-              <caret line="81" column="1" selection-start-line="81" selection-start-column="1" selection-end-line="81" selection-end-column="1" />
+            <state vertical-scroll-proportion="0.91611844" vertical-offset="1517" max-vertical-offset="2533">
+              <caret line="122" column="13" selection-start-line="122" selection-start-column="13" selection-end-line="122" selection-end-column="13" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -55,7 +55,7 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.153846" vertical-offset="51" max-vertical-offset="646">
+            <state vertical-scroll-proportion="-8.153846" vertical-offset="77" max-vertical-offset="646">
               <caret line="17" column="23" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
               <folding />
             </state>
@@ -65,8 +65,8 @@
       <file leaf-file-name="main.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/css/main.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2312" max-vertical-offset="2907">
-              <caret line="159" column="31" selection-start-line="159" selection-start-column="31" selection-end-line="159" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2210" max-vertical-offset="2805">
+              <caret line="100" column="1" selection-start-line="100" selection-start-column="1" selection-end-line="100" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -81,8 +81,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/public/index.html" />
-        <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/public/css/main.css" />
+        <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/public/index.js" />
       </list>
     </option>
@@ -194,7 +194,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Assignments/homework5" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
   </component>
   <component name="RunManager">
@@ -287,36 +287,36 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.153846" vertical-offset="77" max-vertical-offset="646">
+          <caret line="17" column="23" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2091" max-vertical-offset="2805">
+          <caret line="100" column="1" selection-start-line="100" selection-start-column="1" selection-end-line="100" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="38" max-vertical-offset="663">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="735" max-vertical-offset="1377">
+          <caret line="73" column="5" selection-start-line="73" selection-start-column="5" selection-end-line="73" selection-end-column="5" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2227" max-vertical-offset="2907">
-          <caret line="159" column="31" selection-start-line="159" selection-start-column="31" selection-end-line="159" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.153846" vertical-offset="51" max-vertical-offset="646">
-          <caret line="17" column="23" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.4194078" vertical-offset="514" max-vertical-offset="1751">
-          <caret line="81" column="1" selection-start-line="81" selection-start-column="1" selection-end-line="81" selection-end-column="1" />
+        <state vertical-scroll-proportion="0.91611844" vertical-offset="1517" max-vertical-offset="2533">
+          <caret line="122" column="13" selection-start-line="122" selection-start-column="13" selection-end-line="122" selection-end-column="13" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
