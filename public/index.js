@@ -17,6 +17,9 @@ var POWER_PELLET_VALUE = 3;
 
 var mazeTable;
 
+var pacmanStartingX = 1;
+var pacmanStartingY = 6;
+
 window.setInterval(getTableFromServer, 100);
 
 function displayTables()
@@ -80,6 +83,14 @@ function fillMaze()
     }
 }
 
+function placeCharacters(){
+    var tableData = document.getElementById("x_" + pacmanStartingX + "-y_" + pacmanStartingY);
+    tableData.innerHTML = "<img src=\"assets/pacman.gif\" id=\"pacman-gif\">";
+    var image = document.getElementById("pacman-gif");
+    image.style.width = '80%';
+    image.style.height = 'auto';
+}
+
 function getTableFromServer()
 {
     url = "/table";
@@ -104,6 +115,8 @@ function handleTable(req) {
             console.log(mazeTable);
             createMaze();
             fillMaze();
+            placeCharacters();
+            testAnimation();
             isStartup = false;
         }
         else {
@@ -141,4 +154,76 @@ function updateMazeSquare(squareX, squareY, newVal){
     else if (newVal == POWER_PELLET_VALUE){
         squareElement.innerHTML = "<img src=\"assets/powerpellet.png\">";
     }
+}
+
+var imgObj;
+
+function testAnimation(){
+    imgObj = document.getElementById('pacman-gif');
+    imgObj.style.position= 'relative';
+    imgObj.style.left = '0px';
+    moveRight();
+    console.log("Move right called");
+}
+
+function moveRight(){
+    imgObj.style.left = parseInt(imgObj.style.left) + 1 + 'px';
+    animate = setTimeout(moveRight,20); // call moveRight in 20msec
+    if (parseInt(imgObj.style.left) >= 600){
+        clearTimeout(animate);
+    }
+    console.log(imgObj.style.left);
+    var pacmanSquare = getSquareForObject("pacman-gif");
+    console.log("Pacman is at (" + pacmanSquare.x + ", " + pacmanSquare.y + ")");
+
+    if (pacmanSquare.x != -1 && pacmanSquare.y != -1 && (pacmanSquare.x != pacmanStartingX || pacmanSquare.y != pacmanStartingY)) {
+        var pacmanSquareData = mazeTable[pacmanSquare.x][pacmanSquare.y];
+        if (pacmanSquareData == PELLET_VALUE || pacmanSquareData == POWER_PELLET_VALUE) {
+            var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
+            squareElement.innerHTML = "";
+            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
+            sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+        }
+    }
+}
+
+function isCollision(rect1, rect2){
+    return !(rect1.right < rect2.left ||
+    rect1.left > rect2.right ||
+    rect1.bottom < rect2.top ||
+    rect1.top > rect2.bottom);
+}
+
+function getSquareForObject(elementId){
+    var coordinate;
+    var givenElement = document.getElementById(elementId);
+    for (var i = 0; i < gridWidth; i++){
+        for (var j = 0; j < gridHeight; j++){
+            var squareElement = document.getElementById("x_" + i + "-y_" + j);
+            gridSquare = squareElement.getBoundingClientRect();
+            givenRect = givenElement.getBoundingClientRect();
+            var givenRectCenter;
+            givenRectCenter = {x: (givenRect.left + (givenRect.width / 2)), y: givenRect.top + (givenRect.height / 2)};
+            var isElementInSquare = doesRectContainPoint(gridSquare, givenRectCenter);
+            if (isElementInSquare){
+                var squareCoords = {x: i, y: j};
+                return squareCoords;
+            }
+        }
+    }
+    var squareCoords = {x: -1, y: -1};
+    return squareCoords;
+}
+
+function doesRectContainPoint(rect, point){
+    if (point.x <= rect.right && point.x >= rect.left && point.y <= rect.bottom && point.y >= rect.top){
+        return true;
+    }
+    return false;
+}
+
+function sendNewTableData(tableX, tableY, newVal){
+    var req = new XMLHttpRequest();
+    req.open('POST', '/pacman');
+    req.send('tableX=' + tableX + '&tableY=' + tableY + '&newVal=' + newVal);
 }

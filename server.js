@@ -39,7 +39,7 @@ var mazeTable = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 
 function initPage()
 {
-    setInterval(testChangeValue, 1000);
+
 }
 
 var app = express();
@@ -56,8 +56,25 @@ app.get('/table', function (req, res) {
     res.send(mazeTable);
 });
 
+app.post('/pacman', function(req, res){
+    var chunk = "";
+    req.on('data', function(data) {
+        chunk += data;
+    });
+    req.on("end", function() {
+        chunk = chunk.split('&');
+        console.log("Chunk = " + chunk);
+        var tableX = chunk[0].split('=')[1];
+        var tableY = chunk[1].split('=')[1];
+        var newVal = chunk[2].split('=')[1];
+        mazeTable[tableX][tableY] = newVal;
+        res.end();
+    });
+});
+
 app.listen(port, function() {
-  console.log('App is listening on port ' + port);
+    setInterval(testChangeValue, 1000);
+    console.log('App is listening on port ' + port);
 });
 
 app.use(express.static(path.join(__dirname, '/public')));
@@ -72,5 +89,4 @@ function testChangeValue(){
     else {
         mazeTable[i][j] = FLOOR_VALUE;
     }
-    console.log("Changing value on server");
 }
