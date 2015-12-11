@@ -65,8 +65,9 @@ app.get('/ghost', function (req, res) {
 });
 
 app.get('/pacman', function (req, res) {
-    var pagePacman = page + "<script src='index.js' type='text/javascript'></script>";
+    var pagePacman = page;
     pagePacman += getStartingPositionsScript();
+    pagePacman += "<script src='pacman.js' type='text/javascript'></script>";
     res.send(pagePacman);
 });
 
