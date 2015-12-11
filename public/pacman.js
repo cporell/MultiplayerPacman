@@ -24,6 +24,11 @@ var pacmanStartingY = 6;
 var currentPacmanX = 1;
 var currentPacmanY = 6;
 
+var distanceToCenter = 0;
+var isPacmanAdjusting = false;
+
+var pacmanPixelsPerTick = 2;
+
 MovementEnum = {
     UP: 0,
     RIGHT: 1,
@@ -94,121 +99,64 @@ function fillMaze()
             else if (tableValue == POWER_PELLET_VALUE){
                 tableData.innerHTML = "<img src=\"assets/powerpellet.png\">";
             }
-            else if (tableValue == WALL_VALUE)
-            {
-                tableData.innerHTML = setWallSprite(i, j);
-            }
         }
     }
-}
-
-function setWallSprite(wallPosX, wallPosY)
-{
-    // Check the N, S, E, and W tils adjacent to this one to determine which maze sprite to place.
-    // Checks for being at map bounds are done at this time as well.
-    var boundings = [0, 0, 0, 0]; // N E S W
-
-    // If the tile is on the map extremeties, set the appropriate boundings
-
-    if (wallPosY == 0) { boundings[0] = 0; }
-    else if (wallPosY == (gridHeight - 1)) { boundings[2] = 0; }
-    if (wallPosX == 0) { boundings[3] = 0; }
-    else if (wallPosX == (gridWidth - 1)) { boundings[1] = 0; }
-
-    // is there a wall to the north?
-    if (wallPosY != 0)
-    {
-        if (mazeTable[wallPosX][wallPosY - 1] == WALL_VALUE) {
-            boundings[0] = 1;
-        }
-    }
-    
-    // is there a wall to the east?
-    if (wallPosX != gridWidth - 1)
-    {
-        if (mazeTable[wallPosX + 1][wallPosY] == WALL_VALUE) {
-            boundings[1] = 1;
-        }
-    }
-
-    // is there a wall to the south?
-    if (wallPosY != gridHeight - 1)
-    {
-        if (mazeTable[wallPosX][wallPosY + 1] == WALL_VALUE) {
-            boundings[2] = 1;
-        }
-    }
-
-    // is there a wall to the west?
-    if (wallPosX != 0)
-    {
-        if (mazeTable[wallPosX - 1][wallPosY] == WALL_VALUE) {
-            boundings[3] = 1;
-        }
-    }
-    
-    var wallType = "";
-    // now run through the boundings array to see which wall we should draw
-    if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 0)
-    {
-        wallType = "";
-    }
-    if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 0) {
-        wallType = "cap-top";
-    }
-    if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 1) {
-        wallType = "cap-right";
-    } //
-    if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 0) {
-        wallType = "cap-bot";
-    } //
-    if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 0) {
-        wallType = "cap-left";
-    } //
-    if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 1) {
-        wallType = "long-horiz";
-    } //
-    if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 0) {
-        wallType = "long-vert";
-    } //
-    if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 0) {
-        wallType = "t-TRB";
-    } // 
-    if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 1) {
-        wallType = "t-RBL";
-    }
-    if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 1) {
-        wallType = "t-TBL";
-    }
-    if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 1) {
-        wallType = "t-TRL";
-    }
-    if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 0) {
-        wallType = "l-NE";
-    }
-    if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 0) {
-        wallType = "l-SE";
-    }
-    if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 1) {
-        wallType = "l-NW";
-    }
-    if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 1) {
-        wallType = "l-SW";
-    }
-    if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 1) {
-        wallType = "4way";
-    }
-
-    var strHTML = "<img src='assets/wall-" + wallType + ".png' class='wall-square'>";
-
-    console.log("At " + wallPosX + ", " + wallPosY + " bounding is " + boundings + "walltype is " + wallType);
-    return strHTML;
 }
 
 function placeCharacters(){
     var tableData = document.getElementById("x_" + pacmanStartingX + "-y_" + pacmanStartingY);
     tableData.innerHTML = "<img src=\"assets/pacman.gif\" id=\"pacman-gif\">";
     var image = document.getElementById("pacman-gif");
+    image.style.width = '80%';
+    image.style.height = 'auto';
+}
+
+function placeCharacters(){
+    for(i = 0; i < 5; i++){
+        var gifName = "blinky.gif";
+        var x = 0;
+        var y = 0;
+        var id = "id";
+        switch(i){
+            case 0:
+                gifName = "pacman.gif";
+                x = pacmanStartX;
+                y = pacmanStartY;
+                id = "pacman-gif";
+                break;
+            case 1:
+                gifName = "blinky.gif";
+                x = ghost1StartX;
+                y = ghost1StartY;
+                id = "ghost1ID";
+                break;
+            case 2:
+                gifName = "clyde.gif";
+                x = ghost2StartX;
+                y = ghost2StartY;
+                id = "ghost2ID";
+                break;
+            case 3:
+                gifName = "inky.gif";
+                x = ghost3StartX;
+                y = ghost3StartY;
+                id = "ghost3ID";
+                break;
+            case 4:
+                gifName = "pinky.gif";
+                x = ghost4StartX;
+                y = ghost4StartY;
+                id = "ghost4ID";
+                break;
+        }
+        placeOneCharacter(gifName, x, y, id);
+    }
+}
+
+function placeOneCharacter(gifName, x, y, id){
+    var tableData = document.getElementById("x_" + x + "-y_" + y);
+    tableData.innerHTML = "<img src=\"assets/" + gifName + "\" id=\""+ id +"\">";
+    var image = document.getElementById(id);
     image.style.width = '80%';
     image.style.height = 'auto';
 }
@@ -231,7 +179,6 @@ function handleTable(req) {
     }
 
     if(req.status === 200) {
-        console.log("Handling table");
         if (isStartup) {
             mazeTable = eval(req.responseText);
             console.log(mazeTable);
@@ -302,11 +249,36 @@ function movePacman(){
 
     var isPacmanMoving = isPacmanHittingWall();
 
-    if (!isPacmanMoving) {
-        currentPacmanDirection = MovementEnum.STOPPED;
+    if (!isPacmanMoving && !isPacmanAdjusting) {
+        getDistanceToCenter("pacman-gif", pacmanSquare.x, pacmanSquare.y);
+        isPacmanAdjusting = true;
     }
 
     animate = setTimeout(movePacman, 20); // call movePacman in 20msec
+}
+
+function getDistanceToCenter(pacmanId, squareX, squareY){
+    var pacmanElement = document.getElementById(pacmanId);
+    var gridSquareElement = document.getElementById("x_" + squareX + "-y_" + squareY);
+    var pacmanRect = pacmanElement.getBoundingClientRect();
+    var gridSquareRect = gridSquareElement.getBoundingClientRect();
+    var pacmanRectCenter = {x: (pacmanRect.left + (pacmanRect.width / 2)), y: pacmanRect.top + (pacmanRect.height / 2)};
+    var squareRectCenter = {x: (gridSquareRect.left + (gridSquareRect.width / 2)), y: gridSquareRect.top + (gridSquareRect.height / 2)};
+
+    switch (currentPacmanDirection){
+        case MovementEnum.UP:
+            distanceToCenter = Math.abs(pacmanRectCenter.y - squareRectCenter.y);
+            break;
+        case MovementEnum.RIGHT:
+            distanceToCenter = Math.abs(pacmanRectCenter.x - squareRectCenter.x);
+            break;
+        case MovementEnum.DOWN:
+            distanceToCenter = Math.abs(pacmanRectCenter.y - squareRectCenter.y);
+            break;
+        case MovementEnum.LEFT:
+            distanceToCenter = Math.abs(pacmanRectCenter.x - squareRectCenter.x);
+            break;
+    }
 }
 
 function isPacmanHittingWall(){
@@ -319,6 +291,9 @@ function isPacmanHittingWall(){
         if (isNextSquareWall(nextSquare.x, nextSquare.y)){
             return false;
         }
+        return true;
+    }
+    else {
         return true;
     }
 }
@@ -347,20 +322,34 @@ function checkInput(){
 }
 
 function movePacmanImage(){
+    if (isPacmanAdjusting && distanceToCenter <= 0){
+        currentPacmanDirection = MovementEnum.STOPPED;
+        isPacmanAdjusting = false;
+        return;
+    }
+
     switch(currentPacmanDirection){
         case MovementEnum.UP:
-            imgObj.style.top = parseInt(imgObj.style.top) - 2 + 'px';
+            imgObj.style.top = parseInt(imgObj.style.top) - pacmanPixelsPerTick + 'px';
             break;
         case MovementEnum.RIGHT:
-            imgObj.style.left = parseInt(imgObj.style.left) + 2 + 'px';
+            imgObj.style.left = parseInt(imgObj.style.left) + pacmanPixelsPerTick + 'px';
             break;
         case MovementEnum.DOWN:
             console.log(imgObj.style.top);
-            imgObj.style.top = parseInt(imgObj.style.top) + 2 + 'px';
+            imgObj.style.top = parseInt(imgObj.style.top) + pacmanPixelsPerTick + 'px';
             break;
         case MovementEnum.LEFT:
-            imgObj.style.left = parseInt(imgObj.style.left) - 2 + 'px';
+            imgObj.style.left = parseInt(imgObj.style.left) - pacmanPixelsPerTick + 'px';
             break;
+    }
+
+    if (isPacmanAdjusting){
+        distanceToCenter -= pacmanPixelsPerTick;
+        if (distanceToCenter <= 0){
+            isPacmanAdjusting = false;
+            currentPacmanDirection = MovementEnum.STOPPED;
+        }
     }
 }
 
@@ -517,19 +506,15 @@ function checkKey(e) {
     e = e || window.event;
 
     if (e.keyCode == '38' || e.keyCode == '87') {
-        console.log("Up pressed");
         currentPacmanInput = MovementEnum.UP;
     }
     else if (e.keyCode == '40' || e.keyCode == '83') {
-        console.log("Down pressed");
         currentPacmanInput = MovementEnum.DOWN;
     }
     else if (e.keyCode == '37' || e.keyCode == '65') {
-        console.log("Left pressed");
         currentPacmanInput = MovementEnum.LEFT;
     }
     else if (e.keyCode == '39' || e.keyCode == '68') {
-        console.log("Right pressed");
         currentPacmanInput = MovementEnum.RIGHT;
     }
 

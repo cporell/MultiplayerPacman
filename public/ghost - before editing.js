@@ -18,11 +18,13 @@ var POWER_PELLET_VALUE = 3;
 
 var mazeTable;
 
-var pacmanStartingX = 1;
-var pacmanStartingY = 6;
+var ghostStartingX = 1;
+var ghostStartingY = 6;
 
-var currentPacmanX = 1;
-var currentPacmanY = 6;
+var currentghostX = 1;
+var currentghostY = 6;
+
+var myGhostID = "ghost-id";
 
 MovementEnum = {
     UP: 0,
@@ -32,8 +34,8 @@ MovementEnum = {
     STOPPED: 4
 }
 
-var currentPacmanDirection = MovementEnum.STOPPED;
-var currentPacmanInput = null;
+var currentghostDirection = MovementEnum.STOPPED;
+var currentghostInput = null;
 
 window.setInterval(getTableFromServer, 100);
 document.onkeydown = checkKey;
@@ -94,121 +96,71 @@ function fillMaze()
             else if (tableValue == POWER_PELLET_VALUE){
                 tableData.innerHTML = "<img src=\"assets/powerpellet.png\">";
             }
-            else if (tableValue == WALL_VALUE)
-            {
-                tableData.innerHTML = setWallSprite(i, j);
-            }
         }
     }
-}
-
-function setWallSprite(wallPosX, wallPosY)
-{
-    // Check the N, S, E, and W tils adjacent to this one to determine which maze sprite to place.
-    // Checks for being at map bounds are done at this time as well.
-    var boundings = [0, 0, 0, 0]; // N E S W
-
-    // If the tile is on the map extremeties, set the appropriate boundings
-
-    if (wallPosY == 0) { boundings[0] = 0; }
-    else if (wallPosY == (gridHeight - 1)) { boundings[2] = 0; }
-    if (wallPosX == 0) { boundings[3] = 0; }
-    else if (wallPosX == (gridWidth - 1)) { boundings[1] = 0; }
-
-    // is there a wall to the north?
-    if (wallPosY != 0)
-    {
-        if (mazeTable[wallPosX][wallPosY - 1] == WALL_VALUE) {
-            boundings[0] = 1;
-        }
-    }
-    
-    // is there a wall to the east?
-    if (wallPosX != gridWidth - 1)
-    {
-        if (mazeTable[wallPosX + 1][wallPosY] == WALL_VALUE) {
-            boundings[1] = 1;
-        }
-    }
-
-    // is there a wall to the south?
-    if (wallPosY != gridHeight - 1)
-    {
-        if (mazeTable[wallPosX][wallPosY + 1] == WALL_VALUE) {
-            boundings[2] = 1;
-        }
-    }
-
-    // is there a wall to the west?
-    if (wallPosX != 0)
-    {
-        if (mazeTable[wallPosX - 1][wallPosY] == WALL_VALUE) {
-            boundings[3] = 1;
-        }
-    }
-    
-    var wallType = "";
-    // now run through the boundings array to see which wall we should draw
-    if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 0)
-    {
-        wallType = "";
-    }
-    if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 0) {
-        wallType = "cap-top";
-    }
-    if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 1) {
-        wallType = "cap-right";
-    } //
-    if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 0) {
-        wallType = "cap-bot";
-    } //
-    if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 0) {
-        wallType = "cap-left";
-    } //
-    if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 1) {
-        wallType = "long-horiz";
-    } //
-    if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 0) {
-        wallType = "long-vert";
-    } //
-    if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 0) {
-        wallType = "t-TRB";
-    } // 
-    if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 1) {
-        wallType = "t-RBL";
-    }
-    if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 1) {
-        wallType = "t-TBL";
-    }
-    if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 1) {
-        wallType = "t-TRL";
-    }
-    if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 0) {
-        wallType = "l-NE";
-    }
-    if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 0) {
-        wallType = "l-SE";
-    }
-    if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 1) {
-        wallType = "l-NW";
-    }
-    if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 1) {
-        wallType = "l-SW";
-    }
-    if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 1) {
-        wallType = "4way";
-    }
-
-    var strHTML = "<img src='assets/wall-" + wallType + ".png' class='wall-square'>";
-
-    console.log("At " + wallPosX + ", " + wallPosY + " bounding is " + boundings + "walltype is " + wallType);
-    return strHTML;
 }
 
 function placeCharacters(){
-    var tableData = document.getElementById("x_" + pacmanStartingX + "-y_" + pacmanStartingY);
-    tableData.innerHTML = "<img src=\"assets/pacman.gif\" id=\"pacman-gif\">";
-    var image = document.getElementById("pacman-gif");
+    for(i = 0; i < 5; i++){
+        var gifName = "blinky.gif";
+        var x = 0;
+        var y = 0;
+        var id = "id";
+        switch(i){
+            case 0:
+                gifName = "pacman.gif";
+                x = pacmanStartX;
+                y = pacmanStartY;
+                id = "pacman-gif";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+            case 1:
+                gifName = "blinky.gif";
+                x = ghost1StartX;
+                y = ghost1StartY;
+                id = "ghost1ID";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+            case 2:
+                gifName = "clyde.gif";
+                x = ghost2StartX;
+                y = ghost2StartY;
+                id = "ghost2ID";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+            case 3:
+                gifName = "inky.gif";
+                x = ghost3StartX;
+                y = ghost3StartY;
+                id = "ghost3ID";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+            case 4:
+                gifName = "pinky.gif";
+                x = ghost4StartX;
+                y = ghost4StartY;
+                id = "ghost4ID";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+        }
+        placeOneCharacter(gifName, x, y, id);
+    }
+}
+
+function placeOneCharacter(gifName, x, y, id){
+    var tableData = document.getElementById("x_" + x + "-y_" + y);
+    tableData.innerHTML = "<img src=\"assets/" + gifName + "\" id=\""+ id +"\">";
+    var image = document.getElementById(id);
     image.style.width = '80%';
     image.style.height = 'auto';
 }
@@ -231,14 +183,14 @@ function handleTable(req) {
     }
 
     if(req.status === 200) {
-        console.log("Handling table");
+        //console.log("Handling table");
         if (isStartup) {
             mazeTable = eval(req.responseText);
             console.log(mazeTable);
             createMaze();
             fillMaze();
             placeCharacters();
-            startPacman();
+            startghost();
             isStartup = false;
         }
         else {
@@ -280,42 +232,40 @@ function updateMazeSquare(squareX, squareY, newVal){
 
 var imgObj;
 
-function startPacman(){
-    imgObj = document.getElementById('pacman-gif');
+function startghost(){
+    imgObj = document.getElementById(myGhostID);
     imgObj.style.position= 'relative';
     imgObj.style.left = '0px';
     imgObj.style.top = '0px';
-    movePacman();
+    moveghost();
 }
 
-function movePacman(){
+function moveghost(){
 
-    movePacmanImage();
+    moveghostImage();
     checkInput();
 
-    var pacmanSquare = getSquareForObject("pacman-gif");
+    var ghostSquare = getSquareForObject(myGhostID);
 
-    removePellet(pacmanSquare);
+    currentghostX = ghostSquare.x;
+    currentghostY = ghostSquare.y;
 
-    currentPacmanX = pacmanSquare.x;
-    currentPacmanY = pacmanSquare.y;
+    var isghostMoving = isghostHittingWall();
 
-    var isPacmanMoving = isPacmanHittingWall();
-
-    if (!isPacmanMoving) {
-        currentPacmanDirection = MovementEnum.STOPPED;
+    if (!isghostMoving) {
+        currentghostDirection = MovementEnum.STOPPED;
     }
 
-    animate = setTimeout(movePacman, 20); // call movePacman in 20msec
+    animate = setTimeout(moveghost, 20); // call moveghost in 20msec
 }
 
-function isPacmanHittingWall(){
-    // If Pacman moves to a new grid square, check to see if the next one is a wall
-    if (currentPacmanDirection != MovementEnum.STOPPED){
+function isghostHittingWall(){
+    // If ghost moves to a new grid square, check to see if the next one is a wall
+    if (currentghostDirection != MovementEnum.STOPPED){
 
-        var nextSquare = getNextSquare(currentPacmanX, currentPacmanY, currentPacmanDirection);
+        var nextSquare = getNextSquare(currentghostX, currentghostY, currentghostDirection);
 
-        // If the next square is a wall, stop Pacman from moving
+        // If the next square is a wall, stop ghost from moving
         if (isNextSquareWall(nextSquare.x, nextSquare.y)){
             return false;
         }
@@ -323,31 +273,19 @@ function isPacmanHittingWall(){
     }
 }
 
-function removePellet(pacmanSquare){
-    // Remove the pellet from this square that Pacman is currently in
-    if (pacmanSquare.x != -1 && pacmanSquare.y != -1 && (pacmanSquare.x != pacmanStartingX || pacmanSquare.y != pacmanStartingY)) {
-        var pacmanSquareData = mazeTable[pacmanSquare.x][pacmanSquare.y];
-        if (pacmanSquareData == PELLET_VALUE || pacmanSquareData == POWER_PELLET_VALUE) {
-            var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
-            squareElement.innerHTML = "";
-            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
-            sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
-        }
-    }
-}
 
 function checkInput(){
-    if (currentPacmanDirection == MovementEnum.STOPPED){
-        if (currentPacmanInput != null){
-            console.log("Changing Pacman direction");
-            currentPacmanDirection = currentPacmanInput;
-            currentPacmanInput = null;
+    if (currentghostDirection == MovementEnum.STOPPED){
+        if (currentghostInput != null){
+            console.log("Changing ghost direction");
+            currentghostDirection = currentghostInput;
+            currentghostInput = null;
         }
     }
 }
 
-function movePacmanImage(){
-    switch(currentPacmanDirection){
+function moveghostImage(){
+    switch(currentghostDirection){
         case MovementEnum.UP:
             imgObj.style.top = parseInt(imgObj.style.top) - 2 + 'px';
             break;
@@ -430,7 +368,7 @@ function doesRectContainPoint(rect, point){
 
 function sendNewTableData(tableX, tableY, newVal){
     var req = new XMLHttpRequest();
-    req.open('POST', '/pacman');
+    req.open('POST', '/ghost');
     req.send('tableX=' + tableX + '&tableY=' + tableY + '&newVal=' + newVal);
 }
 
@@ -475,11 +413,11 @@ function sendPacmanUpdate(){
     pacman = {oLocation: "oLocation here", direction: "direction here"};
     sendObjectToSockets('send pacman update', pacman);
 }
-//sendPacmanUpdate();
+//sendghostUpdate();
 
-function handlePacmanUpdate(pacman){
-    oLocation = pacman.oLocation;
-    direction = pacman.direction;
+function handlePacmanUpdate(ghost){
+    oLocation = ghost.oLocation;
+    direction = ghost.direction;
 
 }
 
@@ -518,19 +456,19 @@ function checkKey(e) {
 
     if (e.keyCode == '38' || e.keyCode == '87') {
         console.log("Up pressed");
-        currentPacmanInput = MovementEnum.UP;
+        currentghostInput = MovementEnum.UP;
     }
     else if (e.keyCode == '40' || e.keyCode == '83') {
         console.log("Down pressed");
-        currentPacmanInput = MovementEnum.DOWN;
+        currentghostInput = MovementEnum.DOWN;
     }
     else if (e.keyCode == '37' || e.keyCode == '65') {
         console.log("Left pressed");
-        currentPacmanInput = MovementEnum.LEFT;
+        currentghostInput = MovementEnum.LEFT;
     }
     else if (e.keyCode == '39' || e.keyCode == '68') {
         console.log("Right pressed");
-        currentPacmanInput = MovementEnum.RIGHT;
+        currentghostInput = MovementEnum.RIGHT;
     }
 
 }
