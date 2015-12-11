@@ -24,6 +24,11 @@ var pacmanStartingY = 6;
 var currentPacmanX = 1;
 var currentPacmanY = 6;
 
+var distanceToCenter = 0;
+var isPacmanAdjusting = false;
+
+var pacmanPixelsPerTick = 2;
+
 MovementEnum = {
     UP: 0,
     RIGHT: 1,
@@ -174,7 +179,6 @@ function handleTable(req) {
     }
 
     if(req.status === 200) {
-        console.log("Handling table");
         if (isStartup) {
             mazeTable = eval(req.responseText);
             console.log(mazeTable);
@@ -245,11 +249,36 @@ function movePacman(){
 
     var isPacmanMoving = isPacmanHittingWall();
 
-    if (!isPacmanMoving) {
-        currentPacmanDirection = MovementEnum.STOPPED;
+    if (!isPacmanMoving && !isPacmanAdjusting) {
+        getDistanceToCenter("pacman-gif", pacmanSquare.x, pacmanSquare.y);
+        isPacmanAdjusting = true;
     }
 
     animate = setTimeout(movePacman, 20); // call movePacman in 20msec
+}
+
+function getDistanceToCenter(pacmanId, squareX, squareY){
+    var pacmanElement = document.getElementById(pacmanId);
+    var gridSquareElement = document.getElementById("x_" + squareX + "-y_" + squareY);
+    var pacmanRect = pacmanElement.getBoundingClientRect();
+    var gridSquareRect = gridSquareElement.getBoundingClientRect();
+    var pacmanRectCenter = {x: (pacmanRect.left + (pacmanRect.width / 2)), y: pacmanRect.top + (pacmanRect.height / 2)};
+    var squareRectCenter = {x: (gridSquareRect.left + (gridSquareRect.width / 2)), y: gridSquareRect.top + (gridSquareRect.height / 2)};
+
+    switch (currentPacmanDirection){
+        case MovementEnum.UP:
+            distanceToCenter = Math.abs(pacmanRectCenter.y - squareRectCenter.y);
+            break;
+        case MovementEnum.RIGHT:
+            distanceToCenter = Math.abs(pacmanRectCenter.x - squareRectCenter.x);
+            break;
+        case MovementEnum.DOWN:
+            distanceToCenter = Math.abs(pacmanRectCenter.y - squareRectCenter.y);
+            break;
+        case MovementEnum.LEFT:
+            distanceToCenter = Math.abs(pacmanRectCenter.x - squareRectCenter.x);
+            break;
+    }
 }
 
 function isPacmanHittingWall(){
@@ -262,6 +291,9 @@ function isPacmanHittingWall(){
         if (isNextSquareWall(nextSquare.x, nextSquare.y)){
             return false;
         }
+        return true;
+    }
+    else {
         return true;
     }
 }
@@ -290,20 +322,34 @@ function checkInput(){
 }
 
 function movePacmanImage(){
+    if (isPacmanAdjusting && distanceToCenter <= 0){
+        currentPacmanDirection = MovementEnum.STOPPED;
+        isPacmanAdjusting = false;
+        return;
+    }
+
     switch(currentPacmanDirection){
         case MovementEnum.UP:
-            imgObj.style.top = parseInt(imgObj.style.top) - 2 + 'px';
+            imgObj.style.top = parseInt(imgObj.style.top) - pacmanPixelsPerTick + 'px';
             break;
         case MovementEnum.RIGHT:
-            imgObj.style.left = parseInt(imgObj.style.left) + 2 + 'px';
+            imgObj.style.left = parseInt(imgObj.style.left) + pacmanPixelsPerTick + 'px';
             break;
         case MovementEnum.DOWN:
             console.log(imgObj.style.top);
-            imgObj.style.top = parseInt(imgObj.style.top) + 2 + 'px';
+            imgObj.style.top = parseInt(imgObj.style.top) + pacmanPixelsPerTick + 'px';
             break;
         case MovementEnum.LEFT:
-            imgObj.style.left = parseInt(imgObj.style.left) - 2 + 'px';
+            imgObj.style.left = parseInt(imgObj.style.left) - pacmanPixelsPerTick + 'px';
             break;
+    }
+
+    if (isPacmanAdjusting){
+        distanceToCenter -= pacmanPixelsPerTick;
+        if (distanceToCenter <= 0){
+            isPacmanAdjusting = false;
+            currentPacmanDirection = MovementEnum.STOPPED;
+        }
     }
 }
 
@@ -460,19 +506,15 @@ function checkKey(e) {
     e = e || window.event;
 
     if (e.keyCode == '38' || e.keyCode == '87') {
-        console.log("Up pressed");
         currentPacmanInput = MovementEnum.UP;
     }
     else if (e.keyCode == '40' || e.keyCode == '83') {
-        console.log("Down pressed");
         currentPacmanInput = MovementEnum.DOWN;
     }
     else if (e.keyCode == '37' || e.keyCode == '65') {
-        console.log("Left pressed");
         currentPacmanInput = MovementEnum.LEFT;
     }
     else if (e.keyCode == '39' || e.keyCode == '68') {
-        console.log("Right pressed");
         currentPacmanInput = MovementEnum.RIGHT;
     }
 

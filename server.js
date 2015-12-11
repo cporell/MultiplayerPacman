@@ -100,7 +100,6 @@ app.post('/pacman', function(req, res){
     });
     req.on("end", function() {
         chunk = chunk.split('&');
-        console.log("Chunk = " + chunk);
         var tableX = chunk[0].split('=')[1];
         var tableY = chunk[1].split('=')[1];
         var newVal = chunk[2].split('=')[1];
