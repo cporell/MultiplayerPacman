@@ -393,6 +393,13 @@ function connect(){
         console.log(pacman);
         handlePacmanUpdate(pacman);
     });
+
+    socket.on('new ghost update', function (data) {
+        ghost = parseObjectFromSockets(data.ghost);
+        console.log(ghost);
+        handleGhostUpdate(ghost);
+    });
+
     socket.on('new ghosts update', function (data) {
         ghosts = parseObjectFromSockets(data.ghosts);
         console.log(ghosts);
@@ -423,6 +430,17 @@ function sendPacmanUpdate(){
 function handlePacmanUpdate(pacman){
     oLocation = pacman.oLocation;
     direction = pacman.direction;
+
+}
+
+function sendGhostUpdate(){
+    pacman = {oLocation: "oLocation here", direction: "direction here"};
+    sendObjectToSockets('send pacman update', pacman);
+}
+//sendPacmanUpdate();
+
+function handleGhostUpdate(ghost){
+    console.log("Ghost wants to move: " + ghost);
 
 }
 
