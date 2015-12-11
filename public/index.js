@@ -21,7 +21,22 @@ var mazeTable;
 var pacmanStartingX = 1;
 var pacmanStartingY = 6;
 
+var currentPacmanX = 1;
+var currentPacmanY = 6;
+
+MovementEnum = {
+    UP: 0,
+    RIGHT: 1,
+    DOWN: 2,
+    LEFT: 3,
+    STOPPED: 4
+}
+
+var currentPacmanDirection = MovementEnum.STOPPED;
+var currentPacmanInput = null;
+
 window.setInterval(getTableFromServer, 100);
+document.onkeydown = checkKey;
 
 function displayTables()
 {
@@ -51,7 +66,6 @@ function createMaze()
         html += "<tr>";
         for (var j = 0; j < gridWidth; j++){
             var tableValue = mazeTable[i][j];
-            console.log(tableValue);
             var squareClass = "";
             if (tableValue == WALL_VALUE){
                 squareClass = "wall";
@@ -117,7 +131,7 @@ function handleTable(req) {
             createMaze();
             fillMaze();
             placeCharacters();
-            testAnimation();
+            startPacman();
             isStartup = false;
         }
         else {
@@ -159,24 +173,51 @@ function updateMazeSquare(squareX, squareY, newVal){
 
 var imgObj;
 
-function testAnimation(){
+function startPacman(){
     imgObj = document.getElementById('pacman-gif');
     imgObj.style.position= 'relative';
     imgObj.style.left = '0px';
-    moveRight();
-    console.log("Move right called");
+    imgObj.style.top = '0px';
+    movePacman();
 }
 
-function moveRight(){
-    imgObj.style.left = parseInt(imgObj.style.left) + 1 + 'px';
-    animate = setTimeout(moveRight,20); // call moveRight in 20msec
-    if (parseInt(imgObj.style.left) >= 600){
-        clearTimeout(animate);
-    }
-    //console.log(imgObj.style.left);
-    var pacmanSquare = getSquareForObject("pacman-gif");
-    //console.log("Pacman is at (" + pacmanSquare.x + ", " + pacmanSquare.y + ")");
+function movePacman(){
 
+    movePacmanImage();
+    checkInput();
+
+    var pacmanSquare = getSquareForObject("pacman-gif");
+
+    removePellet(pacmanSquare);
+
+    currentPacmanX = pacmanSquare.x;
+    currentPacmanY = pacmanSquare.y;
+
+    var isPacmanMoving = isPacmanHittingWall();
+
+    if (!isPacmanMoving) {
+        currentPacmanDirection = MovementEnum.STOPPED;
+    }
+
+    animate = setTimeout(movePacman, 20); // call movePacman in 20msec
+}
+
+function isPacmanHittingWall(){
+    // If Pacman moves to a new grid square, check to see if the next one is a wall
+    if (currentPacmanDirection != MovementEnum.STOPPED){
+
+        var nextSquare = getNextSquare(currentPacmanX, currentPacmanY, currentPacmanDirection);
+
+        // If the next square is a wall, stop Pacman from moving
+        if (isNextSquareWall(nextSquare.x, nextSquare.y)){
+            return false;
+        }
+        return true;
+    }
+}
+
+function removePellet(pacmanSquare){
+    // Remove the pellet from this square that Pacman is currently in
     if (pacmanSquare.x != -1 && pacmanSquare.y != -1 && (pacmanSquare.x != pacmanStartingX || pacmanSquare.y != pacmanStartingY)) {
         var pacmanSquareData = mazeTable[pacmanSquare.x][pacmanSquare.y];
         if (pacmanSquareData == PELLET_VALUE || pacmanSquareData == POWER_PELLET_VALUE) {
@@ -186,6 +227,63 @@ function moveRight(){
             sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
         }
     }
+}
+
+function checkInput(){
+    if (currentPacmanDirection == MovementEnum.STOPPED){
+        if (currentPacmanInput != null){
+            console.log("Changing Pacman direction");
+            currentPacmanDirection = currentPacmanInput;
+            currentPacmanInput = null;
+        }
+    }
+}
+
+function movePacmanImage(){
+    switch(currentPacmanDirection){
+        case MovementEnum.UP:
+            imgObj.style.top = parseInt(imgObj.style.top) - 2 + 'px';
+            break;
+        case MovementEnum.RIGHT:
+            imgObj.style.left = parseInt(imgObj.style.left) + 2 + 'px';
+            break;
+        case MovementEnum.DOWN:
+            console.log(imgObj.style.top);
+            imgObj.style.top = parseInt(imgObj.style.top) + 2 + 'px';
+            break;
+        case MovementEnum.LEFT:
+            imgObj.style.left = parseInt(imgObj.style.left) - 2 + 'px';
+            break;
+    }
+}
+
+function isNextSquareWall(nextX, nextY){
+    if (nextX < 0 || nextX > mazeTable.length || nextY < 0 || nextY > mazeTable[0].length){
+        return true;
+    }
+    if (mazeTable[nextX][nextY] == WALL_VALUE){
+        return true;
+    }
+    return false;
+}
+
+function getNextSquare(currentX, currentY, currentDirection){
+    var nextSquare;
+    switch(currentDirection){
+        case MovementEnum.UP:
+            nextSquare = {x: currentX - 1, y: currentY};
+            break;
+        case MovementEnum.RIGHT:
+            nextSquare = {x: currentX, y: currentY + 1};
+            break;
+        case MovementEnum.DOWN:
+            nextSquare = {x: currentX + 1, y: currentY};
+            break;
+        case MovementEnum.LEFT:
+            nextSquare = {x: currentX, y: currentY - 1};
+            break;
+    }
+    return nextSquare;
 }
 
 function isCollision(rect1, rect2){
@@ -305,4 +403,27 @@ function sendBoardUpdate(){
 function handleBoardUpdate(board){
     oLocation = board.oLocation;
     action = board.action;
+}
+
+function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '38' || e.keyCode == '87') {
+        console.log("Up pressed");
+        currentPacmanInput = MovementEnum.UP;
+    }
+    else if (e.keyCode == '40' || e.keyCode == '83') {
+        console.log("Down pressed");
+        currentPacmanInput = MovementEnum.DOWN;
+    }
+    else if (e.keyCode == '37' || e.keyCode == '65') {
+        console.log("Left pressed");
+        currentPacmanInput = MovementEnum.LEFT;
+    }
+    else if (e.keyCode == '39' || e.keyCode == '68') {
+        console.log("Right pressed");
+        currentPacmanInput = MovementEnum.RIGHT;
+    }
+
 }
