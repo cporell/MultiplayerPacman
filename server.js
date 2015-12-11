@@ -11,6 +11,7 @@ var app = express();
 var port = process.env.PORT || 3000;
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+var cookieParser = require('cookie-parser');
 
 var page = fs.readFileSync("./public/index.html").toString();
 var tablerows = "";
@@ -29,7 +30,7 @@ var mazeTable = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                  [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
                  [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
                  [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
-                 [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+                 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -46,6 +47,27 @@ function initPage()
 
 }
 
+var cookieManager;
+function setup(){
+    cookieManager = {pacman: "", ghost1: "", ghost2: "", ghost3: "", ghost4: ""};
+    console.log(cookieManager);
+}
+setup();
+
+app.use(cookieParser());
+
+app.use(function (req, res, next) {
+  // check if client sent cookie
+  var cookie = req.cookies.pacmanGame;
+  if (cookie === undefined)
+  {
+    // no: set a new cookie
+    var randomNumber=Math.random().toString();
+    randomNumber=randomNumber.substring(2,randomNumber.length);
+    res.cookie('pacmanGame',randomNumber, { maxAge: 90000000, httpOnly: false });
+  } 
+  next(); // <-- important!
+});
 
 initPage();
 
@@ -55,20 +77,77 @@ app.get('/', function (req, res) {
     res.send(pageIndex);
 });
 
-var ghostNum = 0;
 app.get('/ghost', function (req, res) {
-    var pageGhost = page + "<script>var ghostNum =" + ((ghostNum % 4) + 1) + "; </script>";
-    pageGhost += "<script src='ghost.js' type='text/javascript'></script>";
-    pageGhost += getStartingPositionsScript();
-    res.send(pageGhost);
-    ghostNum++;
+    passed = false;
+    var pageGhost = page;
+    if(req.query.ghost && req.query.ghost.length > 0){
+        requestedGhost = req.query.ghost;
+        switch(requestedGhost){
+            case "1":
+                if(cookieManager.ghost1.length == 0){
+                    cookieManager.ghost1 = req.cookies.pacmanGame;
+                }
+                if(cookieManager.ghost1 === req.cookies.pacmanGame){
+                    pageGhost += "<script>var ghostNum = 1; </script>";
+                    passed = true;
+                }
+                break;
+            case "2":
+                if(cookieManager.ghost2.length == 0){
+                    cookieManager.ghost2 = req.cookies.pacmanGame;
+                }
+                if(cookieManager.ghost2 === req.cookies.pacmanGame){
+                    pageGhost += "<script>var ghostNum = 2; </script>";
+                    passed = true;
+                }
+                break;
+            case "3":
+                if(cookieManager.ghost3.length == 0){
+                    cookieManager.ghost3 = req.cookies.pacmanGame;
+                }
+                if(cookieManager.ghost3 === req.cookies.pacmanGame){
+                    pageGhost += "<script>var ghostNum = 3; </script>";
+                    passed = true;
+                }
+                break;
+            case "4":
+                if(cookieManager.ghost4.length == 0){
+                    cookieManager.ghost4 = req.cookies.pacmanGame;
+                }
+                if(cookieManager.ghost4 === req.cookies.pacmanGame){
+                    pageGhost += "<script>var ghostNum = 4; </script>";
+                    passed = true;
+                }
+                break;
+        }
+
+        
+    }
+
+    if(passed){
+            pageGhost += getStartingPositionsScript();
+            pageGhost += "<script src='ghost.js' type='text/javascript'></script>";
+            res.send(pageGhost);
+    }
+    else {
+        res.send("<html><head><script> document.location = '/'; </script></head></html>");
+    }
 });
 
 app.get('/pacman', function (req, res) {
-    var pagePacman = page;
-    pagePacman += getStartingPositionsScript();
-    pagePacman += "<script src='pacman.js' type='text/javascript'></script>";
-    res.send(pagePacman);
+
+    if(cookieManager.pacman.length == 0){
+        cookieManager.pacman = req.cookies.pacmanGame;
+    }
+    if(cookieManager.pacman === req.cookies.pacmanGame){
+        var pagePacman = page;
+        pagePacman += getStartingPositionsScript();
+        pagePacman += "<script src='pacman.js' type='text/javascript'></script>";
+        res.send(pagePacman);
+    }
+    else{
+        res.send("<html><head><script> document.location = '/'; </script></head></html>");
+    }
 });
 
 
@@ -76,13 +155,13 @@ function getStartingPositionsScript(){
     var script = "<script>" +
     "var pacmanStartX = 1;" +
     "var pacmanStartY = 5;" +
-    "var ghost1StartX = 1;" +
+    "var ghost1StartX = 9;" +
     "var ghost1StartY = 7;" +
-    "var ghost2StartX = 1;" +
+    "var ghost2StartX = 9;" +
     "var ghost2StartY = 4;" +
-    "var ghost3StartX = 1;" +
+    "var ghost3StartX = 9;" +
     "var ghost3StartY = 6;" +
-    "var ghost4StartX = 1;" +
+    "var ghost4StartX = 9;" +
     "var ghost4StartY = 8;" +
     "</script>";
     return script;
@@ -143,8 +222,6 @@ io.on('connection', function (socket) {
       pacman: data
     });
   });
-
-
 
   socket.on('send ghost update', function (data) {
 
