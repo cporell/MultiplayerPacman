@@ -64,7 +64,7 @@ app.use(function (req, res, next) {
     // no: set a new cookie
     var randomNumber=Math.random().toString();
     randomNumber=randomNumber.substring(2,randomNumber.length);
-    res.cookie('pacmanGame',randomNumber, { maxAge: 900000, httpOnly: false });
+    res.cookie('pacmanGame',randomNumber, { maxAge: 90000000, httpOnly: false });
   } 
   next(); // <-- important!
 });
@@ -125,8 +125,8 @@ app.get('/ghost', function (req, res) {
     }
 
     if(passed){
-            pageGhost += "<script src='ghost.js' type='text/javascript'></script>";
             pageGhost += getStartingPositionsScript();
+            pageGhost += "<script src='ghost.js' type='text/javascript'></script>";
             res.send(pageGhost);
     }
     else {
@@ -223,8 +223,6 @@ io.on('connection', function (socket) {
       pacman: data
     });
   });
-
-
 
   socket.on('send ghost update', function (data) {
 

@@ -26,30 +26,13 @@ var currentghostY = 6;
 
 var myGhostID = "ghost-id";
 
-var myGhost;
-
-var pacmanObj = new character("pacman-gif", pacmanStartX, pacmanStartY, "pacman.gif");
-var ghost1Obj = new character("ghost1id", ghost1StartX, ghost1StartY, "blinky.gif");
-var ghost2Obj = new character("ghost2id", ghost2StartX, ghost2StartY, "clyde.gif");
-var ghost3Obj = new character("ghost3id", ghost3StartX, ghost3StartY, "inky.gif");
-var ghost4Obj = new character("ghost4id", ghost4StartX, ghost4StartY, "pinky.gif");
-
-switch(ghostNum){
-    case 1:
-        myGhost = ghost1Obj;
-        break;
-    case 2:
-        myGhost = ghost2Obj;
-        break;
-    case 3:
-        myGhost = ghost3Obj;
-        break;
-    case 4:
-        myGhost = ghost4Obj;
-        break;
+MovementEnum = {
+    UP: 0,
+    RIGHT: 1,
+    DOWN: 2,
+    LEFT: 3,
+    STOPPED: 4
 }
-console.log(myGhost);
-
 
 var currentghostDirection = MovementEnum.STOPPED;
 var currentghostInput = null;
@@ -118,11 +101,68 @@ function fillMaze()
 }
 
 function placeCharacters(){
-    pacmanObj.placeCharacter();
-    ghost1Obj.placeCharacter();
-    ghost2Obj.placeCharacter();
-    ghost3Obj.placeCharacter();
-    ghost4Obj.placeCharacter();
+    for(i = 0; i < 5; i++){
+        var gifName = "blinky.gif";
+        var x = 0;
+        var y = 0;
+        var id = "id";
+        switch(i){
+            case 0:
+                gifName = "pacman.gif";
+                x = pacmanStartX;
+                y = pacmanStartY;
+                id = "pacman-gif";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+            case 1:
+                gifName = "blinky.gif";
+                x = ghost1StartX;
+                y = ghost1StartY;
+                id = "ghost1ID";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+            case 2:
+                gifName = "clyde.gif";
+                x = ghost2StartX;
+                y = ghost2StartY;
+                id = "ghost2ID";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+            case 3:
+                gifName = "inky.gif";
+                x = ghost3StartX;
+                y = ghost3StartY;
+                id = "ghost3ID";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+            case 4:
+                gifName = "pinky.gif";
+                x = ghost4StartX;
+                y = ghost4StartY;
+                id = "ghost4ID";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+        }
+        placeOneCharacter(gifName, x, y, id);
+    }
+}
+
+function placeOneCharacter(gifName, x, y, id){
+    var tableData = document.getElementById("x_" + x + "-y_" + y);
+    tableData.innerHTML = "<img src=\"assets/" + gifName + "\" id=\""+ id +"\">";
+    var image = document.getElementById(id);
+    image.style.width = '80%';
+    image.style.height = 'auto';
 }
 
 function getTableFromServer()
@@ -150,7 +190,7 @@ function handleTable(req) {
             createMaze();
             fillMaze();
             placeCharacters();
-            startCharacters();
+            startghost();
             isStartup = false;
         }
         else {
@@ -192,15 +232,139 @@ function updateMazeSquare(squareX, squareY, newVal){
 
 var imgObj;
 
-
-function startCharacters(){
-    pacmanObj.startMove();
-    ghost1Obj.startMove();
-    ghost2Obj.startMove();
-    ghost3Obj.startMove();
-    ghost4Obj.startMove();
+function startghost(){
+    imgObj = document.getElementById(myGhostID);
+    imgObj.style.position= 'relative';
+    imgObj.style.left = '0px';
+    imgObj.style.top = '0px';
+    moveghost();
 }
 
+function moveghost(){
+
+    moveghostImage();
+    checkInput();
+
+    var ghostSquare = getSquareForObject(myGhostID);
+
+    currentghostX = ghostSquare.x;
+    currentghostY = ghostSquare.y;
+
+    var isghostMoving = isghostHittingWall();
+
+    if (!isghostMoving) {
+        currentghostDirection = MovementEnum.STOPPED;
+    }
+
+    animate = setTimeout(moveghost, 20); // call moveghost in 20msec
+}
+
+function isghostHittingWall(){
+    // If ghost moves to a new grid square, check to see if the next one is a wall
+    if (currentghostDirection != MovementEnum.STOPPED){
+
+        var nextSquare = getNextSquare(currentghostX, currentghostY, currentghostDirection);
+
+        // If the next square is a wall, stop ghost from moving
+        if (isNextSquareWall(nextSquare.x, nextSquare.y)){
+            return false;
+        }
+        return true;
+    }
+}
+
+
+function checkInput(){
+    if (currentghostDirection == MovementEnum.STOPPED){
+        if (currentghostInput != null){
+            console.log("Changing ghost direction");
+            currentghostDirection = currentghostInput;
+            currentghostInput = null;
+        }
+    }
+}
+
+function moveghostImage(){
+    switch(currentghostDirection){
+        case MovementEnum.UP:
+            imgObj.style.top = parseInt(imgObj.style.top) - 2 + 'px';
+            break;
+        case MovementEnum.RIGHT:
+            imgObj.style.left = parseInt(imgObj.style.left) + 2 + 'px';
+            break;
+        case MovementEnum.DOWN:
+            console.log(imgObj.style.top);
+            imgObj.style.top = parseInt(imgObj.style.top) + 2 + 'px';
+            break;
+        case MovementEnum.LEFT:
+            imgObj.style.left = parseInt(imgObj.style.left) - 2 + 'px';
+            break;
+    }
+}
+
+function isNextSquareWall(nextX, nextY){
+    if (nextX < 0 || nextX > mazeTable.length || nextY < 0 || nextY > mazeTable[0].length){
+        return true;
+    }
+    if (mazeTable[nextX][nextY] == WALL_VALUE){
+        return true;
+    }
+    return false;
+}
+
+function getNextSquare(currentX, currentY, currentDirection){
+    var nextSquare;
+    switch(currentDirection){
+        case MovementEnum.UP:
+            nextSquare = {x: currentX - 1, y: currentY};
+            break;
+        case MovementEnum.RIGHT:
+            nextSquare = {x: currentX, y: currentY + 1};
+            break;
+        case MovementEnum.DOWN:
+            nextSquare = {x: currentX + 1, y: currentY};
+            break;
+        case MovementEnum.LEFT:
+            nextSquare = {x: currentX, y: currentY - 1};
+            break;
+    }
+    return nextSquare;
+}
+
+function isCollision(rect1, rect2){
+    return !(rect1.right < rect2.left ||
+    rect1.left > rect2.right ||
+    rect1.bottom < rect2.top ||
+    rect1.top > rect2.bottom);
+}
+
+function getSquareForObject(elementId){
+    var coordinate;
+    var givenElement = document.getElementById(elementId);
+    for (var i = 0; i < gridWidth; i++){
+        for (var j = 0; j < gridHeight; j++){
+            var squareElement = document.getElementById("x_" + i + "-y_" + j);
+            gridSquare = squareElement.getBoundingClientRect();
+            givenRect = givenElement.getBoundingClientRect();
+            var givenRectCenter;
+            givenRectCenter = {x: (givenRect.left + (givenRect.width / 2)), y: givenRect.top + (givenRect.height / 2)};
+            var isElementInSquare = doesRectContainPoint(gridSquare, givenRectCenter);
+            if (isElementInSquare){
+                var squareCoords = {x: i, y: j};
+                return squareCoords;
+            }
+        }
+    }
+    var squareCoords = {x: -1, y: -1};
+    return squareCoords;
+}
+
+function doesRectContainPoint(rect, point){
+    if (point.x <= rect.right && point.x >= rect.left && point.y <= rect.bottom && point.y >= rect.top){
+        return true;
+    }
+    return false;
+}
 
 function sendNewTableData(tableX, tableY, newVal){
     var req = new XMLHttpRequest();
@@ -292,19 +456,19 @@ function checkKey(e) {
 
     if (e.keyCode == '38' || e.keyCode == '87') {
         console.log("Up pressed");
-        myGhost.setInput(MovementEnum.UP);
+        currentghostInput = MovementEnum.UP;
     }
     else if (e.keyCode == '40' || e.keyCode == '83') {
         console.log("Down pressed");
-        myGhost.setInput(MovementEnum.DOWN);
+        currentghostInput = MovementEnum.DOWN;
     }
     else if (e.keyCode == '37' || e.keyCode == '65') {
         console.log("Left pressed");
-        myGhost.setInput(MovementEnum.LEFT);
+        currentghostInput = MovementEnum.LEFT;
     }
     else if (e.keyCode == '39' || e.keyCode == '68') {
         console.log("Right pressed");
-        myGhost.setInput(MovementEnum.RIGHT);
+        currentghostInput = MovementEnum.RIGHT;
     }
 
 }
