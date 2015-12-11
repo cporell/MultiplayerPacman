@@ -305,23 +305,23 @@ function checkKey(e) {
 
     if (e.keyCode == '38' || e.keyCode == '87') {
         console.log("Up pressed");
-        //myGhost.setInput(MovementEnum.UP);
-        sendGhostUpdate(MovementEnum.UP);
+        myGhost.setInput(MovementEnum.UP);
+        //sendGhostUpdate(MovementEnum.UP);
     }
     else if (e.keyCode == '40' || e.keyCode == '83') {
         console.log("Down pressed");
-        //myGhost.setInput(MovementEnum.DOWN);
-        sendGhostUpdate(MovementEnum.DOWN);
+        myGhost.setInput(MovementEnum.DOWN);
+        //sendGhostUpdate(MovementEnum.DOWN);
     }
     else if (e.keyCode == '37' || e.keyCode == '65') {
         console.log("Left pressed");
-        //myGhost.setInput(MovementEnum.LEFT);
-        sendGhostUpdate(MovementEnum.LEFT);
+        myGhost.setInput(MovementEnum.LEFT);
+        //sendGhostUpdate(MovementEnum.LEFT);
     }
     else if (e.keyCode == '39' || e.keyCode == '68') {
         console.log("Right pressed");
-        //myGhost.setInput(MovementEnum.RIGHT);
-        sendGhostUpdate(MovementEnum.RIGHT);
+        myGhost.setInput(MovementEnum.RIGHT);
+        //sendGhostUpdate(MovementEnum.RIGHT);
     }
 
 }

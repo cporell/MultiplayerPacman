@@ -73,7 +73,7 @@ initPage();
 
 app.get('/', function (req, res) {
     initPage();
-    var pageIndex = page + "<script src='index.js' type='text/javascript'></script>";
+    var pageIndex = page + getStartingPositionsScript() + "<script src='index.js' type='text/javascript'></script>";
     res.send(pageIndex);
 });
 
