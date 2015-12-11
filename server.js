@@ -51,8 +51,42 @@ initPage();
 
 app.get('/', function (req, res) {
     initPage();
-    res.send(page);
+    var pageIndex = page + "<script src='index.js' type='text/javascript'></script>";
+    res.send(pageIndex);
 });
+
+var ghostNum = 0;
+app.get('/ghost', function (req, res) {
+    var pageGhost = page + "<script>var ghostNum =" + ((ghostNum % 4) + 1) + "; </script>";
+    pageGhost += "<script src='ghost.js' type='text/javascript'></script>";
+    pageGhost += getStartingPositionsScript();
+    res.send(pageGhost);
+    ghostNum++;
+});
+
+app.get('/pacman', function (req, res) {
+    var pagePacman = page + "<script src='index.js' type='text/javascript'></script>";
+    pagePacman += getStartingPositionsScript();
+    res.send(pagePacman);
+});
+
+
+function getStartingPositionsScript(){
+    var script = "<script>" +
+    "var pacmanStartX = 1;" +
+    "var pacmanStartY = 5;" +
+    "var ghost1StartX = 1;" +
+    "var ghost1StartY = 7;" +
+    "var ghost2StartX = 1;" +
+    "var ghost2StartY = 4;" +
+    "var ghost3StartX = 1;" +
+    "var ghost3StartY = 6;" +
+    "var ghost4StartX = 1;" +
+    "var ghost4StartY = 8;" +
+    "</script>";
+    return script;
+
+}
 
 app.get('/table', function (req, res) {
     res.send(mazeTable);
@@ -107,6 +141,15 @@ io.on('connection', function (socket) {
 
     socket.broadcast.emit('new pacman update', {
       pacman: data
+    });
+  });
+
+
+
+  socket.on('send ghost update', function (data) {
+
+    socket.broadcast.emit('new ghost update', {
+      ghost: data
     });
   });
 

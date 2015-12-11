@@ -24,6 +24,8 @@ var ghostStartingY = 6;
 var currentghostX = 1;
 var currentghostY = 6;
 
+var myGhostID = "ghost-id";
+
 MovementEnum = {
     UP: 0,
     RIGHT: 1,
@@ -99,9 +101,66 @@ function fillMaze()
 }
 
 function placeCharacters(){
-    var tableData = document.getElementById("x_" + ghostStartingX + "-y_" + ghostStartingY);
-    tableData.innerHTML = "<img src=\"assets/ghost.gif\" id=\"ghost-gif\">";
-    var image = document.getElementById("ghost-gif");
+    for(i = 0; i < 5; i++){
+        var gifName = "blinky.gif";
+        var x = 0;
+        var y = 0;
+        var id = "id";
+        switch(i){
+            case 0:
+                gifName = "pacman.gif";
+                x = pacmanStartX;
+                y = pacmanStartY;
+                id = "pacman-gif";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+            case 1:
+                gifName = "blinky.gif";
+                x = ghost1StartX;
+                y = ghost1StartY;
+                id = "ghost1ID";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+            case 2:
+                gifName = "clyde.gif";
+                x = ghost2StartX;
+                y = ghost2StartY;
+                id = "ghost2ID";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+            case 3:
+                gifName = "inky.gif";
+                x = ghost3StartX;
+                y = ghost3StartY;
+                id = "ghost3ID";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+            case 4:
+                gifName = "pinky.gif";
+                x = ghost4StartX;
+                y = ghost4StartY;
+                id = "ghost4ID";
+                if(ghostNum == i){
+                    myGhostID = id;
+                }
+                break;
+        }
+        placeOneCharacter(gifName, x, y, id);
+    }
+}
+
+function placeOneCharacter(gifName, x, y, id){
+    var tableData = document.getElementById("x_" + x + "-y_" + y);
+    tableData.innerHTML = "<img src=\"assets/" + gifName + "\" id=\""+ id +"\">";
+    var image = document.getElementById(id);
     image.style.width = '80%';
     image.style.height = 'auto';
 }
@@ -174,7 +233,7 @@ function updateMazeSquare(squareX, squareY, newVal){
 var imgObj;
 
 function startghost(){
-    imgObj = document.getElementById('ghost-gif');
+    imgObj = document.getElementById(myGhostID);
     imgObj.style.position= 'relative';
     imgObj.style.left = '0px';
     imgObj.style.top = '0px';
@@ -186,7 +245,7 @@ function moveghost(){
     moveghostImage();
     checkInput();
 
-    var ghostSquare = getSquareForObject("ghost-gif");
+    var ghostSquare = getSquareForObject(myGhostID);
 
     currentghostX = ghostSquare.x;
     currentghostY = ghostSquare.y;
