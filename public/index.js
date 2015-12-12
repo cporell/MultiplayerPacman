@@ -122,7 +122,7 @@ function placeCharacters(){
     ghost4Obj.placeCharacter();
 }
 
-function setWallSprite(wallPosX, wallPosY)
+function setWallSprite(wallPosY, wallPosX)
 {
     // Check the N, S, E, and W tils adjacent to this one to determine which maze sprite to place.
     // Checks for being at map bounds are done at this time as well.
@@ -130,14 +130,14 @@ function setWallSprite(wallPosX, wallPosY)
 
     // If the tile is on the map extremeties, set the appropriate boundings
     
-    // is there a wall to the north?
-    if (wallPosY != 0)
+    // is there a wall to the north? EAST
+    /*if (wallPosY != 0)
     {
         if (mazeTable[wallPosX][wallPosY - 1] === WALL_VALUE) {
-            boundings[0] = 1;
+            boundings[1] = 1;
         }
         else {
-            boundings[0] = 0;
+            boundings[1] = 0;
         }
     }
     
@@ -145,28 +145,17 @@ function setWallSprite(wallPosX, wallPosY)
     if (wallPosX != (gridWidth - 1))
     {
         if (mazeTable[wallPosX + 1][wallPosY] === WALL_VALUE) {
-            boundings[1] = 1;
+            //boundings[1] = 1;
         }
         else {
-            boundings[1] = 0;
+           // boundings[1] = 0;
         }
     }
 
-    // is there a wall to the south?
+    // is there a wall to the south?  WEST
     if (wallPosY != (gridHeight - 1))
     {
         if (mazeTable[wallPosX][wallPosY + 1] === WALL_VALUE) {
-            boundings[2] = 1;
-        }
-        else {
-            boundings[2] = 0;
-        }
-    }
-
-    // is there a wall to the west?
-    if (wallPosX != 0)
-    {
-        if (mazeTable[wallPosX - 1][wallPosY] === WALL_VALUE) {
             boundings[3] = 1;
         }
         else {
@@ -174,16 +163,66 @@ function setWallSprite(wallPosX, wallPosY)
         }
     }
 
-    if (wallPosY == 0) { boundings[0] = 0; }
-    else if (wallPosY == (gridHeight - 1)) { boundings[2] = 0; }
+    // is there a wall to the west?
+    if (wallPosX != 0)
+    {
+        if (mazeTable[wallPosX - 1][wallPosY] === WALL_VALUE) {
+            //boundings[3] = 1;
+        }
+        else {
+            //boundings[3] = 0;
+        }
+    }
+
+    if (wallPosY == 0) { boundings[1] = 0; }
+    else if (wallPosY == (gridHeight - 1)) { boundings[3] = 0; }
     if (wallPosX == 0) { boundings[3] = 0; }
     else if (wallPosX == (gridWidth - 1)) { boundings[1] = 0; }
+    */
+
+    var isTop = wallPosX == 0;
+    var isBottom = wallPosX == gridHeight - 1;
+    var isLeft = wallPosY == 0;
+    var isRight = wallPosY == gridWidth - 1;
+
+    if(isTop){
+        boundings[0] = 0;
+    }
+    else{
+        boundings[0] = mazeTable[wallPosX - 1][wallPosY] === WALL_VALUE ? 1 : 0;
+    }
+
+
+    if(isBottom){
+        boundings[2] = 0;
+    }
+    else{
+        boundings[2] = mazeTable[wallPosX + 1][wallPosY] === WALL_VALUE ? 1 : 0;
+    }
+
+    if(isLeft){
+        boundings[3] = 0;
+    }
+    else{
+        boundings[3] = mazeTable[wallPosX][wallPosY - 1] === WALL_VALUE ? 1 : 0;
+    }
+
+
+    if(isRight){
+        boundings[1] = 0;
+    }
+    else{
+        boundings[1] = mazeTable[wallPosX][wallPosY + 1] === WALL_VALUE ? 1 : 0;
+    }
+
+    console.log(wallPosX, wallPosY);
+    console.log(boundings);
     
     var wallType = "";
     // now run through the boundings array to see which wall we should draw
     if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 0)
     {
-        wallType = "";
+        wallType = "4way";
     }
     if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 0) {
         wallType = "cap-top";
