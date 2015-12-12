@@ -247,7 +247,7 @@ function movePacman(){
     currentPacmanX = pacmanSquare.x;
     currentPacmanY = pacmanSquare.y;
 
-    var isPacmanMoving = isPacmanHittingWall();
+    var isPacmanMoving = isPacmanHittingWall(currentPacmanDirection);
 
     if (isPacmanMoving && !isPacmanAdjusting) {
         getDistanceToCenter("pacman-gif", pacmanSquare.x, pacmanSquare.y);
@@ -281,11 +281,11 @@ function getDistanceToCenter(pacmanId, squareX, squareY){
     }
 }
 
-function isPacmanHittingWall(){
+function isPacmanHittingWall(direction){
     // If Pacman moves to a new grid square, check to see if the next one is a wall
-    if (currentPacmanDirection != MovementEnum.STOPPED){
+    if (direction != MovementEnum.STOPPED){
 
-        var nextSquare = getNextSquare(currentPacmanX, currentPacmanY, currentPacmanDirection);
+        var nextSquare = getNextSquare(currentPacmanX, currentPacmanY, direction);
 
         // If the next square is a wall, stop Pacman from moving
         if (isNextSquareWall(nextSquare.x, nextSquare.y)){
@@ -364,11 +364,10 @@ function movePacmanImage(){
 
 function changePacmanDirection(newDirection){
     if (!isPacmanAdjusting) {
-        currentPacmanDirection = newDirection;
-        changePacmanImageRotation(newDirection);
 
-        if (isPacmanHittingWall()) {
-            currentPacmanDirection = MovementEnum.STOPPED;
+        if (!isPacmanHittingWall(newDirection)) {
+            currentPacmanDirection = newDirection;
+            changePacmanImageRotation(newDirection);
         }
     }
 }

@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d4f20047-f73e-4b59-9882-30be6e7dea5d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/pacman.js" afterPath="$PROJECT_DIR$/public/pacman.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MultiplayerPacman.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -41,8 +42,8 @@
       <file leaf-file-name="pacman.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/pacman.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7137931" vertical-offset="4312" max-vertical-offset="9945">
-              <caret line="278" column="70" selection-start-line="278" selection-start-column="70" selection-end-line="278" selection-end-column="70" />
+            <state vertical-scroll-proportion="0.45" vertical-offset="6063" max-vertical-offset="9928">
+              <caret line="372" column="1" selection-start-line="372" selection-start-column="1" selection-end-line="372" selection-end-column="1" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -472,8 +473,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/pacman.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7137931" vertical-offset="4312" max-vertical-offset="9945">
-          <caret line="278" column="70" selection-start-line="278" selection-start-column="70" selection-end-line="278" selection-end-column="70" />
+        <state vertical-scroll-proportion="0.45" vertical-offset="6063" max-vertical-offset="9928">
+          <caret line="372" column="1" selection-start-line="372" selection-start-column="1" selection-end-line="372" selection-end-column="1" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
