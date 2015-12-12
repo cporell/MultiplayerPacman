@@ -96,7 +96,7 @@ function fillMaze()
             }
             else if (tableValue == WALL_VALUE)
             {
-                tableData.innerHTML = setWallSprite(i, j);
+                tableData.innerHTML = setWallSprite(j, i);
             }
         }
     }
@@ -109,43 +109,55 @@ function setWallSprite(wallPosX, wallPosY)
     var boundings = [0, 0, 0, 0]; // N E S W
 
     // If the tile is on the map extremeties, set the appropriate boundings
-
-    if (wallPosY == 0) { boundings[0] = 0; }
-    else if (wallPosY == (gridHeight - 1)) { boundings[2] = 0; }
-    if (wallPosX == 0) { boundings[3] = 0; }
-    else if (wallPosX == (gridWidth - 1)) { boundings[1] = 0; }
-
+    
     // is there a wall to the north?
     if (wallPosY != 0)
     {
-        if (mazeTable[wallPosX][wallPosY - 1] == WALL_VALUE) {
+        if (mazeTable[wallPosX][wallPosY - 1] === WALL_VALUE) {
             boundings[0] = 1;
+        }
+        else {
+            boundings[0] = 0;
         }
     }
     
     // is there a wall to the east?
-    if (wallPosX != gridWidth - 1)
+    if (wallPosX != (gridWidth - 1))
     {
-        if (mazeTable[wallPosX + 1][wallPosY] == WALL_VALUE) {
+        if (mazeTable[wallPosX + 1][wallPosY] === WALL_VALUE) {
             boundings[1] = 1;
+        }
+        else {
+            boundings[1] = 0;
         }
     }
 
     // is there a wall to the south?
-    if (wallPosY != gridHeight - 1)
+    if (wallPosY != (gridHeight - 1))
     {
-        if (mazeTable[wallPosX][wallPosY + 1] == WALL_VALUE) {
+        if (mazeTable[wallPosX][wallPosY + 1] === WALL_VALUE) {
             boundings[2] = 1;
+        }
+        else {
+            boundings[2] = 0;
         }
     }
 
     // is there a wall to the west?
     if (wallPosX != 0)
     {
-        if (mazeTable[wallPosX - 1][wallPosY] == WALL_VALUE) {
+        if (mazeTable[wallPosX - 1][wallPosY] === WALL_VALUE) {
             boundings[3] = 1;
         }
+        else {
+            boundings[3] = 0;
+        }
     }
+
+    if (wallPosY == 0) { boundings[0] = 0; }
+    else if (wallPosY == (gridHeight - 1)) { boundings[2] = 0; }
+    if (wallPosX == 0) { boundings[3] = 0; }
+    else if (wallPosX == (gridWidth - 1)) { boundings[1] = 0; }
     
     var wallType = "";
     // now run through the boundings array to see which wall we should draw
