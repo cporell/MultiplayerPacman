@@ -150,9 +150,13 @@ function character(theID, startingX, startingY, gifName) {
 
 	this.getDistanceToCenter = function(pacmanId, squareX, squareY){
 	    var pacmanElement = document.getElementById(pacmanId);
+	    console.log(pacmanId, squareX, squareY);
 	    var gridSquareElement = document.getElementById("x_" + squareX + "-y_" + squareY);
+	    if(gridSquareElement == null) return;
 	    var pacmanRect = pacmanElement.getBoundingClientRect();
+	    //if(pacmanRect == null) return;
 	    var gridSquareRect = gridSquareElement.getBoundingClientRect();
+	    //if(gridSquareRect == null) return;
 	    var pacmanRectCenter = {x: (pacmanRect.left + (pacmanRect.width / 2)), y: pacmanRect.top + (pacmanRect.height / 2)};
 	    var squareRectCenter = {x: (gridSquareRect.left + (gridSquareRect.width / 2)), y: gridSquareRect.top + (gridSquareRect.height / 2)};
 
@@ -204,7 +208,7 @@ function character(theID, startingX, startingY, gifName) {
 	};
 
 	this.removePellet = function(pacmanSquare){
-		if(this.theID === "pacman-gif"){
+		if(this.theID === "pacman-gif" && pacmanSquare.x > -1 && pacmanSquare.y > -1){
 		    // Remove the pellet from this square that Pacman is currently in
 		    var pacmanSquareData = mazeTable[pacmanSquare.x][pacmanSquare.y];
 		    if (pacmanSquareData == PELLET_VALUE) {
@@ -213,7 +217,8 @@ function character(theID, startingX, startingY, gifName) {
 		        if (pelletElement) {
 		            squareElement.removeChild(pelletElement);
 		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
-		            sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+		            //sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+		            sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
 		        }
 		    }
 		    else if (pacmanSquareData == POWER_PELLET_VALUE){
@@ -222,7 +227,8 @@ function character(theID, startingX, startingY, gifName) {
 		        if (pelletElement) {
 		            squareElement.removeChild(pelletElement);
 		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
-		            sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+		            //sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+		            sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
 		        }
 		    }
 		}
@@ -230,10 +236,14 @@ function character(theID, startingX, startingY, gifName) {
 
 	this.updateCharacter = function(character){
 		//console.log(character.image);
+		//this.imageTop = character.imageTop;
+		//this.imageLeft = character.imageLeft;
 
-	    this.image.style.top = character.imageTop
-	    
-	    this.image.style.left = character.imageLeft;
+		if(this.image){
+		    this.image.style.top = character.imageTop;
+		    
+		    this.image.style.left = character.imageLeft;
+		}
 	    
 		this.setInput(character.currentInput);
 		if(this.theID === 'pacman-gif'){

@@ -214,11 +214,25 @@ function testChangeValue(){
 
 var numUsers = 0;
 var users = [];
+var pacman = null;
+var ghosts = null;
 
 io.on('connection', function (socket) {
   var addedUser = false;
 
+  socket.on('request updates', function (data) {
+
+    socket.emit('new pacman update', {
+      pacman: pacman
+    });
+
+    socket.emit('new ghosts update', {
+      ghosts: ghosts
+    });
+  });
+
   socket.on('send pacman update', function (data) {
+    pacman = data;
 
     socket.broadcast.emit('new pacman update', {
       pacman: data
@@ -226,23 +240,26 @@ io.on('connection', function (socket) {
   });
 
   socket.on('send ghost update', function (data) {
-
     socket.broadcast.emit('new ghost update', {
       ghost: data
     });
   });
 
   socket.on('send ghosts update', function (data) {
-
+    ghosts = data;
     socket.broadcast.emit('new ghosts update', {
       ghosts: data
     });
   });
 
   socket.on('send board update', function (data) {
-
+        dataNew = JSON.parse(data);
+        var tableX = dataNew.x;
+        var tableY = dataNew.y;
+        var newVal = dataNew.value;
+        mazeTable[tableX][tableY] = newVal;
     socket.broadcast.emit('new board update', {
-      board: data
+      board: JSON.stringify(mazeTable)
     });
   });
 });

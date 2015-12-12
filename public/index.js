@@ -250,7 +250,10 @@ function handleTable(req) {
             createMaze();
             fillMaze();
             placeCharacters();
+
             startCharacters();
+            requestUpdates();
+
             isStartup = false;
         }
         else {
@@ -319,13 +322,17 @@ function connect(){
 
     socket.on('new pacman update', function (data) {
         pacman = parseObjectFromSockets(data.pacman);
-        //console.log(pacman);
-        handlePacmanUpdate(pacman);
+        console.log(pacman);
+        if(pacman){
+            handlePacmanUpdate(pacman);
+        }
     });
     socket.on('new ghosts update', function (data) {
         ghosts = parseObjectFromSockets(data.ghosts);
-        //console.log(ghosts);
-        handleGhostsUpdate(ghosts);
+        console.log(ghosts);
+        if(ghosts){
+            handleGhostsUpdate(ghosts);
+        }
     });
     socket.on('new board update', function (data) {
         board = parseObjectFromSockets(data.board);
@@ -344,42 +351,63 @@ function parseObjectFromSockets(jsonString){
 }
 
 function sendPacmanUpdate(){
-    pacman = {oLocation: "oLocation here", direction: "direction here"};
+    pacman = {pacman: pacmanObj};
     sendObjectToSockets('send pacman update', pacman);
 }
-//sendPacmanUpdate();
+//sendghostUpdate();
 
 function handlePacmanUpdate(pacman){
-    oLocation = pacman.oLocation;
-    direction = pacman.direction;
+    //console.log(pacman);
+    pacmanObj.updateCharacter(pacman.pacman);
+}
+
+
+function sendGhostUpdate(dir){
+    ghost = {direction: dir, number: ghostNum};
+    sendObjectToSockets('send ghost update', ghost);
+}
+//sendghostUpdate();
+
+function handleGhostUpdate(ghost){
+    oLocation = ghost.oLocation;
+    direction = ghost.direction;
 
 }
 
 function sendGhostsUpdate(){
-    ghost1 = {oLocation: "Ghost1 oLocation here", direction: "direction here"};
-    ghost2 = {oLocation: "oLocation here", direction: "direction here"};
-    ghost3 = {oLocation: "oLocation here", direction: "direction here"};
-    ghost4 = {oLocation: "oLocation here", direction: "direction here"};
-    ghosts = {ghost1: ghost1,ghost2: ghost2,ghost3: ghost3,ghost4: ghost4}
+    //ghost1 = {direction: ghost1};
+    //ghost2 = {direction: "direction here"};
+    //ghost3 = {direction: "direction here"};
+    //ghost4 = {direction: "direction here"};
+    ghosts = {ghost1: ghost1Obj,ghost2: ghost2Obj,ghost3: ghost3Obj,ghost4: ghost4Obj}
     sendObjectToSockets('send ghosts update', ghosts);
 }
 //sendGhostsUpdate();
 
 function handleGhostsUpdate(ghosts){
-    ghost1 = ghosts.ghost1;
-    ghost2 = ghosts.ghost2;
-    ghost3 = ghosts.ghost3;
-    ghost4 = ghosts.ghost4;
+    console.log("test");
+    ghost1Obj.updateCharacter(ghosts.ghost1);
+    ghost2Obj.updateCharacter(ghosts.ghost2);
+    ghost3Obj.updateCharacter(ghosts.ghost3);
+    ghost4Obj.updateCharacter(ghosts.ghost4);
 }
 
-sendBoardUpdate();
-function sendBoardUpdate(){
+//sendBoardUpdate();
+function sendBoardUpdate(x, y, value){
     
-    board = {oLocation: "oLocation here", action: "action here"};
-    sendObjectToSockets('send board update', board);
+    /*board = {x: x, y: y, value: value};
+    console.log(board);
+    sendObjectToSockets('send board update', board);*/
 }
 
 function handleBoardUpdate(board){
-    oLocation = board.oLocation;
-    action = board.action;
+   
+    compareMazes(board);
 }
+
+//requestUpdates();
+function requestUpdates(){
+    sendObjectToSockets('request updates', '');
+}
+
+
