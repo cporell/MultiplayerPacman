@@ -82,9 +82,14 @@ h2
 
 table
 {
-    border: groove;
+  border-spacing: 0;
     border-collapse:collapse;
     width: auto;
+    height: auto;
+    table-layout: fixed;
+  padding: 0;
+  margin: 0;
+  border: none;
 }
 
 thead
@@ -102,7 +107,21 @@ th
 
 tr
 {
-    font-family: 'Raleway';
+  font-family: 'Raleway';
+  border-collapse: collapse;
+  padding: 0;
+  margin: 0;
+  border: none;
+  height: 30px;
+  max-height: 30px;
+  min-height: 30px;
+}
+
+td{
+  padding: 0;
+  border-collapse: collapse;
+  margin: 0;
+  border: none;
 }
 
 a
@@ -143,16 +162,35 @@ input.fullList
     font-size: 1.5em;
 }
 
+img {
+  display: block;
+  margin-left:auto;
+  margin-right:auto;
+}
+
 .grid-square
 {
     height: 30px;
     width: 30px;
+    max-height: 30px;
+    max-width: 30px;
+    min-height: 30px;
+    min-width: 30px;
 }
 
 .wall-square
 {
+  /*
     height: 30px;
     width: 30px;
+    max-height: 30px;
+    max-width: 30px;
+    min-height: 30px;
+    min-width: 30px;
+    */
+    height: 28px;
+    width: 28px;
+    overflow: hidden;
 }
 
 .wall
@@ -163,4 +201,36 @@ input.fullList
 .floor
 {
     background-color: #333333;
+}
+
+.rotate-right {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
+
+.rotate-down {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.rotate-left {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.rotate-up {
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
 }

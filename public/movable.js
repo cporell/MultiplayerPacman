@@ -7,6 +7,8 @@ MovementEnum = {
     STOPPED: 4
 }
 
+var pixelsPerTick = 2;
+
 function character(theID, startingX, startingY, gifName) {
     this.theID = theID;  
     this.gifName = gifName;
@@ -15,8 +17,19 @@ function character(theID, startingX, startingY, gifName) {
     this.currentX = startingX;
     this.currentY = startingY;
     this.currentDirection = MovementEnum.STOPPED;
+    this.currentInput = null;
     this.tableID = "x_" + this.startingX + "-y_" + this.startingY;
     this.image = null;
+
+    this.distanceToCenter = 0;
+	this.isAdjusting = false;
+
+	this.imageTop = 0;
+	this.imageLeft = 0;
+
+	this.now = +new Date;
+    this.lastFrame = this.now;
+	this.deltaT = this.now - this.lastFrame;
 
     this.placeCharacter = function (){
 	    var tableData = document.getElementById("x_" + this.startingX + "-y_" + this.startingY);
@@ -32,10 +45,13 @@ function character(theID, startingX, startingY, gifName) {
 	    this.image.style.left = '0px';
 	    this.image.style.top = '0px';
 	    this.moveCharacter();
-		console.log(this);
+		//console.log(this);
 	};
 
 	this.moveCharacter = function(){
+
+		this.now = +new Date;
+    	this.deltaT = this.now - this.lastFrame;
 
 		//console.log(this);
 	    this.moveImage();
@@ -46,41 +62,63 @@ function character(theID, startingX, startingY, gifName) {
 	    this.currentX = square.x;
 	    this.currentY = square.y;
 
-	    var isMoving = this.isHittingWall();
+	    this.removePellet(square);
 
-	    if (!isMoving) {
-	        this.currentDirection = MovementEnum.STOPPED;
+	    var isHitting = this.isHittingWall(this.currentDirection);
+
+	    if (isHitting && !this.isAdjusting) {
+	        this.getDistanceToCenter(this.theID, square.x, square.y);
+	        this.isAdjusting = true;
 	    }
 
 	    animate = setTimeout(function(character){
 	    	character.moveCharacter();
 	    }, 20, this); 
 	    
+	    this.lastFrame = this.now;
 	};
 
 
 	this.moveImage = function(){
+	    if (this.isAdjusting && this.distanceToCenter <= 0){
+	        this.currentDirection = MovementEnum.STOPPED;
+	        this.isAdjusting = false;
+	        return;
+	    }
+
 	    switch(this.currentDirection){
 	        case MovementEnum.UP:
-	            this.image.style.top = parseInt(this.image.style.top) - 2 + 'px';
+	            this.image.style.top = parseInt(this.image.style.top) - (pixelsPerTick * this.deltaT/20) + 'px';
 	            break;
 	        case MovementEnum.RIGHT:
-	            this.image.style.left = parseInt(this.image.style.left) + 2 + 'px';
+	            this.image.style.left = parseInt(this.image.style.left) +  (pixelsPerTick * this.deltaT/20) + 'px';
 	            break;
 	        case MovementEnum.DOWN:
-	            this.image.style.top = parseInt(this.image.style.top) + 2 + 'px';
+	            this.image.style.top = parseInt(this.image.style.top) +  (pixelsPerTick * this.deltaT/20) + 'px';
 	            break;
 	        case MovementEnum.LEFT:
-	            this.image.style.left = parseInt(this.image.style.left) - 2 + 'px';
+	            this.image.style.left = parseInt(this.image.style.left) -  (pixelsPerTick * this.deltaT/20) + 'px';
 	            break;
-		}
+	    }
+
+	    this.imageTop = this.image.style.top;
+	    this.imageLeft = this.image.style.left;
+
+	    if (this.isAdjusting){
+	        this.distanceToCenter -= (pixelsPerTick * (this.deltaT / 20));
+	        if (this.distanceToCenter <= 0){
+	            this.isAdjusting = false;
+	            this.currentDirection = MovementEnum.STOPPED;
+	        }
+	    }
 	};
 
 	this.checkInput = function(){
 	    if (this.currentDirection == MovementEnum.STOPPED){
 	        if (this.currentInput != null){
-	            console.log("Changing ghost direction");
+	            //console.log("Changing ghost direction");
 	            this.currentDirection = this.currentInput;
+	            this.changeImageRotation(this.currentDirection);
 	            this.currentInput = null;
 	        }
 	    }
@@ -93,17 +131,113 @@ function character(theID, startingX, startingY, gifName) {
 		//this.moveCharacter();
 	};
 
-	this.isHittingWall = function(){
+	this.isHittingWall = function(newDirection){
 		// If ghost moves to a new grid square, check to see if the next one is a wall
-		if (this.currentDirection != MovementEnum.STOPPED){
+		if (newDirection != MovementEnum.STOPPED){
 
-		    var nextSquare = getNextSquare(this.currentX, this.currentY, this.currentDirection);
+		    var nextSquare = getNextSquare(this.currentX, this.currentY, newDirection);
 
 		    // If the next square is a wall, stop ghost from moving
 		    if (isNextSquareWall(nextSquare.x, nextSquare.y)){
-		        return false;
+		        return true;
 		    }
-		    return true;
+		    return false;
+		}
+		else{
+			return false;
+		}
+	}
+
+	this.getDistanceToCenter = function(pacmanId, squareX, squareY){
+	    var pacmanElement = document.getElementById(pacmanId);
+	    var gridSquareElement = document.getElementById("x_" + squareX + "-y_" + squareY);
+	    var pacmanRect = pacmanElement.getBoundingClientRect();
+	    var gridSquareRect = gridSquareElement.getBoundingClientRect();
+	    var pacmanRectCenter = {x: (pacmanRect.left + (pacmanRect.width / 2)), y: pacmanRect.top + (pacmanRect.height / 2)};
+	    var squareRectCenter = {x: (gridSquareRect.left + (gridSquareRect.width / 2)), y: gridSquareRect.top + (gridSquareRect.height / 2)};
+
+	    switch (this.currentDirection){
+	        case MovementEnum.UP:
+	            this.distanceToCenter = pacmanRectCenter.y - squareRectCenter.y;
+	            break;
+	        case MovementEnum.RIGHT:
+	            this.distanceToCenter = squareRectCenter.x - pacmanRectCenter.x;
+	            break;
+	        case MovementEnum.DOWN:
+	            this.distanceToCenter = squareRectCenter.y - pacmanRectCenter.y;
+	            break;
+	        case MovementEnum.LEFT:
+	            this.distanceToCenter = pacmanRectCenter.x - squareRectCenter.x;
+	            break;
+	    }
+	};
+
+	this.changeDirection = function(newDirection){
+	    if (!this.isAdjusting) {
+
+	        if (!this.isHittingWall(newDirection)) {
+	        	//console.log("Here");
+	            this.currentDirection = newDirection;
+	            this.changeImageRotation(newDirection);
+	        }
+	    }
+	};
+
+	this.changeImageRotation = function(newDirection){
+	    if(this.theID === 'pacman-gif'){
+		    var pacmanElement = document.getElementById('pacman-gif');
+		    switch(newDirection){
+		        case MovementEnum.UP:
+		            pacmanElement.className = 'rotate-up';
+		            break;
+		        case MovementEnum.RIGHT:
+		            pacmanElement.className = ' rotate-right';
+		            break;
+		        case MovementEnum.DOWN:
+		            pacmanElement.className = ' rotate-down';
+		            break;
+		        case MovementEnum.LEFT:
+		            pacmanElement.className = ' rotate-left';
+		            break;
+		    }
+		}
+	};
+
+	this.removePellet = function(pacmanSquare){
+		if(this.theID === "pacman-gif"){
+		    // Remove the pellet from this square that Pacman is currently in
+		    var pacmanSquareData = mazeTable[pacmanSquare.x][pacmanSquare.y];
+		    if (pacmanSquareData == PELLET_VALUE) {
+		        var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y)
+		        var pelletElement = document.getElementById('pellet-x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
+		        if (pelletElement) {
+		            squareElement.removeChild(pelletElement);
+		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
+		            sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+		        }
+		    }
+		    else if (pacmanSquareData == POWER_PELLET_VALUE){
+		        var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y)
+		        var pelletElement = document.getElementById('power-pellet-x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
+		        if (pelletElement) {
+		            squareElement.removeChild(pelletElement);
+		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
+		            sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+		        }
+		    }
+		}
+	};
+
+	this.updateCharacter = function(character){
+		//console.log(character.image);
+
+	    this.image.style.top = character.imageTop
+	    
+	    this.image.style.left = character.imageLeft;
+	    
+		this.setInput(character.currentInput);
+		if(this.theID === 'pacman-gif'){
+			this.changeDirection(character.currentInput);
 		}
 	}
 
@@ -173,3 +307,12 @@ function doesRectContainPoint(rect, point){
     }
     return false;
 }
+
+function setPixelsPerTick(){
+
+	var tableData = document.getElementById("x_" + this.startingX + "-y_" + this.startingY);
+	if(tableData != null){
+		pixelsPerTick = tableData.style.width * 0.5;
+	}
+}
+
