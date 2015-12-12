@@ -94,10 +94,10 @@ function fillMaze()
             var tableValue = mazeTable[i][j];
             var tableData = document.getElementById("x_" + i + "-y_" + j);
             if (tableValue == PELLET_VALUE){
-                tableData.innerHTML = "<img src=\"assets/pellet.png\">";
+                tableData.innerHTML = "<img id=\"pellet-x_" + i + "-y_" + j + "\" src=\"assets/pellet.png\">";
             }
             else if (tableValue == POWER_PELLET_VALUE){
-                tableData.innerHTML = "<img src=\"assets/powerpellet.png\">";
+                tableData.innerHTML = "<img id=\"power-pellet-x_" + i + "-y_" + j + "\" src=\"assets/powerpellet.png\">";
             }
         }
     }
@@ -218,10 +218,10 @@ function updateMazeSquare(squareX, squareY, newVal){
         squareElement.style.backgroundColor = "darkblue";
     }
     else if (newVal == PELLET_VALUE){
-        squareElement.innerHTML = "<img src=\"assets/pellet.png\">";
+        squareElement.innerHTML = "<img id=\"pellet-x_" + squareX + "-y_" + squareY + "\" src=\"assets/pellet.png\">";
     }
     else if (newVal == POWER_PELLET_VALUE){
-        squareElement.innerHTML = "<img src=\"assets/powerpellet.png\">";
+        squareElement.innerHTML = "<img id=\"power-pellet-x_" + squareX + "-y_" + squareY + "\" src=\"assets/powerpellet.png\">";
     }
 }
 
@@ -300,11 +300,21 @@ function isPacmanHittingWall(){
 
 function removePellet(pacmanSquare){
     // Remove the pellet from this square that Pacman is currently in
-    if (pacmanSquare.x != -1 && pacmanSquare.y != -1 && (pacmanSquare.x != pacmanStartingX || pacmanSquare.y != pacmanStartingY)) {
-        var pacmanSquareData = mazeTable[pacmanSquare.x][pacmanSquare.y];
-        if (pacmanSquareData == PELLET_VALUE || pacmanSquareData == POWER_PELLET_VALUE) {
-            var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
-            squareElement.innerHTML = "";
+    var pacmanSquareData = mazeTable[pacmanSquare.x][pacmanSquare.y];
+    if (pacmanSquareData == PELLET_VALUE) {
+        var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y)
+        var pelletElement = document.getElementById('pellet-x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
+        if (pelletElement) {
+            squareElement.removeChild(pelletElement);
+            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
+            sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+        }
+    }
+    else if (pacmanSquareData == POWER_PELLET_VALUE){
+        var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y)
+        var pelletElement = document.getElementById('power-pellet-x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
+        if (pelletElement) {
+            squareElement.removeChild(pelletElement);
             mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
             sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
         }
@@ -314,7 +324,6 @@ function removePellet(pacmanSquare){
 function checkInput(){
     if (currentPacmanDirection == MovementEnum.STOPPED){
         if (currentPacmanInput != null){
-            console.log("Changing Pacman direction");
             currentPacmanDirection = currentPacmanInput;
             currentPacmanInput = null;
         }
@@ -336,7 +345,6 @@ function movePacmanImage(){
             imgObj.style.left = parseInt(imgObj.style.left) + pacmanPixelsPerTick + 'px';
             break;
         case MovementEnum.DOWN:
-            console.log(imgObj.style.top);
             imgObj.style.top = parseInt(imgObj.style.top) + pacmanPixelsPerTick + 'px';
             break;
         case MovementEnum.LEFT:
@@ -517,5 +525,4 @@ function checkKey(e) {
     else if (e.keyCode == '39' || e.keyCode == '68') {
         currentPacmanInput = MovementEnum.RIGHT;
     }
-
 }
