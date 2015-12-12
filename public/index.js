@@ -18,6 +18,7 @@ var POWER_PELLET_VALUE = 3;
 
 var mazeTable;
 
+/*
 var pacmanStartingX = 1;
 var pacmanStartingY = 6;
 
@@ -34,9 +35,17 @@ MovementEnum = {
 
 var currentPacmanDirection = MovementEnum.STOPPED;
 var currentPacmanInput = null;
+*/
+
+
+var pacmanObj = new character("pacman-gif", pacmanStartX, pacmanStartY, "pacman.gif");
+var ghost1Obj = new character("ghost1id", ghost1StartX, ghost1StartY, "blinky.gif");
+var ghost2Obj = new character("ghost2id", ghost2StartX, ghost2StartY, "clyde.gif");
+var ghost3Obj = new character("ghost3id", ghost3StartX, ghost3StartY, "inky.gif");
+var ghost4Obj = new character("ghost4id", ghost4StartX, ghost4StartY, "pinky.gif");
 
 window.setInterval(getTableFromServer, 100);
-document.onkeydown = checkKey;
+//document.onkeydown = checkKey;
 
 function displayTables()
 {
@@ -88,11 +97,12 @@ function fillMaze()
         for (var j = 0; j < gridWidth; j++){
             var tableValue = mazeTable[i][j];
             var tableData = document.getElementById("x_" + i + "-y_" + j);
+            
             if (tableValue == PELLET_VALUE){
-                tableData.innerHTML = "<img src=\"assets/pellet.png\">";
+                tableData.innerHTML = "<img id=\"pellet-x_" + i + "-y_" + j + "\" src=\"assets/pellet.png\">";
             }
             else if (tableValue == POWER_PELLET_VALUE){
-                tableData.innerHTML = "<img src=\"assets/powerpellet.png\">";
+                tableData.innerHTML = "<img id=\"power-pellet-x_" + i + "-y_" + j + "\" src=\"assets/powerpellet.png\">";
             }
             else if (tableValue == WALL_VALUE)
             {
@@ -100,6 +110,15 @@ function fillMaze()
             }
         }
     }
+}
+
+
+function placeCharacters(){
+    pacmanObj.placeCharacter();
+    ghost1Obj.placeCharacter();
+    ghost2Obj.placeCharacter();
+    ghost3Obj.placeCharacter();
+    ghost4Obj.placeCharacter();
 }
 
 function setWallSprite(wallPosX, wallPosY)
@@ -205,6 +224,7 @@ function setWallSprite(wallPosX, wallPosY)
     return strHTML;
 }
 
+/*
 function placeCharacters(){
     var tableData = document.getElementById("x_" + pacmanStartingX + "-y_" + pacmanStartingY);
     tableData.innerHTML = "<img src=\"assets/pacman.gif\" id=\"pacman-gif\">";
@@ -212,6 +232,7 @@ function placeCharacters(){
     image.style.width = '80%';
     image.style.height = 'auto';
 }
+*/
 
 function getTableFromServer()
 {
@@ -238,7 +259,7 @@ function handleTable(req) {
             createMaze();
             fillMaze();
             placeCharacters();
-            startPacman();
+            startCharacters();
             isStartup = false;
         }
         else {
@@ -246,6 +267,15 @@ function handleTable(req) {
             compareMazes(newMaze);
         }
     }
+}
+
+
+function startCharacters(){
+    pacmanObj.startMove();
+    ghost1Obj.startMove();
+    ghost2Obj.startMove();
+    ghost3Obj.startMove();
+    ghost4Obj.startMove();
 }
 
 function compareMazes(newMaze){
@@ -271,13 +301,14 @@ function updateMazeSquare(squareX, squareY, newVal){
         squareElement.style.backgroundColor = "darkblue";
     }
     else if (newVal == PELLET_VALUE){
-        squareElement.innerHTML = "<img src=\"assets/pellet.png\">";
+        squareElement.innerHTML = "<img id=\"pellet-x_" + squareX + "-y_" + squareY + "\" src=\"assets/pellet.png\">";
     }
     else if (newVal == POWER_PELLET_VALUE){
-        squareElement.innerHTML = "<img src=\"assets/powerpellet.png\">";
+        squareElement.innerHTML = "<img id=\"power-pellet-x_" + squareX + "-y_" + squareY + "\" src=\"assets/powerpellet.png\">";
     }
 }
 
+/*
 var imgObj;
 
 function startPacman(){
@@ -427,6 +458,7 @@ function doesRectContainPoint(rect, point){
     }
     return false;
 }
+*/
 
 function sendNewTableData(tableX, tableY, newVal){
     var req = new XMLHttpRequest();
@@ -512,6 +544,7 @@ function handleBoardUpdate(board){
     action = board.action;
 }
 
+/*
 function checkKey(e) {
 
     e = e || window.event;
@@ -534,3 +567,4 @@ function checkKey(e) {
     }
 
 }
+*/

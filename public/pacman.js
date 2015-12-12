@@ -29,6 +29,7 @@ var isPacmanAdjusting = false;
 
 var pacmanPixelsPerTick = 2;
 
+/*
 MovementEnum = {
     UP: 0,
     RIGHT: 1,
@@ -40,9 +41,10 @@ MovementEnum = {
 var currentPacmanDirection = MovementEnum.STOPPED;
 var currentPacmanInput = null;
 
-window.setInterval(getTableFromServer, 100);
+window.setInterval(getTableFromServer, 100); */
 document.onkeydown = checkKey;
 
+/*
 function displayTables()
 {
     var oReq = new XMLHttpRequest();
@@ -102,7 +104,9 @@ function fillMaze()
         }
     }
 }
+*/
 
+/*
 function placeCharacters(){
     var tableData = document.getElementById("x_" + pacmanStartingX + "-y_" + pacmanStartingY);
     tableData.innerHTML = "<img src=\"assets/pacman.gif\" id=\"pacman-gif\">";
@@ -159,8 +163,9 @@ function placeOneCharacter(gifName, x, y, id){
     var image = document.getElementById(id);
     image.style.width = '80%';
     image.style.height = 'auto';
-}
+}*/
 
+/*
 function getTableFromServer()
 {
     url = "/table";
@@ -319,8 +324,9 @@ function removePellet(pacmanSquare){
             sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
         }
     }
-}
+}*/
 
+/*
 function checkInput(){
     if (currentPacmanDirection == MovementEnum.STOPPED){
         if (currentPacmanInput != null){
@@ -459,7 +465,7 @@ function sendNewTableData(tableX, tableY, newVal){
     req.open('POST', '/pacman');
     req.send('tableX=' + tableX + '&tableY=' + tableY + '&newVal=' + newVal);
 }
-
+*/
 connect();
 
 socket.emit('send update', "test");
@@ -561,19 +567,27 @@ function checkKey(e) {
     e = e || window.event;
 
     if (e.keyCode == '38' || e.keyCode == '87') {
-        currentPacmanInput = MovementEnum.UP;
-        changePacmanDirection(MovementEnum.UP);
+        //currentPacmanInput = MovementEnum.UP;
+        pacmanObj.setInput(MovementEnum.UP);
+        pacmanObj.changeDirection(MovementEnum.UP);
+        //changePacmanDirection(MovementEnum.UP);
     }
     else if (e.keyCode == '40' || e.keyCode == '83') {
-        currentPacmanInput = MovementEnum.DOWN;
-        changePacmanDirection(MovementEnum.DOWN);
+        //currentPacmanInput = MovementEnum.DOWN;
+        pacmanObj.setInput(MovementEnum.DOWN);
+        pacmanObj.changeDirection(MovementEnum.DOWN);
+        //changePacmanDirection(MovementEnum.DOWN);
     }
     else if (e.keyCode == '37' || e.keyCode == '65') {
-        currentPacmanInput = MovementEnum.LEFT;
-        changePacmanDirection(MovementEnum.LEFT);
+        //currentPacmanInput = MovementEnum.LEFT;
+        pacmanObj.setInput(MovementEnum.LEFT);
+        pacmanObj.changeDirection(MovementEnum.LEFT);
+        //changePacmanDirection(MovementEnum.LEFT);
     }
     else if (e.keyCode == '39' || e.keyCode == '68') {
-        currentPacmanInput = MovementEnum.RIGHT;
-        changePacmanDirection(MovementEnum.RIGHT);
+        //currentPacmanInput = MovementEnum.RIGHT;
+        pacmanObj.setInput(MovementEnum.RIGHT);
+        pacmanObj.changeDirection(MovementEnum.RIGHT);
+        //changePacmanDirection(MovementEnum.RIGHT);
     }
 }

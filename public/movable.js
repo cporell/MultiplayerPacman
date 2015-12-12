@@ -15,6 +15,7 @@ function character(theID, startingX, startingY, gifName) {
     this.currentX = startingX;
     this.currentY = startingY;
     this.currentDirection = MovementEnum.STOPPED;
+    this.currentInput = null;
     this.tableID = "x_" + this.startingX + "-y_" + this.startingY;
     this.image = null;
 
@@ -50,9 +51,11 @@ function character(theID, startingX, startingY, gifName) {
 	    this.currentX = square.x;
 	    this.currentY = square.y;
 
-	    var isMoving = this.isHittingWall();
+	    this.removePellet(square);
 
-	    if (!isMoving && !this.isAdjusting) {
+	    var isHitting = this.isHittingWall(this.currentDirection);
+
+	    if (isHitting && !this.isAdjusting) {
 	        this.getDistanceToCenter(this.theID, square.x, square.y);
 	        this.isAdjusting = true;
 	    }
@@ -100,6 +103,7 @@ function character(theID, startingX, startingY, gifName) {
 	        if (this.currentInput != null){
 	            console.log("Changing ghost direction");
 	            this.currentDirection = this.currentInput;
+	            this.changeImageRotation(this.currentDirection);
 	            this.currentInput = null;
 	        }
 	    }
@@ -112,20 +116,20 @@ function character(theID, startingX, startingY, gifName) {
 		//this.moveCharacter();
 	};
 
-	this.isHittingWall = function(){
+	this.isHittingWall = function(newDirection){
 		// If ghost moves to a new grid square, check to see if the next one is a wall
-		if (this.currentDirection != MovementEnum.STOPPED){
+		if (newDirection != MovementEnum.STOPPED){
 
-		    var nextSquare = getNextSquare(this.currentX, this.currentY, this.currentDirection);
+		    var nextSquare = getNextSquare(this.currentX, this.currentY, newDirection);
 
 		    // If the next square is a wall, stop ghost from moving
 		    if (isNextSquareWall(nextSquare.x, nextSquare.y)){
-		        return false;
+		        return true;
 		    }
-		    return true;
+		    return false;
 		}
 		else{
-			return true;
+			return false;
 		}
 	}
 
@@ -139,18 +143,75 @@ function character(theID, startingX, startingY, gifName) {
 
 	    switch (this.currentDirection){
 	        case MovementEnum.UP:
-	            this.distanceToCenter = Math.abs(pacmanRectCenter.y - squareRectCenter.y);
+	            this.distanceToCenter = pacmanRectCenter.y - squareRectCenter.y;
 	            break;
 	        case MovementEnum.RIGHT:
-	            this.distanceToCenter = Math.abs(pacmanRectCenter.x - squareRectCenter.x);
+	            this.distanceToCenter = squareRectCenter.x - pacmanRectCenter.x;
 	            break;
 	        case MovementEnum.DOWN:
-	            this.distanceToCenter = Math.abs(pacmanRectCenter.y - squareRectCenter.y);
+	            this.distanceToCenter = squareRectCenter.y - pacmanRectCenter.y;
 	            break;
 	        case MovementEnum.LEFT:
-	            this.distanceToCenter = Math.abs(pacmanRectCenter.x - squareRectCenter.x);
+	            this.distanceToCenter = pacmanRectCenter.x - squareRectCenter.x;
 	            break;
 	    }
+	};
+
+	this.changeDirection = function(newDirection){
+	    if (!this.isAdjusting) {
+
+	        if (!this.isHittingWall(newDirection)) {
+	        	console.log("Here");
+	            this.currentDirection = newDirection;
+	            this.changeImageRotation(newDirection);
+	        }
+	    }
+	};
+
+	this.changeImageRotation = function(newDirection){
+	    if(this.theID === 'pacman-gif'){
+		    var pacmanElement = document.getElementById('pacman-gif');
+		    switch(newDirection){
+		        case MovementEnum.UP:
+		            pacmanElement.className = 'rotate-up';
+		            break;
+		        case MovementEnum.RIGHT:
+		            pacmanElement.className = ' rotate-right';
+		            break;
+		        case MovementEnum.DOWN:
+		            pacmanElement.className = ' rotate-down';
+		            break;
+		        case MovementEnum.LEFT:
+		            pacmanElement.className = ' rotate-left';
+		            break;
+		    }
+		}
+	};
+
+	this.removePellet = function(pacmanSquare){
+		if(this.theID === "pacman-gif"){
+		    // Remove the pellet from this square that Pacman is currently in
+		    var pacmanSquareData = mazeTable[pacmanSquare.x][pacmanSquare.y];
+		    if (pacmanSquareData == PELLET_VALUE) {
+		        var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y)
+		        var pelletElement = document.getElementById('pellet-x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
+		        if (pelletElement) {
+					console.log("test")
+		            squareElement.removeChild(pelletElement);
+		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
+		            sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+		        }
+		    }
+		    else if (pacmanSquareData == POWER_PELLET_VALUE){
+		        var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y)
+		        var pelletElement = document.getElementById('power-pellet-x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
+		        if (pelletElement) {
+		            squareElement.removeChild(pelletElement);
+		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
+		            sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+		        }
+		    }
+		}
 	};
 
 }

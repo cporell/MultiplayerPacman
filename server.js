@@ -126,6 +126,7 @@ app.get('/ghost', function (req, res) {
 
     if(passed){
             pageGhost += getStartingPositionsScript();
+            pageGhost += "<script src='index.js' type='text/javascript'></script>";
             pageGhost += "<script src='ghost.js' type='text/javascript'></script>";
             res.send(pageGhost);
     }
@@ -142,6 +143,7 @@ app.get('/pacman', function (req, res) {
     if(cookieManager.pacman === req.cookies.pacmanGame){
         var pagePacman = page;
         pagePacman += getStartingPositionsScript();
+        pagePacman += "<script src='index.js' type='text/javascript'></script>";
         pagePacman += "<script src='pacman.js' type='text/javascript'></script>";
         res.send(pagePacman);
     }
