@@ -249,7 +249,7 @@ function movePacman(){
 
     var isPacmanMoving = isPacmanHittingWall();
 
-    if (!isPacmanMoving && !isPacmanAdjusting) {
+    if (isPacmanMoving && !isPacmanAdjusting) {
         getDistanceToCenter("pacman-gif", pacmanSquare.x, pacmanSquare.y);
         isPacmanAdjusting = true;
     }
@@ -289,12 +289,12 @@ function isPacmanHittingWall(){
 
         // If the next square is a wall, stop Pacman from moving
         if (isNextSquareWall(nextSquare.x, nextSquare.y)){
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
     else {
-        return true;
+        return false;
     }
 }
 
@@ -356,6 +356,16 @@ function movePacmanImage(){
         distanceToCenter -= pacmanPixelsPerTick;
         if (distanceToCenter <= 0){
             isPacmanAdjusting = false;
+            currentPacmanDirection = MovementEnum.STOPPED;
+        }
+    }
+}
+
+function changePacmanDirection(newDirection){
+    if (!isPacmanAdjusting) {
+        currentPacmanDirection = newDirection;
+
+        if (isPacmanHittingWall()) {
             currentPacmanDirection = MovementEnum.STOPPED;
         }
     }
@@ -533,14 +543,18 @@ function checkKey(e) {
 
     if (e.keyCode == '38' || e.keyCode == '87') {
         currentPacmanInput = MovementEnum.UP;
+        changePacmanDirection(MovementEnum.UP);
     }
     else if (e.keyCode == '40' || e.keyCode == '83') {
         currentPacmanInput = MovementEnum.DOWN;
+        changePacmanDirection(MovementEnum.DOWN);
     }
     else if (e.keyCode == '37' || e.keyCode == '65') {
         currentPacmanInput = MovementEnum.LEFT;
+        changePacmanDirection(MovementEnum.LEFT);
     }
     else if (e.keyCode == '39' || e.keyCode == '68') {
         currentPacmanInput = MovementEnum.RIGHT;
+        changePacmanDirection(MovementEnum.RIGHT);
     }
 }
