@@ -18,6 +18,10 @@ function character(theID, startingX, startingY, gifName) {
     this.tableID = "x_" + this.startingX + "-y_" + this.startingY;
     this.image = null;
 
+    this.distanceToCenter = 0;
+	this.isAdjusting = false;
+	this.pixelsPerTick = 2;
+
     this.placeCharacter = function (){
 	    var tableData = document.getElementById("x_" + this.startingX + "-y_" + this.startingY);
 	    tableData.innerHTML = "<img src=\"assets/" + this.gifName + "\" id=\""+ this.theID +"\">";
@@ -48,8 +52,9 @@ function character(theID, startingX, startingY, gifName) {
 
 	    var isMoving = this.isHittingWall();
 
-	    if (!isMoving) {
-	        this.currentDirection = MovementEnum.STOPPED;
+	    if (!isMoving && !this.isAdjusting) {
+	        this.getDistanceToCenter(this.theID, square.x, square.y);
+	        this.isAdjusting = true;
 	    }
 
 	    animate = setTimeout(function(character){
@@ -60,20 +65,34 @@ function character(theID, startingX, startingY, gifName) {
 
 
 	this.moveImage = function(){
+	    if (this.isAdjusting && this.distanceToCenter <= 0){
+	        this.currentDirection = MovementEnum.STOPPED;
+	        this.isAdjusting = false;
+	        return;
+	    }
+
 	    switch(this.currentDirection){
 	        case MovementEnum.UP:
-	            this.image.style.top = parseInt(this.image.style.top) - 2 + 'px';
+	            this.image.style.top = parseInt(this.image.style.top) - this.pixelsPerTick + 'px';
 	            break;
 	        case MovementEnum.RIGHT:
-	            this.image.style.left = parseInt(this.image.style.left) + 2 + 'px';
+	            this.image.style.left = parseInt(this.image.style.left) + this.pixelsPerTick + 'px';
 	            break;
 	        case MovementEnum.DOWN:
-	            this.image.style.top = parseInt(this.image.style.top) + 2 + 'px';
+	            this.image.style.top = parseInt(this.image.style.top) + this.pixelsPerTick + 'px';
 	            break;
 	        case MovementEnum.LEFT:
-	            this.image.style.left = parseInt(this.image.style.left) - 2 + 'px';
+	            this.image.style.left = parseInt(this.image.style.left) - this.pixelsPerTick + 'px';
 	            break;
-		}
+	    }
+
+	    if (this.isAdjusting){
+	        this.distanceToCenter -= this.pixelsPerTick;
+	        if (this.distanceToCenter <= 0){
+	            this.isAdjusting = false;
+	            this.currentDirection = MovementEnum.STOPPED;
+	        }
+	    }
 	};
 
 	this.checkInput = function(){
@@ -105,7 +124,34 @@ function character(theID, startingX, startingY, gifName) {
 		    }
 		    return true;
 		}
+		else{
+			return true;
+		}
 	}
+
+	this.getDistanceToCenter = function(pacmanId, squareX, squareY){
+	    var pacmanElement = document.getElementById(pacmanId);
+	    var gridSquareElement = document.getElementById("x_" + squareX + "-y_" + squareY);
+	    var pacmanRect = pacmanElement.getBoundingClientRect();
+	    var gridSquareRect = gridSquareElement.getBoundingClientRect();
+	    var pacmanRectCenter = {x: (pacmanRect.left + (pacmanRect.width / 2)), y: pacmanRect.top + (pacmanRect.height / 2)};
+	    var squareRectCenter = {x: (gridSquareRect.left + (gridSquareRect.width / 2)), y: gridSquareRect.top + (gridSquareRect.height / 2)};
+
+	    switch (this.currentDirection){
+	        case MovementEnum.UP:
+	            this.distanceToCenter = Math.abs(pacmanRectCenter.y - squareRectCenter.y);
+	            break;
+	        case MovementEnum.RIGHT:
+	            this.distanceToCenter = Math.abs(pacmanRectCenter.x - squareRectCenter.x);
+	            break;
+	        case MovementEnum.DOWN:
+	            this.distanceToCenter = Math.abs(pacmanRectCenter.y - squareRectCenter.y);
+	            break;
+	        case MovementEnum.LEFT:
+	            this.distanceToCenter = Math.abs(pacmanRectCenter.x - squareRectCenter.x);
+	            break;
+	    }
+	};
 
 }
 
@@ -173,3 +219,5 @@ function doesRectContainPoint(rect, point){
     }
     return false;
 }
+
+

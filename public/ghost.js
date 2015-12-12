@@ -257,6 +257,19 @@ function handlePacmanUpdate(ghost){
 
 }
 
+
+function sendGhostUpdate(dir){
+    ghost = {direction: dir, number: ghostNum};
+    sendObjectToSockets('send ghost update', ghost);
+}
+//sendghostUpdate();
+
+function handleGhostUpdate(ghost){
+    oLocation = ghost.oLocation;
+    direction = ghost.direction;
+
+}
+
 function sendGhostsUpdate(){
     ghost1 = {oLocation: "Ghost1 oLocation here", direction: "direction here"};
     ghost2 = {oLocation: "oLocation here", direction: "direction here"};
@@ -293,18 +306,22 @@ function checkKey(e) {
     if (e.keyCode == '38' || e.keyCode == '87') {
         console.log("Up pressed");
         myGhost.setInput(MovementEnum.UP);
+        //sendGhostUpdate(MovementEnum.UP);
     }
     else if (e.keyCode == '40' || e.keyCode == '83') {
         console.log("Down pressed");
         myGhost.setInput(MovementEnum.DOWN);
+        //sendGhostUpdate(MovementEnum.DOWN);
     }
     else if (e.keyCode == '37' || e.keyCode == '65') {
         console.log("Left pressed");
         myGhost.setInput(MovementEnum.LEFT);
+        //sendGhostUpdate(MovementEnum.LEFT);
     }
     else if (e.keyCode == '39' || e.keyCode == '68') {
         console.log("Right pressed");
         myGhost.setInput(MovementEnum.RIGHT);
+        //sendGhostUpdate(MovementEnum.RIGHT);
     }
 
 }

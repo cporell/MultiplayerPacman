@@ -149,6 +149,12 @@ input.fullList
     width: 30px;
 }
 
+.wall-square
+{
+    height: 30px;
+    width: 30px;
+}
+
 .wall
 {
     background-color: darkblue;

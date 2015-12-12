@@ -94,8 +94,115 @@ function fillMaze()
             else if (tableValue == POWER_PELLET_VALUE){
                 tableData.innerHTML = "<img src=\"assets/powerpellet.png\">";
             }
+            else if (tableValue == WALL_VALUE)
+            {
+                tableData.innerHTML = setWallSprite(i, j);
+            }
         }
     }
+}
+
+function setWallSprite(wallPosX, wallPosY)
+{
+    // Check the N, S, E, and W tils adjacent to this one to determine which maze sprite to place.
+    // Checks for being at map bounds are done at this time as well.
+    var boundings = [0, 0, 0, 0]; // N E S W
+
+    // If the tile is on the map extremeties, set the appropriate boundings
+
+    if (wallPosY == 0) { boundings[0] = 0; }
+    else if (wallPosY == (gridHeight - 1)) { boundings[2] = 0; }
+    if (wallPosX == 0) { boundings[3] = 0; }
+    else if (wallPosX == (gridWidth - 1)) { boundings[1] = 0; }
+
+    // is there a wall to the north?
+    if (wallPosY != 0)
+    {
+        if (mazeTable[wallPosX][wallPosY - 1] == WALL_VALUE) {
+            boundings[0] = 1;
+        }
+    }
+    
+    // is there a wall to the east?
+    if (wallPosX != gridWidth - 1)
+    {
+        if (mazeTable[wallPosX + 1][wallPosY] == WALL_VALUE) {
+            boundings[1] = 1;
+        }
+    }
+
+    // is there a wall to the south?
+    if (wallPosY != gridHeight - 1)
+    {
+        if (mazeTable[wallPosX][wallPosY + 1] == WALL_VALUE) {
+            boundings[2] = 1;
+        }
+    }
+
+    // is there a wall to the west?
+    if (wallPosX != 0)
+    {
+        if (mazeTable[wallPosX - 1][wallPosY] == WALL_VALUE) {
+            boundings[3] = 1;
+        }
+    }
+    
+    var wallType = "";
+    // now run through the boundings array to see which wall we should draw
+    if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 0)
+    {
+        wallType = "";
+    }
+    if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 0) {
+        wallType = "cap-top";
+    }
+    if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 1) {
+        wallType = "cap-right";
+    } //
+    if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 0) {
+        wallType = "cap-bot";
+    } //
+    if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 0) {
+        wallType = "cap-left";
+    } //
+    if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 1) {
+        wallType = "long-horiz";
+    } //
+    if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 0) {
+        wallType = "long-vert";
+    } //
+    if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 0) {
+        wallType = "t-TRB";
+    } // 
+    if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 1) {
+        wallType = "t-RBL";
+    }
+    if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 1) {
+        wallType = "t-TBL";
+    }
+    if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 1) {
+        wallType = "t-TRL";
+    }
+    if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 0) {
+        wallType = "l-NE";
+    }
+    if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 0) {
+        wallType = "l-SE";
+    }
+    if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 1) {
+        wallType = "l-NW";
+    }
+    if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 1) {
+        wallType = "l-SW";
+    }
+    if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 1) {
+        wallType = "4way";
+    }
+
+    var strHTML = "<img src='assets/wall-" + wallType + ".png' class='wall-square'>";
+
+    console.log("At " + wallPosX + ", " + wallPosY + " bounding is " + boundings + "walltype is " + wallType);
+    return strHTML;
 }
 
 function placeCharacters(){
