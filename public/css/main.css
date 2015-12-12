@@ -164,6 +164,8 @@ input.fullList
 
 img {
   display: block;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .grid-square

@@ -27,6 +27,10 @@ function character(theID, startingX, startingY, gifName) {
 	this.imageTop = 0;
 	this.imageLeft = 0;
 
+	this.now = +new Date;
+    this.lastFrame = this.now;
+	this.deltaT = this.now - this.lastFrame;
+
     this.placeCharacter = function (){
 	    var tableData = document.getElementById("x_" + this.startingX + "-y_" + this.startingY);
 	    tableData.innerHTML = "<img src=\"assets/" + this.gifName + "\" id=\""+ this.theID +"\">";
@@ -45,6 +49,9 @@ function character(theID, startingX, startingY, gifName) {
 	};
 
 	this.moveCharacter = function(){
+
+		this.now = +new Date;
+    	this.deltaT = this.now - this.lastFrame;
 
 		//console.log(this);
 	    this.moveImage();
@@ -68,6 +75,7 @@ function character(theID, startingX, startingY, gifName) {
 	    	character.moveCharacter();
 	    }, 20, this); 
 	    
+	    this.lastFrame = this.now;
 	};
 
 
@@ -80,16 +88,16 @@ function character(theID, startingX, startingY, gifName) {
 
 	    switch(this.currentDirection){
 	        case MovementEnum.UP:
-	            this.image.style.top = parseInt(this.image.style.top) - pixelsPerTick + 'px';
+	            this.image.style.top = parseInt(this.image.style.top) - (pixelsPerTick * this.deltaT/20) + 'px';
 	            break;
 	        case MovementEnum.RIGHT:
-	            this.image.style.left = parseInt(this.image.style.left) + pixelsPerTick + 'px';
+	            this.image.style.left = parseInt(this.image.style.left) +  (pixelsPerTick * this.deltaT/20) + 'px';
 	            break;
 	        case MovementEnum.DOWN:
-	            this.image.style.top = parseInt(this.image.style.top) + pixelsPerTick + 'px';
+	            this.image.style.top = parseInt(this.image.style.top) +  (pixelsPerTick * this.deltaT/20) + 'px';
 	            break;
 	        case MovementEnum.LEFT:
-	            this.image.style.left = parseInt(this.image.style.left) - pixelsPerTick + 'px';
+	            this.image.style.left = parseInt(this.image.style.left) -  (pixelsPerTick * this.deltaT/20) + 'px';
 	            break;
 	    }
 
@@ -97,7 +105,7 @@ function character(theID, startingX, startingY, gifName) {
 	    this.imageLeft = this.image.style.left;
 
 	    if (this.isAdjusting){
-	        this.distanceToCenter -= pixelsPerTick;
+	        this.distanceToCenter -= (pixelsPerTick * (this.deltaT / 20));
 	        if (this.distanceToCenter <= 0){
 	            this.isAdjusting = false;
 	            this.currentDirection = MovementEnum.STOPPED;
