@@ -231,7 +231,7 @@ function startPacman(){
     imgObj = document.getElementById('pacman-gif');
     imgObj.style.position= 'relative';
     imgObj.style.left = '0px';
-    imgObj.style.top = '0px';
+    imgObj.style.top = '2px';
     movePacman();
 }
 
@@ -325,6 +325,7 @@ function checkInput(){
     if (currentPacmanDirection == MovementEnum.STOPPED){
         if (currentPacmanInput != null){
             currentPacmanDirection = currentPacmanInput;
+            changePacmanImageRotation(currentPacmanInput);
             currentPacmanInput = null;
         }
     }
@@ -364,10 +365,29 @@ function movePacmanImage(){
 function changePacmanDirection(newDirection){
     if (!isPacmanAdjusting) {
         currentPacmanDirection = newDirection;
+        changePacmanImageRotation(newDirection);
 
         if (isPacmanHittingWall()) {
             currentPacmanDirection = MovementEnum.STOPPED;
         }
+    }
+}
+
+function changePacmanImageRotation(newDirection){
+    var pacmanElement = document.getElementById('pacman-gif');
+    switch(newDirection){
+        case MovementEnum.UP:
+            pacmanElement.className = 'rotate-up';
+            break;
+        case MovementEnum.RIGHT:
+            pacmanElement.className = ' rotate-right';
+            break;
+        case MovementEnum.DOWN:
+            pacmanElement.className = ' rotate-down';
+            break;
+        case MovementEnum.LEFT:
+            pacmanElement.className = ' rotate-left';
+            break;
     }
 }
 
