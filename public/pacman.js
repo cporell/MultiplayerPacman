@@ -231,7 +231,7 @@ function startPacman(){
     imgObj = document.getElementById('pacman-gif');
     imgObj.style.position= 'relative';
     imgObj.style.left = '0px';
-    imgObj.style.top = '2px';
+    imgObj.style.top = '0px';
     movePacman();
 }
 
@@ -267,16 +267,16 @@ function getDistanceToCenter(pacmanId, squareX, squareY){
 
     switch (currentPacmanDirection){
         case MovementEnum.UP:
-            distanceToCenter = Math.abs(pacmanRectCenter.y - squareRectCenter.y);
+            distanceToCenter = pacmanRectCenter.y - squareRectCenter.y;
             break;
         case MovementEnum.RIGHT:
-            distanceToCenter = Math.abs(pacmanRectCenter.x - squareRectCenter.x);
+            distanceToCenter = squareRectCenter.x - pacmanRectCenter.x;
             break;
         case MovementEnum.DOWN:
-            distanceToCenter = Math.abs(pacmanRectCenter.y - squareRectCenter.y);
+            distanceToCenter = squareRectCenter.y - pacmanRectCenter.y;
             break;
         case MovementEnum.LEFT:
-            distanceToCenter = Math.abs(pacmanRectCenter.x - squareRectCenter.x);
+            distanceToCenter = pacmanRectCenter.x - squareRectCenter.x;
             break;
     }
 }
