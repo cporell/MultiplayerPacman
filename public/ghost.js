@@ -3,26 +3,9 @@
 // Nathan Bryant nmbryant@wpi.edu
 // Connor Porell cgporell@wpi.edu
 
-// Index.js takes care of game rules as well as event handlers.
+// ghost.js takes care of ghost moves
 
-var isStartup = true;
 var socket = null;
-
-var gridWidth = 20;
-var gridHeight = 20;
-
-var FLOOR_VALUE = 0;
-var WALL_VALUE = 1;
-var PELLET_VALUE = 2;
-var POWER_PELLET_VALUE = 3;
-
-var mazeTable;
-
-var ghostStartingX = 1;
-var ghostStartingY = 6;
-
-var currentghostX = 1;
-var currentghostY = 6;
 
 var myGhostID = "ghost-id";
 
@@ -44,7 +27,7 @@ switch(ghostNum){
         myGhost = ghost4Obj;
         break;
 }
-console.log(myGhost);
+//console.log(myGhost);
 
 
 connect();
@@ -60,23 +43,23 @@ function connect(){
 
     socket.on('new pacman update', function (data) {
         pacman = parseObjectFromSockets(data.pacman);
-        console.log(pacman);
+        //console.log(pacman);
         handlePacmanUpdate(pacman);
     });
     socket.on('new ghosts update', function (data) {
         ghosts = parseObjectFromSockets(data.ghosts);
-        console.log(ghosts);
+        //console.log(ghosts);
         handleGhostsUpdate(ghosts);
     });
     socket.on('new board update', function (data) {
         board = parseObjectFromSockets(data.board);
-        console.log(board);
+        //console.log(board);
         handleBoardUpdate(board);
     });
 }
 
 function sendObjectToSockets(updateName, object){
-    console.log(object);
+    //console.log(object);
     socket.emit(updateName, JSON.stringify(object));
 }
 
@@ -90,10 +73,9 @@ function sendPacmanUpdate(){
 }
 //sendghostUpdate();
 
-function handlePacmanUpdate(ghost){
-    oLocation = ghost.oLocation;
-    direction = ghost.direction;
-
+function handlePacmanUpdate(pacman){
+    //console.log(pacman);
+    pacmanObj.updateCharacter(pacman.pacman);
 }
 
 
@@ -120,10 +102,10 @@ function sendGhostsUpdate(){
 //sendGhostsUpdate();
 
 function handleGhostsUpdate(ghosts){
-    ghost1 = ghosts.ghost1;
-    ghost2 = ghosts.ghost2;
-    ghost3 = ghosts.ghost3;
-    ghost4 = ghosts.ghost4;
+    ghost1Obj.updateCharacter(ghosts.ghost1);
+    ghost2Obj.updateCharacter(ghosts.ghost2);
+    ghost3Obj.updateCharacter(ghosts.ghost3);
+    ghost4Obj.updateCharacter(ghosts.ghost4);
 }
 
 sendBoardUpdate();
@@ -143,24 +125,24 @@ function checkKey(e) {
     e = e || window.event;
 
     if (e.keyCode == '38' || e.keyCode == '87') {
-        console.log("Up pressed");
-        myGhost.setInput(MovementEnum.UP);
-        //sendGhostUpdate(MovementEnum.UP);
+        //console.log("Up pressed");
+        //myGhost.setInput(MovementEnum.UP);
+        sendGhostUpdate(MovementEnum.UP);
     }
     else if (e.keyCode == '40' || e.keyCode == '83') {
-        console.log("Down pressed");
-        myGhost.setInput(MovementEnum.DOWN);
-        //sendGhostUpdate(MovementEnum.DOWN);
+        //console.log("Down pressed");
+        //myGhost.setInput(MovementEnum.DOWN);
+        sendGhostUpdate(MovementEnum.DOWN);
     }
     else if (e.keyCode == '37' || e.keyCode == '65') {
-        console.log("Left pressed");
-        myGhost.setInput(MovementEnum.LEFT);
-        //sendGhostUpdate(MovementEnum.LEFT);
+        //console.log("Left pressed");
+        //myGhost.setInput(MovementEnum.LEFT);
+        sendGhostUpdate(MovementEnum.LEFT);
     }
     else if (e.keyCode == '39' || e.keyCode == '68') {
-        console.log("Right pressed");
-        myGhost.setInput(MovementEnum.RIGHT);
-        //sendGhostUpdate(MovementEnum.RIGHT);
+        //console.log("Right pressed");
+        //myGhost.setInput(MovementEnum.RIGHT);
+        sendGhostUpdate(MovementEnum.RIGHT);
     }
 
 }

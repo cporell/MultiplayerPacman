@@ -7,6 +7,8 @@ MovementEnum = {
     STOPPED: 4
 }
 
+var pixelsPerTick = 2;
+
 function character(theID, startingX, startingY, gifName) {
     this.theID = theID;  
     this.gifName = gifName;
@@ -21,7 +23,9 @@ function character(theID, startingX, startingY, gifName) {
 
     this.distanceToCenter = 0;
 	this.isAdjusting = false;
-	this.pixelsPerTick = 2;
+
+	this.imageTop = 0;
+	this.imageLeft = 0;
 
     this.placeCharacter = function (){
 	    var tableData = document.getElementById("x_" + this.startingX + "-y_" + this.startingY);
@@ -37,7 +41,7 @@ function character(theID, startingX, startingY, gifName) {
 	    this.image.style.left = '0px';
 	    this.image.style.top = '0px';
 	    this.moveCharacter();
-		console.log(this);
+		//console.log(this);
 	};
 
 	this.moveCharacter = function(){
@@ -76,21 +80,24 @@ function character(theID, startingX, startingY, gifName) {
 
 	    switch(this.currentDirection){
 	        case MovementEnum.UP:
-	            this.image.style.top = parseInt(this.image.style.top) - this.pixelsPerTick + 'px';
+	            this.image.style.top = parseInt(this.image.style.top) - pixelsPerTick + 'px';
 	            break;
 	        case MovementEnum.RIGHT:
-	            this.image.style.left = parseInt(this.image.style.left) + this.pixelsPerTick + 'px';
+	            this.image.style.left = parseInt(this.image.style.left) + pixelsPerTick + 'px';
 	            break;
 	        case MovementEnum.DOWN:
-	            this.image.style.top = parseInt(this.image.style.top) + this.pixelsPerTick + 'px';
+	            this.image.style.top = parseInt(this.image.style.top) + pixelsPerTick + 'px';
 	            break;
 	        case MovementEnum.LEFT:
-	            this.image.style.left = parseInt(this.image.style.left) - this.pixelsPerTick + 'px';
+	            this.image.style.left = parseInt(this.image.style.left) - pixelsPerTick + 'px';
 	            break;
 	    }
 
+	    this.imageTop = this.image.style.top;
+	    this.imageLeft = this.image.style.left;
+
 	    if (this.isAdjusting){
-	        this.distanceToCenter -= this.pixelsPerTick;
+	        this.distanceToCenter -= pixelsPerTick;
 	        if (this.distanceToCenter <= 0){
 	            this.isAdjusting = false;
 	            this.currentDirection = MovementEnum.STOPPED;
@@ -101,7 +108,7 @@ function character(theID, startingX, startingY, gifName) {
 	this.checkInput = function(){
 	    if (this.currentDirection == MovementEnum.STOPPED){
 	        if (this.currentInput != null){
-	            console.log("Changing ghost direction");
+	            //console.log("Changing ghost direction");
 	            this.currentDirection = this.currentInput;
 	            this.changeImageRotation(this.currentDirection);
 	            this.currentInput = null;
@@ -161,7 +168,7 @@ function character(theID, startingX, startingY, gifName) {
 	    if (!this.isAdjusting) {
 
 	        if (!this.isHittingWall(newDirection)) {
-	        	console.log("Here");
+	        	//console.log("Here");
 	            this.currentDirection = newDirection;
 	            this.changeImageRotation(newDirection);
 	        }
@@ -196,7 +203,6 @@ function character(theID, startingX, startingY, gifName) {
 		        var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y)
 		        var pelletElement = document.getElementById('pellet-x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
 		        if (pelletElement) {
-					console.log("test")
 		            squareElement.removeChild(pelletElement);
 		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
 		            sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
@@ -213,6 +219,19 @@ function character(theID, startingX, startingY, gifName) {
 		    }
 		}
 	};
+
+	this.updateCharacter = function(character){
+		//console.log(character.image);
+
+	    this.image.style.top = character.imageTop
+	    
+	    this.image.style.left = character.imageLeft;
+	    
+		this.setInput(character.currentInput);
+		if(this.theID === 'pacman-gif'){
+			this.changeDirection(character.currentInput);
+		}
+	}
 
 }
 
@@ -281,4 +300,11 @@ function doesRectContainPoint(rect, point){
     return false;
 }
 
+function setPixelsPerTick(){
+
+	var tableData = document.getElementById("x_" + this.startingX + "-y_" + this.startingY);
+	if(tableData != null){
+		pixelsPerTick = tableData.style.width * 0.5;
+	}
+}
 

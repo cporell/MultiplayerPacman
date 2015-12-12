@@ -82,9 +82,14 @@ h2
 
 table
 {
-    border: groove;
+  border-spacing: 0;
     border-collapse:collapse;
     width: auto;
+    height: auto;
+    table-layout: fixed;
+  padding: 0;
+  margin: 0;
+  border: none;
 }
 
 thead
@@ -102,7 +107,21 @@ th
 
 tr
 {
-    font-family: 'Raleway';
+  font-family: 'Raleway';
+  border-collapse: collapse;
+  padding: 0;
+  margin: 0;
+  border: none;
+  height: 30px;
+  max-height: 30px;
+  min-height: 30px;
+}
+
+td{
+  padding: 0;
+  border-collapse: collapse;
+  margin: 0;
+  border: none;
 }
 
 a
@@ -143,16 +162,33 @@ input.fullList
     font-size: 1.5em;
 }
 
+img {
+  display: block;
+}
+
 .grid-square
 {
     height: 30px;
     width: 30px;
+    max-height: 30px;
+    max-width: 30px;
+    min-height: 30px;
+    min-width: 30px;
 }
 
 .wall-square
 {
+  /*
     height: 30px;
     width: 30px;
+    max-height: 30px;
+    max-width: 30px;
+    min-height: 30px;
+    min-width: 30px;
+    */
+    height: 28px;
+    width: 28px;
+    overflow: hidden;
 }
 
 .wall

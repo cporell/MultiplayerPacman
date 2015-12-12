@@ -44,7 +44,7 @@ var ghost2Obj = new character("ghost2id", ghost2StartX, ghost2StartY, "clyde.gif
 var ghost3Obj = new character("ghost3id", ghost3StartX, ghost3StartY, "inky.gif");
 var ghost4Obj = new character("ghost4id", ghost4StartX, ghost4StartY, "pinky.gif");
 
-window.setInterval(getTableFromServer, 100);
+window.setTimeout(getTableFromServer, 100);
 //document.onkeydown = checkKey;
 
 function displayTables()
@@ -89,6 +89,7 @@ function createMaze()
     }
     html += "</table>";
     maze.innerHTML = html;
+    setPixelsPerTick();
 }
 
 function fillMaze()
@@ -220,19 +221,9 @@ function setWallSprite(wallPosX, wallPosY)
 
     var strHTML = "<img src='assets/wall-" + wallType + ".png' class='wall-square'>";
 
-    console.log("At " + wallPosX + ", " + wallPosY + " bounding is " + boundings + "walltype is " + wallType);
+    //console.log("At " + wallPosX + ", " + wallPosY + " bounding is " + boundings + "walltype is " + wallType);
     return strHTML;
 }
-
-/*
-function placeCharacters(){
-    var tableData = document.getElementById("x_" + pacmanStartingX + "-y_" + pacmanStartingY);
-    tableData.innerHTML = "<img src=\"assets/pacman.gif\" id=\"pacman-gif\">";
-    var image = document.getElementById("pacman-gif");
-    image.style.width = '80%';
-    image.style.height = 'auto';
-}
-*/
 
 function getTableFromServer()
 {
@@ -252,10 +243,10 @@ function handleTable(req) {
     }
 
     if(req.status === 200) {
-        console.log("Handling table");
+        //console.log("Handling table");
         if (isStartup) {
             mazeTable = eval(req.responseText);
-            console.log(mazeTable);
+            //console.log(mazeTable);
             createMaze();
             fillMaze();
             placeCharacters();
@@ -308,157 +299,6 @@ function updateMazeSquare(squareX, squareY, newVal){
     }
 }
 
-/*
-var imgObj;
-
-function startPacman(){
-    imgObj = document.getElementById('pacman-gif');
-    imgObj.style.position= 'relative';
-    imgObj.style.left = '0px';
-    imgObj.style.top = '0px';
-    movePacman();
-}
-
-function movePacman(){
-
-    movePacmanImage();
-    checkInput();
-
-    var pacmanSquare = getSquareForObject("pacman-gif");
-
-    removePellet(pacmanSquare);
-
-    currentPacmanX = pacmanSquare.x;
-    currentPacmanY = pacmanSquare.y;
-
-    var isPacmanMoving = isPacmanHittingWall();
-
-    if (!isPacmanMoving) {
-        currentPacmanDirection = MovementEnum.STOPPED;
-    }
-
-    animate = setTimeout(movePacman, 20); // call movePacman in 20msec
-}
-
-function isPacmanHittingWall(){
-    // If Pacman moves to a new grid square, check to see if the next one is a wall
-    if (currentPacmanDirection != MovementEnum.STOPPED){
-
-        var nextSquare = getNextSquare(currentPacmanX, currentPacmanY, currentPacmanDirection);
-
-        // If the next square is a wall, stop Pacman from moving
-        if (isNextSquareWall(nextSquare.x, nextSquare.y)){
-            return false;
-        }
-        return true;
-    }
-}
-
-function removePellet(pacmanSquare){
-    // Remove the pellet from this square that Pacman is currently in
-    if (pacmanSquare.x != -1 && pacmanSquare.y != -1 && (pacmanSquare.x != pacmanStartingX || pacmanSquare.y != pacmanStartingY)) {
-        var pacmanSquareData = mazeTable[pacmanSquare.x][pacmanSquare.y];
-        if (pacmanSquareData == PELLET_VALUE || pacmanSquareData == POWER_PELLET_VALUE) {
-            var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
-            squareElement.innerHTML = "";
-            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
-            sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
-        }
-    }
-}
-
-function checkInput(){
-    if (currentPacmanDirection == MovementEnum.STOPPED){
-        if (currentPacmanInput != null){
-            console.log("Changing Pacman direction");
-            currentPacmanDirection = currentPacmanInput;
-            currentPacmanInput = null;
-        }
-    }
-}
-
-function movePacmanImage(){
-    switch(currentPacmanDirection){
-        case MovementEnum.UP:
-            imgObj.style.top = parseInt(imgObj.style.top) - 2 + 'px';
-            break;
-        case MovementEnum.RIGHT:
-            imgObj.style.left = parseInt(imgObj.style.left) + 2 + 'px';
-            break;
-        case MovementEnum.DOWN:
-            console.log(imgObj.style.top);
-            imgObj.style.top = parseInt(imgObj.style.top) + 2 + 'px';
-            break;
-        case MovementEnum.LEFT:
-            imgObj.style.left = parseInt(imgObj.style.left) - 2 + 'px';
-            break;
-    }
-}
-
-function isNextSquareWall(nextX, nextY){
-    if (nextX < 0 || nextX > mazeTable.length || nextY < 0 || nextY > mazeTable[0].length){
-        return true;
-    }
-    if (mazeTable[nextX][nextY] == WALL_VALUE){
-        return true;
-    }
-    return false;
-}
-
-function getNextSquare(currentX, currentY, currentDirection){
-    var nextSquare;
-    switch(currentDirection){
-        case MovementEnum.UP:
-            nextSquare = {x: currentX - 1, y: currentY};
-            break;
-        case MovementEnum.RIGHT:
-            nextSquare = {x: currentX, y: currentY + 1};
-            break;
-        case MovementEnum.DOWN:
-            nextSquare = {x: currentX + 1, y: currentY};
-            break;
-        case MovementEnum.LEFT:
-            nextSquare = {x: currentX, y: currentY - 1};
-            break;
-    }
-    return nextSquare;
-}
-
-function isCollision(rect1, rect2){
-    return !(rect1.right < rect2.left ||
-    rect1.left > rect2.right ||
-    rect1.bottom < rect2.top ||
-    rect1.top > rect2.bottom);
-}
-
-function getSquareForObject(elementId){
-    var coordinate;
-    var givenElement = document.getElementById(elementId);
-    for (var i = 0; i < gridWidth; i++){
-        for (var j = 0; j < gridHeight; j++){
-            var squareElement = document.getElementById("x_" + i + "-y_" + j);
-            gridSquare = squareElement.getBoundingClientRect();
-            givenRect = givenElement.getBoundingClientRect();
-            var givenRectCenter;
-            givenRectCenter = {x: (givenRect.left + (givenRect.width / 2)), y: givenRect.top + (givenRect.height / 2)};
-            var isElementInSquare = doesRectContainPoint(gridSquare, givenRectCenter);
-            if (isElementInSquare){
-                var squareCoords = {x: i, y: j};
-                return squareCoords;
-            }
-        }
-    }
-    var squareCoords = {x: -1, y: -1};
-    return squareCoords;
-}
-
-function doesRectContainPoint(rect, point){
-    if (point.x <= rect.right && point.x >= rect.left && point.y <= rect.bottom && point.y >= rect.top){
-        return true;
-    }
-    return false;
-}
-*/
 
 function sendNewTableData(tableX, tableY, newVal){
     var req = new XMLHttpRequest();
@@ -479,23 +319,23 @@ function connect(){
 
     socket.on('new pacman update', function (data) {
         pacman = parseObjectFromSockets(data.pacman);
-        console.log(pacman);
+        //console.log(pacman);
         handlePacmanUpdate(pacman);
     });
     socket.on('new ghosts update', function (data) {
         ghosts = parseObjectFromSockets(data.ghosts);
-        console.log(ghosts);
+        //console.log(ghosts);
         handleGhostsUpdate(ghosts);
     });
     socket.on('new board update', function (data) {
         board = parseObjectFromSockets(data.board);
-        console.log(board);
+        //console.log(board);
         handleBoardUpdate(board);
     });
 }
 
 function sendObjectToSockets(updateName, object){
-    console.log(object);
+    //console.log(object);
     socket.emit(updateName, JSON.stringify(object));
 }
 
@@ -543,28 +383,3 @@ function handleBoardUpdate(board){
     oLocation = board.oLocation;
     action = board.action;
 }
-
-/*
-function checkKey(e) {
-
-    e = e || window.event;
-
-    if (e.keyCode == '38' || e.keyCode == '87') {
-        console.log("Up pressed");
-        currentPacmanInput = MovementEnum.UP;
-    }
-    else if (e.keyCode == '40' || e.keyCode == '83') {
-        console.log("Down pressed");
-        currentPacmanInput = MovementEnum.DOWN;
-    }
-    else if (e.keyCode == '37' || e.keyCode == '65') {
-        console.log("Left pressed");
-        currentPacmanInput = MovementEnum.LEFT;
-    }
-    else if (e.keyCode == '39' || e.keyCode == '68') {
-        console.log("Right pressed");
-        currentPacmanInput = MovementEnum.RIGHT;
-    }
-
-}
-*/
