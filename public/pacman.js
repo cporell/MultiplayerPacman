@@ -51,28 +51,36 @@ function checkKey(e) {
     if (e.keyCode == '38' || e.keyCode == '87') {
         //currentPacmanInput = MovementEnum.UP;
         pacmanObj.setInput(MovementEnum.UP);
-        pacmanObj.changeDirection(MovementEnum.UP);
+        if (pacmanObj.currentDirection == MovementEnum.DOWN) {
+            pacmanObj.changeDirection(MovementEnum.UP);
+        }
         sendPacmanUpdate(MovementEnum.UP);
         //changePacmanDirection(MovementEnum.UP);
     }
     else if (e.keyCode == '40' || e.keyCode == '83') {
         //currentPacmanInput = MovementEnum.DOWN;
         pacmanObj.setInput(MovementEnum.DOWN);
-        pacmanObj.changeDirection(MovementEnum.DOWN);
+        if (pacmanObj.currentDirection == MovementEnum.UP) {
+            pacmanObj.changeDirection(MovementEnum.DOWN);
+        }
         sendPacmanUpdate(MovementEnum.DOWN);
         //changePacmanDirection(MovementEnum.DOWN);
     }
     else if (e.keyCode == '37' || e.keyCode == '65') {
         //currentPacmanInput = MovementEnum.LEFT;
         pacmanObj.setInput(MovementEnum.LEFT);
-        pacmanObj.changeDirection(MovementEnum.LEFT);
+        if (pacmanObj.currentDirection == MovementEnum.RIGHT) {
+            pacmanObj.changeDirection(MovementEnum.LEFT);
+        }
         sendPacmanUpdate(MovementEnum.LEFT);
         //changePacmanDirection(MovementEnum.LEFT);
     }
     else if (e.keyCode == '39' || e.keyCode == '68') {
         //currentPacmanInput = MovementEnum.RIGHT;
         pacmanObj.setInput(MovementEnum.RIGHT);
-        pacmanObj.changeDirection(MovementEnum.RIGHT);
+        if (pacmanObj.currentDirection == MovementEnum.LEFT) {
+            pacmanObj.changeDirection(MovementEnum.RIGHT);
+        }
         sendPacmanUpdate(MovementEnum.RIGHT);
         //changePacmanDirection(MovementEnum.RIGHT);
     }

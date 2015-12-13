@@ -23,6 +23,7 @@ function character(theID, startingX, startingY, gifName) {
 
     this.distanceToCenter = 0;
 	this.isAdjusting = false;
+	this.isAdjustingIntersection = false;
 
 	this.imageTop = 0;
 	this.imageLeft = 0;
@@ -71,6 +72,12 @@ function character(theID, startingX, startingY, gifName) {
 	        this.isAdjusting = true;
 	    }
 
+		else if (this.currentInput != null && !this.isAdjustingIntersection && !this.isAdjusting && this.isAtIntersection(this.currentX, this.currentY, this.currentDirection)){
+			this.getDistanceToCenter(this.theID, this.currentX, this.currentY);
+			this.isAdjusting = true;
+			this.isAdjustingIntersection = true;
+		}
+
 	    animate = setTimeout(function(character){
 	    	character.moveCharacter();
 	    }, 20, this); 
@@ -78,13 +85,47 @@ function character(theID, startingX, startingY, gifName) {
 	    this.lastFrame = this.now;
 	};
 
+	this.isAtIntersection = function(currentSquareX, currentSquareY, currentDirection){
+		var squareAbove = getNextSquare(currentSquareX, currentSquareY, MovementEnum.UP);
+		var squareAboveData = mazeTable[squareAbove.x][squareAbove.y];
+
+		var squareRight = getNextSquare(currentSquareX, currentSquareY, MovementEnum.RIGHT);
+		var squareRightData = mazeTable[squareRight.x][squareRight.y];
+
+		var squareBelow = getNextSquare(currentSquareX, currentSquareY, MovementEnum.DOWN);
+		var squareBelowData = mazeTable[squareBelow.x][squareBelow.y];
+
+		var squareLeft = getNextSquare(currentSquareX, currentSquareY, MovementEnum.LEFT);
+		var squareLeftData = mazeTable[squareLeft.x][squareLeft.y];
+
+		var isAtIntersection = false;
+
+		switch(currentDirection){
+			case MovementEnum.UP:
+				isAtIntersection = (squareRightData !== WALL_VALUE || squareLeftData !== WALL_VALUE);
+				break;
+			case MovementEnum.DOWN:
+				isAtIntersection = (squareRightData !== WALL_VALUE || squareLeftData !== WALL_VALUE);
+				break;
+			case MovementEnum.RIGHT:
+				isAtIntersection = (squareAboveData !== WALL_VALUE || squareBelowData !== WALL_VALUE);
+				break;
+			case MovementEnum.LEFT:
+				isAtIntersection = (squareAboveData !== WALL_VALUE || squareBelowData !== WALL_VALUE);
+				break;
+		}
+
+		return isAtIntersection
+	};
 
 	this.moveImage = function(){
-	    if (this.isAdjusting && this.distanceToCenter <= 0){
+		/*
+	    if (!this.isAdjustingIntersection && this.isAdjusting && this.distanceToCenter <= 0){
 	        this.currentDirection = MovementEnum.STOPPED;
 	        this.isAdjusting = false;
 	        return;
 	    }
+	    */
 
 	    switch(this.currentDirection){
 	        case MovementEnum.UP:
@@ -108,20 +149,32 @@ function character(theID, startingX, startingY, gifName) {
 	        this.distanceToCenter -= (pixelsPerTick * (this.deltaT / 20));
 	        if (this.distanceToCenter <= 0){
 	            this.isAdjusting = false;
-	            this.currentDirection = MovementEnum.STOPPED;
+				if (!this.isAdjustingIntersection) {
+					this.currentDirection = MovementEnum.STOPPED;
+				}
+				else {
+					var nextSquare = getNextSquare(this.currentX, this.currentY, this.currentInput);
+					var nextSquareData = mazeTable[nextSquare.x][nextSquare.y];
+					if (nextSquareData !== WALL_VALUE) {
+						this.currentDirection = this.currentInput;
+						this.changeImageRotation(this.currentDirection);
+						this.currentInput = null;
+					}
+					this.isAdjustingIntersection = false;
+				}
 	        }
 	    }
 	};
 
 	this.checkInput = function(){
-	    if (this.currentDirection == MovementEnum.STOPPED){
-	        if (this.currentInput != null){
-	            //console.log("Changing ghost direction");
-	            this.currentDirection = this.currentInput;
-	            this.changeImageRotation(this.currentDirection);
-	            this.currentInput = null;
-	        }
-	    }
+	    if (this.currentDirection == MovementEnum.STOPPED) {
+			if (this.currentInput != null) {
+				//console.log("Changing ghost direction");
+				this.currentDirection = this.currentInput;
+				this.changeImageRotation(this.currentDirection);
+				this.currentInput = null;
+			}
+		}
 	};
 
 
@@ -178,7 +231,7 @@ function character(theID, startingX, startingY, gifName) {
 	};
 
 	this.changeDirection = function(newDirection){
-	    if (!this.isAdjusting) {
+	    if (!this.isAdjusting || !this.isAdjustingIntersection) {
 
 	        if (!this.isHittingWall(newDirection)) {
 	        	//console.log("Here");
