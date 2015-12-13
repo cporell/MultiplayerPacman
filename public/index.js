@@ -37,6 +37,21 @@ var currentPacmanDirection = MovementEnum.STOPPED;
 var currentPacmanInput = null;
 */
 
+var isActive;
+
+window.onfocus = function () { 
+  isActive = true; 
+}; 
+
+window.onblur = function () { 
+  isActive = false; 
+}; 
+
+// test
+//setInterval(function () { 
+//  console.log(window.isActive ? 'active' : 'inactive'); 
+//}, 1000);
+
 
 var pacmanObj = new character("pacman-gif", pacmanStartX, pacmanStartY, "pacman.gif");
 var ghost1Obj = new character("ghost1id", ghost1StartX, ghost1StartY, "blinky.gif");
