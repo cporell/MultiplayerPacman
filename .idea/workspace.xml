@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d4f20047-f73e-4b59-9882-30be6e7dea5d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/movable.js" afterPath="$PROJECT_DIR$/public/movable.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/pacman.js" afterPath="$PROJECT_DIR$/public/pacman.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MultiplayerPacman.iws" />
@@ -55,8 +54,8 @@
       <file leaf-file-name="movable.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/movable.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2733686" vertical-offset="2684" max-vertical-offset="6596">
-              <caret line="167" column="0" selection-start-line="167" selection-start-column="0" selection-end-line="167" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.54320985" vertical-offset="967" max-vertical-offset="6630">
+              <caret line="75" column="59" selection-start-line="75" selection-start-column="59" selection-end-line="75" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -591,8 +590,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/movable.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2733686" vertical-offset="2684" max-vertical-offset="6596">
-          <caret line="167" column="0" selection-start-line="167" selection-start-column="0" selection-end-line="167" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.54320985" vertical-offset="967" max-vertical-offset="6630">
+          <caret line="75" column="59" selection-start-line="75" selection-start-column="59" selection-end-line="75" selection-end-column="59" />
           <folding />
         </state>
       </provider>

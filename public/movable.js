@@ -68,14 +68,12 @@ function character(theID, startingX, startingY, gifName) {
 	    var isHitting = this.isHittingWall(this.currentDirection);
 
 	    if (isHitting && !this.isAdjusting) {
-	        this.getDistanceToCenter(this.theID, square.x, square.y);
-	        this.isAdjusting = true;
+	        this.isAdjusting = this.getDistanceToCenter(this.theID, square.x, square.y);
 	    }
 
 		else if (this.currentInput != null && !this.isAdjustingIntersection && !this.isAdjusting && this.isAtIntersection(this.currentX, this.currentY, this.currentDirection)){
-			this.getDistanceToCenter(this.theID, this.currentX, this.currentY);
-			this.isAdjusting = true;
-			this.isAdjustingIntersection = true;
+			this.isAdjusting = this.getDistanceToCenter(this.theID, this.currentX, this.currentY);
+			this.isAdjustingIntersection = this.isAdjusting;
 		}
 
 	    animate = setTimeout(function(character){
@@ -169,9 +167,8 @@ function character(theID, startingX, startingY, gifName) {
 	this.checkInput = function(){
 	    if (this.currentDirection == MovementEnum.STOPPED) {
 			if (this.currentInput != null) {
-				//console.log("Changing ghost direction");
-				this.currentDirection = this.currentInput;
-				this.changeImageRotation(this.currentDirection);
+				//console.log("Changing ghost direction")
+				this.changeDirection(this.currentInput);
 				this.currentInput = null;
 			}
 		}
@@ -228,6 +225,11 @@ function character(theID, startingX, startingY, gifName) {
 	            this.distanceToCenter = pacmanRectCenter.x - squareRectCenter.x;
 	            break;
 	    }
+
+		if (this.distanceToCenter <= 0){
+			return false;
+		}
+		return true;
 	};
 
 	this.changeDirection = function(newDirection){
