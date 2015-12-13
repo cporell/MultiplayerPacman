@@ -136,6 +136,7 @@ function character(theID, startingX, startingY, gifName) {
 		if (newDirection != MovementEnum.STOPPED){
 
 		    var nextSquare = getNextSquare(this.currentX, this.currentY, newDirection);
+		    if(!nextSquare) return true;
 
 		    // If the next square is a wall, stop ghost from moving
 		    if (isNextSquareWall(nextSquare.x, nextSquare.y)){

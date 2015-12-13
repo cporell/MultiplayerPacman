@@ -8,6 +8,8 @@
 var isStartup = true;
 document.onkeydown = checkKey;
 
+window.setInterval(sendPacmanUpdate, 500);
+
 socket.on('new ghost update', function (data) {
     ghost = parseObjectFromSockets(data.ghost);
     console.log(ghost);
