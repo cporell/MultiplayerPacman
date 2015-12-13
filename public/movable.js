@@ -386,6 +386,9 @@ function getNextSquare(currentX, currentY, currentDirection){
         case MovementEnum.LEFT:
             nextSquare = {x: currentX, y: currentY - 1};
             break;
+		default:
+			nextSquare = {x: currentX, y: currentY};
+			break;
     }
     return nextSquare;
 }
