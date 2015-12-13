@@ -152,16 +152,62 @@ function character(theID, startingX, startingY, gifName) {
 						this.currentDirection = MovementEnum.STOPPED;
 					}
 					else {
-						this.currentDirection = chooseRandomDirection(this.currentX, this.currentY, this.currentDirection);
+						if (this.currentInput == null || this.isHittingWall(this.currentInput) || areDirectionsOpposites(this.currentDirection, this.currentInput)) {
+							this.currentDirection = chooseRandomDirection(this.currentX, this.currentY, this.currentDirection);
+							this.currentInput = null;
+						}
+						else {
+							this.currentDirection = this.currentInput;
+							this.currentInput = null;
+						}
 					}
 				}
 				else {
 					var nextSquare = getNextSquare(this.currentX, this.currentY, this.currentInput);
 					var nextSquareData = mazeTable[nextSquare.x][nextSquare.y];
 					if (nextSquareData !== WALL_VALUE) {
-						this.currentDirection = this.currentInput;
-						this.changeImageRotation(this.currentDirection);
-						this.currentInput = null;
+						if (this.theID == 'pacman-gif') {
+							this.currentDirection = this.currentInput;
+							this.changeImageRotation(this.currentDirection);
+							this.currentInput = null;
+						}
+						else {
+							switch (this.currentDirection){
+								case MovementEnum.UP:
+									if (this.currentInput == MovementEnum.RIGHT || this.currentInput == MovementEnum.LEFT){
+										this.currentDirection = this.currentInput;
+										this.changeImageRotation(this.currentDirection);
+										this.currentInput = null;
+									}
+									break;
+								case MovementEnum.DOWN:
+									if (this.currentInput == MovementEnum.RIGHT || this.currentInput == MovementEnum.LEFT){
+										this.currentDirection = this.currentInput;
+										this.changeImageRotation(this.currentDirection);
+										this.currentInput = null;
+									}
+									break;
+								case MovementEnum.RIGHT:
+									if (this.currentInput == MovementEnum.UP || this.currentInput == MovementEnum.DOWN){
+										this.currentDirection = this.currentInput;
+										this.changeImageRotation(this.currentDirection);
+										this.currentInput = null;
+									}
+									break;
+								case MovementEnum.LEFT:
+									if (this.currentInput == MovementEnum.UP || this.currentInput == MovementEnum.DOWN){
+										this.currentDirection = this.currentInput;
+										this.changeImageRotation(this.currentDirection);
+										this.currentInput = null;
+									}
+									break;
+								default:
+									this.currentDirection = this.currentInput;
+									this.changeImageRotation(this.currentDirection);
+									this.currentInput = null;
+									break;
+							}
+						}
 					}
 					this.isAdjustingIntersection = false;
 				}
@@ -439,5 +485,31 @@ function chooseRandomDirection(squareX, squareY, currentDirection){
 
 	var randIndex = Math.ceil((Math.random() * (availableDirections.length - 1)));
 	return availableDirections[randIndex];
+}
+
+function areDirectionsOpposites(directionA, directionB){
+	switch (directionA){
+		case MovementEnum.UP:
+			if (directionB == MovementEnum.DOWN){
+				return true;
+			}
+			break;
+		case MovementEnum.DOWN:
+			if (directionB == MovementEnum.UP){
+				return true;
+			}
+			break;
+		case MovementEnum.RIGHT:
+			if (directionB == MovementEnum.LEFT){
+				return true;
+			}
+			break;
+		case MovementEnum.LEFT:
+			if (directionB == MovementEnum.RIGHT){
+				return true;
+			}
+			break;
+	}
+	return false;
 }
 
