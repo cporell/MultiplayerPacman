@@ -148,7 +148,12 @@ function character(theID, startingX, startingY, gifName) {
 	        if (this.distanceToCenter <= 0){
 	            this.isAdjusting = false;
 				if (!this.isAdjustingIntersection) {
-					this.currentDirection = MovementEnum.STOPPED;
+					if (this.theID === 'pacman-gif') {
+						this.currentDirection = MovementEnum.STOPPED;
+					}
+					else {
+						this.currentDirection = chooseRandomDirection(this.currentX, this.currentY, this.currentDirection);
+					}
 				}
 				else {
 					var nextSquare = getNextSquare(this.currentX, this.currentY, this.currentInput);
@@ -380,5 +385,59 @@ function setPixelsPerTick(){
 	if(tableData != null){
 		pixelsPerTick = tableData.style.width * 0.5;
 	}
+}
+
+function chooseRandomDirection(squareX, squareY, currentDirection){
+	var squareAbove = getNextSquare(squareX, squareY, MovementEnum.UP);
+	var squareAboveData = mazeTable[squareAbove.x][squareAbove.y];
+
+	var squareRight = getNextSquare(squareX, squareY, MovementEnum.RIGHT);
+	var squareRightData = mazeTable[squareRight.x][squareRight.y];
+
+	var squareBelow = getNextSquare(squareX, squareY, MovementEnum.DOWN);
+	var squareBelowData = mazeTable[squareBelow.x][squareBelow.y];
+
+	var squareLeft = getNextSquare(squareX, squareY, MovementEnum.LEFT);
+	var squareLeftData = mazeTable[squareLeft.x][squareLeft.y];
+
+	var availableDirections = [];
+
+	switch(currentDirection){
+		case MovementEnum.UP:
+			if (squareRightData !== WALL_VALUE){
+				availableDirections.push(MovementEnum.RIGHT);
+			}
+			if (squareLeftData !== WALL_VALUE){
+				availableDirections.push(MovementEnum.LEFT);
+			}
+			break;
+		case MovementEnum.DOWN:
+			if (squareRightData !== WALL_VALUE){
+				availableDirections.push(MovementEnum.RIGHT);
+			}
+			if (squareLeftData !== WALL_VALUE){
+				availableDirections.push(MovementEnum.LEFT);
+			}
+			break;
+		case MovementEnum.RIGHT:
+			if (squareAboveData !== WALL_VALUE){
+				availableDirections.push(MovementEnum.UP);
+			}
+			if (squareBelowData !== WALL_VALUE){
+				availableDirections.push(MovementEnum.DOWN);
+			}
+			break;
+		case MovementEnum.LEFT:
+			if (squareAboveData !== WALL_VALUE){
+				availableDirections.push(MovementEnum.UP);
+			}
+			if (squareBelowData !== WALL_VALUE){
+				availableDirections.push(MovementEnum.DOWN);
+			}
+			break;
+	}
+
+	var randIndex = Math.ceil((Math.random() * (availableDirections.length - 1)));
+	return availableDirections[randIndex];
 }
 
