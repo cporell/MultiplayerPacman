@@ -18,8 +18,10 @@ function character(theID, startingX, startingY, gifName) {
     this.currentY = startingY;
     this.currentDirection = MovementEnum.STOPPED;
     this.currentInput = null;
+    this.lastInput = null;
     this.tableID = "x_" + this.startingX + "-y_" + this.startingY;
     this.image = null;
+    this.animateFunction = null;
 
     this.distanceToCenter = 0;
 	this.isAdjusting = false;
@@ -50,9 +52,11 @@ function character(theID, startingX, startingY, gifName) {
 	};
 
 	this.moveCharacter = function(){
+		this.animateFunction = null;
 
 		this.now = +new Date;
     	this.deltaT = this.now - this.lastFrame;
+    	//console.log(this.deltaT);
 
 		//console.log(this);
 	    this.moveImage();
@@ -60,23 +64,25 @@ function character(theID, startingX, startingY, gifName) {
 
 	    var square = getSquareForObject(this.theID);
 
-	    this.currentX = square.x;
-	    this.currentY = square.y;
+	    if(square){
+		    this.currentX = square.x;
+		    this.currentY = square.y;
 
-	    this.removePellet(square);
+		    this.removePellet(square);
 
-	    var isHitting = this.isHittingWall(this.currentDirection);
+		    var isHitting = this.isHittingWall(this.currentDirection);
 
-	    if (isHitting && !this.isAdjusting) {
-	        this.isAdjusting = this.getDistanceToCenter(this.theID, square.x, square.y);
-	    }
+		    if (isHitting && !this.isAdjusting) {
+		        this.isAdjusting = this.getDistanceToCenter(this.theID, square.x, square.y);
+		    }
 
-		else if (this.currentInput != null && !this.isAdjustingIntersection && !this.isAdjusting && this.isAtIntersection(this.currentX, this.currentY, this.currentDirection)){
-			this.isAdjusting = this.getDistanceToCenter(this.theID, this.currentX, this.currentY);
-			this.isAdjustingIntersection = this.isAdjusting;
+			else if (this.currentInput != null && !this.isAdjustingIntersection && !this.isAdjusting && this.isAtIntersection(this.currentX, this.currentY, this.currentDirection)){
+				this.isAdjusting = this.getDistanceToCenter(this.theID, this.currentX, this.currentY);
+				this.isAdjustingIntersection = this.isAdjusting;
+			}
 		}
 
-	    animate = setTimeout(function(character){
+	     this.animateFunction = setTimeout(function(character){
 	    	character.moveCharacter();
 	    }, 20, this); 
 	    
@@ -124,7 +130,6 @@ function character(theID, startingX, startingY, gifName) {
 	        return;
 	    }
 	    */
-
 	    switch(this.currentDirection){
 	        case MovementEnum.UP:
 	            this.image.style.top = parseInt(this.image.style.top) - (pixelsPerTick * this.deltaT/20) + 'px';
@@ -229,6 +234,7 @@ function character(theID, startingX, startingY, gifName) {
 
 	this.setInput = function(input){
 		this.currentInput = input;
+		this.lastInput = input;
 		//this.moveCharacter();
 	};
 
@@ -252,7 +258,7 @@ function character(theID, startingX, startingY, gifName) {
 
 	this.getDistanceToCenter = function(pacmanId, squareX, squareY){
 	    var pacmanElement = document.getElementById(pacmanId);
-	    console.log(pacmanId, squareX, squareY);
+	    //console.log(pacmanId, squareX, squareY);
 	    var gridSquareElement = document.getElementById("x_" + squareX + "-y_" + squareY);
 	    if(gridSquareElement == null) return;
 	    var pacmanRect = pacmanElement.getBoundingClientRect();
@@ -346,15 +352,25 @@ function character(theID, startingX, startingY, gifName) {
 		//this.imageTop = character.imageTop;
 		//this.imageLeft = character.imageLeft;
 
+		this.areOpposites = areDirectionsOpposites(this.lastInput, character.lastInput);
+
 		if(this.image){
 		    this.image.style.top = character.imageTop;
 		    
 		    this.image.style.left = character.imageLeft;
 		}
 	    
-		this.setInput(character.currentInput);
+		this.setInput(character.lastInput);
+		this.currentDirection = character.currentDirection;
 		if(this.theID === 'pacman-gif'){
-			this.changeDirection(character.currentInput);
+			//console.log("Pacman changing: " + character.lastInput);
+			if(this.areOpposites) this.changeDirection(character.lastInput);
+
+		}
+
+
+		if(!this.animateFunction){
+			this.moveCharacter();
 		}
 	}
 
@@ -362,7 +378,7 @@ function character(theID, startingX, startingY, gifName) {
 
 
 function isNextSquareWall(nextX, nextY){
-    if (nextX < 0 || nextX > mazeTable.length || nextY < 0 || nextY > mazeTable[0].length){
+    if (nextX < 0 || nextX >= mazeTable.length || nextY < 0 || nextY >= mazeTable[0].length){
         return true;
     }
     if (mazeTable[nextX][nextY] == WALL_VALUE){
@@ -417,7 +433,7 @@ function getSquareForObject(elementId){
             }
         }
     }
-    var squareCoords = {x: -1, y: -1};
+    var squareCoords = null;
     return squareCoords;
 }
 

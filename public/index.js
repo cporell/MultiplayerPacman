@@ -44,7 +44,7 @@ window.onfocus = function () {
 }; 
 
 window.onblur = function () { 
-  isActive = false; 
+  //isActive = false; 
 }; 
 
 // test
@@ -230,8 +230,8 @@ function setWallSprite(wallPosY, wallPosX)
         boundings[1] = mazeTable[wallPosX][wallPosY + 1] === WALL_VALUE ? 1 : 0;
     }
 
-    console.log(wallPosX, wallPosY);
-    console.log(boundings);
+    //console.log(wallPosX, wallPosY);
+    //console.log(boundings);
     
     var wallType = "";
     // now run through the boundings array to see which wall we should draw
@@ -388,14 +388,14 @@ function connect(){
 
     socket.on('new pacman update', function (data) {
         pacman = parseObjectFromSockets(data.pacman);
-        console.log(pacman);
+        //console.log(pacman);
         if(pacman){
             handlePacmanUpdate(pacman);
         }
     });
     socket.on('new ghosts update', function (data) {
         ghosts = parseObjectFromSockets(data.ghosts);
-        console.log(ghosts);
+        //console.log(ghosts);
         if(ghosts){
             handleGhostsUpdate(ghosts);
         }
@@ -451,7 +451,7 @@ function sendGhostsUpdate(){
 //sendGhostsUpdate();
 
 function handleGhostsUpdate(ghosts){
-    console.log("test");
+    //console.log("test");
     ghost1Obj.updateCharacter(ghosts.ghost1);
     ghost2Obj.updateCharacter(ghosts.ghost2);
     ghost3Obj.updateCharacter(ghosts.ghost3);
