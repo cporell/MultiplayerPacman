@@ -191,6 +191,8 @@ img {
     height: 28px;
     width: 28px;
     overflow: hidden;
+    border: none;
+    border-collapse: none;
 }
 
 .wall

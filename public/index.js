@@ -59,6 +59,8 @@ var ghost2Obj = new character("ghost2id", ghost2StartX, ghost2StartY, "clyde.gif
 var ghost3Obj = new character("ghost3id", ghost3StartX, ghost3StartY, "inky.gif");
 var ghost4Obj = new character("ghost4id", ghost4StartX, ghost4StartY, "pinky.gif");
 
+var ghostsArray = [ghost1Obj, ghost2Obj, ghost3Obj, ghost4Obj];
+
 window.setTimeout(getTableFromServer, 100);
 //document.onkeydown = checkKey;
 

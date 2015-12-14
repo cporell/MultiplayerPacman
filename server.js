@@ -264,6 +264,7 @@ io.on('connection', function (socket) {
     socket.on('restart', function(data){
         console.log("Original Table 1, 4 = " + originalTable[1][4]);
         socket.emit('restart');
+        socket.broadcast.emit('restart');
         cloneOriginalArray();
     });
 

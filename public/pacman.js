@@ -5,7 +5,7 @@
 
 // Pacman.js takes care of pacman controls.
 
-var ghostNum = 4;
+
 
 var isStartup = true;
 document.onkeydown = checkKey;
@@ -20,6 +20,8 @@ socket.on('new ghost update', function (data) {
     //console.log(ghost);
     handleGhostUpdate(ghost);
 });
+
+pacmanObj.isGameHost = true;
 
 function handleGhostUpdate(ghost){
     if(isActive){
@@ -74,21 +76,7 @@ function isGameWon(){
     return true;
 }
 
-function hasHitGhost(){
-    var pacmanElement = document.getElementById('pacman-gif');
-    var pacmanRect = pacmanElement.getBoundingClientRect();
 
-    for (var i = 1; i <= ghostNum; i++){
-        var ghostElement = document.getElementById('ghost' + i + 'id');
-        var ghostRect = ghostElement.getBoundingClientRect();
-
-        if (isCollision(pacmanRect, ghostRect)){
-            return true;
-        }
-    }
-
-    return false;
-}
 
 function checkKey(e) {
 
