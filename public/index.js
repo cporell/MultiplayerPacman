@@ -405,6 +405,9 @@ function connect(){
         //console.log(board);
         handleBoardUpdate(board);
     });
+    socket.on('restart', function(data){
+        receiveRestart();
+    });
 }
 
 function sendObjectToSockets(updateName, object){
@@ -476,4 +479,11 @@ function requestUpdates(){
     sendObjectToSockets('request updates', '');
 }
 
+function restartGame(){
+    socket.emit('restart');
+}
 
+function receiveRestart(){
+    console.log("Restart received");
+    window.location.assign(window.location.protocol + '//' + window.location.host);
+}

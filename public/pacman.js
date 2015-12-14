@@ -5,6 +5,8 @@
 
 // Pacman.js takes care of pacman controls.
 
+var ghostNum = 4;
+
 var isStartup = true;
 document.onkeydown = checkKey;
 
@@ -47,6 +49,45 @@ function sendBoardUpdate(x, y, value){
     board = {x: x, y: y, value: value};
     //console.log(board);
     sendObjectToSockets('send board update', board);
+}
+
+function sendPacmanWin(){
+    console.log("Pacman has won");
+    restartGame();
+}
+
+function sendPacmanLost(){
+    console.log("Pacman has lost");
+    restartGame();
+}
+
+function isGameWon(){
+    for(var i = 0; i < mazeTable.length; i++){
+        for (var j = 0; j < mazeTable[0].length; j++){
+            var tableData = mazeTable[i][j];
+            if (tableData == PELLET_VALUE || tableData == POWER_PELLET_VALUE){
+                console.log("Pellet at " + i + ", " + j);
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function hasHitGhost(){
+    var pacmanElement = document.getElementById('pacman-gif');
+    var pacmanRect = pacmanElement.getBoundingClientRect();
+
+    for (var i = 1; i <= ghostNum; i++){
+        var ghostElement = document.getElementById('ghost' + i + 'id');
+        var ghostRect = ghostElement.getBoundingClientRect();
+
+        if (isCollision(pacmanRect, ghostRect)){
+            return true;
+        }
+    }
+
+    return false;
 }
 
 function checkKey(e) {

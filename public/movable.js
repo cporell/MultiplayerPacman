@@ -60,6 +60,13 @@ function character(theID, startingX, startingY, gifName) {
 
 		//console.log(this);
 	    this.moveImage();
+
+		if (this.theID == 'pacman-gif'){
+			if (hasHitGhost()){
+				sendPacmanLost();
+			}
+		}
+
 	    this.checkInput();
 
 	    var square = getSquareForObject(this.theID);
@@ -331,7 +338,10 @@ function character(theID, startingX, startingY, gifName) {
 		            squareElement.removeChild(pelletElement);
 		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
 		            //sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
-		            sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+					sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+					if (isGameWon()){
+						sendPacmanWin();
+					}
 		        }
 		    }
 		    else if (pacmanSquareData == POWER_PELLET_VALUE){
@@ -341,7 +351,10 @@ function character(theID, startingX, startingY, gifName) {
 		            squareElement.removeChild(pelletElement);
 		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
 		            //sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
-		            sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+					sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+					if (isGameWon()) {
+						sendPacmanWin();
+					}
 		        }
 		    }
 		}
@@ -372,8 +385,7 @@ function character(theID, startingX, startingY, gifName) {
 		if(!this.animateFunction){
 			this.moveCharacter();
 		}
-	}
-
+	};
 }
 
 
