@@ -15,7 +15,21 @@
                 Go head-to-head against your friends in the classic game of Pac-Man! One player will be the titular character, while up to 4 people can be ghosts.
             </p>
         </header>
-        <div id="maze"></div>
+        <div id='lobby'>
+            <h1 id="lobbytext">
+                Game Lobby
+            </h1>
+            <form>
+                <button type='submit' id='pacbutton' name='pacman'><img src='assets/button-pacman.jpg' /></button>
+                <button type='submit' id='ghost1button' name='ghost'><img src='assets/button-ghost.png' /></button>
+                <button type='submit' id='ghost2button' name='ghost'><img src='assets/button-ghost.png' /></button>
+                <button type='submit' id='ghost3button' name='ghost'><img src='assets/button-ghost.png' /></button>
+                <button type='submit' id='ghost4button' name='ghost'><img src='assets/button-ghost.png' /></button>
+            </form>
+        </div>
+        <div id="maze">
+            
+        </div>
         <footer>
             <p class="copyright">
                 Josh Allard jnallard@wpi.edu<br />
@@ -29,5 +43,29 @@
     </article>
 </body>
 </html>
+<script language="javascript" type="text/javascript">
+    var pacButton = document.getElementById("pacbutton");
+    var ghostButton1 = document.getElementById("ghostbutton1");
+    var ghostButton2 = document.getElementById("ghostbutton2");
+    var ghostButton3 = document.getElementById("ghostbutton3");
+    var ghostButton3 = document.getElementById("ghostbutton4");
+
+    pacButton.addEventListener("mousedown", goToPacman);
+    ghostButton1.addEventListener("mousedown", goToGhost);
+    ghostButton2.addEventListener("mousedown", goToGhost);
+    ghostButton3.addEventListener("mousedown", goToGhost);
+    ghostButton4.addEventListener("mousedown", goToGhost);
+
+    function goToPacman()
+    {
+        document.location.href += "pacman";
+    }
+
+    function goToGhost()
+    {
+        document.location.href += "ghost";
+    }
+
+</script>
 <script src="/movable.js" type="text/javascript"></script>
 <script src="/socket.io.js" type="text/javascript"></script>

@@ -19,6 +19,11 @@ header, footer
     background-color: #7CAC2F; 
 }
 
+div
+{
+    visibility: visible;
+}
+
 hr
 {
      padding: 0; 
@@ -168,6 +173,12 @@ img {
   margin-right:auto;
 }
 
+button > img
+{
+    width:175px;
+    height:175px;
+}
+
 .grid-square
 {
     height: 30px;
@@ -195,12 +206,12 @@ img {
 
 .wall
 {
-    background-color: darkblue;
+    background-color: black;
 }
 
 .floor
 {
-    background-color: #333333;
+    background-color: black;
 }
 
 .rotate-right {

@@ -9,6 +9,9 @@
 
 var myGhostID = "ghost-id";
 
+var lobbyDIV = document.getElementById("lobby");
+lobbyDIV.setAttribute('hidden', true);
+
 var myGhost;
 
 document.onkeydown = checkKey;

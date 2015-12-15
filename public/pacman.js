@@ -8,6 +8,12 @@
 var isStartup = true;
 document.onkeydown = checkKey;
 
+var pacbutton = document.getElementById("pacbutton");
+pacbutton.innerHTML = "<img src='assets/start.png' />"
+pacbutton.removeEventListener("mousedown", goToPacman);
+var lobbytext = document.getElementById("lobbytext");
+//lobbytext.innerHTML = "You are playing PacMan! Press 'Play' to start the game.";
+
 window.setInterval(function(){
     sendPacmanUpdate();
     //sendGhostsUpdate();

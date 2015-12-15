@@ -142,6 +142,8 @@ app.get('/pacman', function (req, res) {
     }
     if(cookieManager.pacman === req.cookies.pacmanGame){
         var pagePacman = page;
+        //var divString = "<div id='lobby'>\n<h1>\nGame Lobby\n</h1>\n<form>\n<button type='submit' id='pacbutton' name='pacman'><img src='assets/button-pacman.jpg' /></button>\n<button type='submit' id='ghostbutton' name='ghost'><img src='assets/button-ghost.png' /></button>\n</form>\n</div>";
+        //pagePacman = pagePacman.replace(divString, "");
         pagePacman += getStartingPositionsScript();
         pagePacman += "<script src='index.js' type='text/javascript'></script>";
         pagePacman += "<script src='pacman.js' type='text/javascript'></script>";

@@ -230,14 +230,11 @@ function setWallSprite(wallPosY, wallPosX)
         boundings[1] = mazeTable[wallPosX][wallPosY + 1] === WALL_VALUE ? 1 : 0;
     }
 
-    //console.log(wallPosX, wallPosY);
-    //console.log(boundings);
-    
     var wallType = "";
     // now run through the boundings array to see which wall we should draw
     if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 0)
     {
-        wallType = "4way";
+        wallType = "lone";
     }
     if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 0) {
         wallType = "cap-top";
@@ -287,7 +284,6 @@ function setWallSprite(wallPosY, wallPosX)
 
     var strHTML = "<img src='assets/wall-" + wallType + ".png' class='wall-square'>";
 
-    //console.log("At " + wallPosX + ", " + wallPosY + " bounding is " + boundings + "walltype is " + wallType);
     return strHTML;
 }
 
