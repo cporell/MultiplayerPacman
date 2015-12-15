@@ -11,10 +11,15 @@ var socket = null;
 var gridWidth = 20;
 var gridHeight = 20;
 
+var gridSquareWidth = 30;
+var gridSquareHeight = 30;
+
 var FLOOR_VALUE = 0;
 var WALL_VALUE = 1;
 var PELLET_VALUE = 2;
 var POWER_PELLET_VALUE = 3;
+
+var ghostsStarted = 0;
 
 var mazeTable;
 
@@ -334,10 +339,13 @@ function handleTable(req) {
 
 function startCharacters(){
     pacmanObj.startMove();
+
+    /*
     ghost1Obj.startMove();
     ghost2Obj.startMove();
     ghost3Obj.startMove();
     ghost4Obj.startMove();
+    */
 }
 
 function compareMazes(newMaze){
@@ -410,6 +418,10 @@ function connect(){
     socket.on('restart', function(data){
         receiveRestart();
     });
+    socket.on('start ghost', function(data) {
+        startGivenGhostNum(data.ghostNum);
+        ghostsStarted++;
+    });
 }
 
 function sendObjectToSockets(updateName, object){
@@ -432,6 +444,9 @@ function handlePacmanUpdate(pacman){
     pacmanObj.updateCharacter(pacman.pacman);
 }
 
+function sendStartGhost(){
+    sendObjectToSockets('start ghost', ghostsStarted);
+}
 
 function sendGhostUpdate(dir){
     ghost = {direction: dir, number: ghostNum};

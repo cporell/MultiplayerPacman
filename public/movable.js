@@ -49,14 +49,22 @@ function character(theID, startingX, startingY, gifName) {
 
 
 	this.startMove = function(){
+		console.log(this.theID);
+
 	    this.image.style.position= 'relative';
 	    this.image.style.left = '0px';
 	    this.image.style.top = '0px';
 	    this.now = +new Date;
 	    this.lastFrame = +new Date;
     	this.deltaT = this.now - this.lastFrame;
+
+		if (this.theID !== 'pacman-gif'){
+			console.log("Moving to square");
+			moveImageToSquare(this.theID, ghostSpawnPointX, ghostSpawnPointY);
+			this.currentDirection = chooseRandomDirection(ghostSpawnPointX, ghostSpawnPointY, MovementEnum.DOWN);
+		}
+
 	    this.moveCharacter();
-		//console.log(this);
 	};
 
 	this.moveCharacter = function(){
@@ -609,3 +617,21 @@ function hasHitGhost(ghostHit){
     return false;
 }
 
+function moveImageToSquare(imageElementId, newSquareX, newSquareY){
+	console.log(imageElementId);
+	console.log(newSquareX);
+	console.log(newSquareY);
+	var imageElement = document.getElementById(imageElementId);
+	var imageSquare = getSquareForObject(imageElementId);
+	var xDistance = newSquareX - imageSquare.x;
+	var yDistance = newSquareY - imageSquare.y;
+	var xPixels = xDistance * gridSquareHeight;
+	var yPixels = yDistance * gridSquareWidth;
+
+	imageElement.style.top = parseInt(imageElement.style.top) + xPixels + 'px';
+	imageElement.style.left = parseInt(imageElement.style.left) + yPixels + 'px';
+}
+
+function startGivenGhostNum(ghostNum){
+	ghostsArray[ghostNum].startMove();
+}
