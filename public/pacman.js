@@ -5,9 +5,10 @@
 
 // Pacman.js takes care of pacman controls.
 
-
-
 var isStartup = true;
+
+var startGhostsSent = 0;
+
 document.onkeydown = checkKey;
 
 var pacbutton = document.getElementById("pacbutton");
@@ -25,6 +26,18 @@ window.setInterval(function(){
     sendPacmanUpdate();
     //sendGhostsUpdate();
     }, 500);
+
+var startGhostInterval = window.setInterval(function() {
+    sendStartGhost();
+    startGhostsSent++;
+    if (startGhostsSent >= 4){
+        stopStartGhostInterval();
+    }
+}, 2000);
+
+function stopStartGhostInterval(){
+    clearInterval(startGhostInterval);
+}
 
 socket.on('new ghost update', function (data) {
     ghost = parseObjectFromSockets(data.ghost);
@@ -86,8 +99,6 @@ function isGameWon(){
     }
     return true;
 }
-
-
 
 function checkKey(e) {
 
