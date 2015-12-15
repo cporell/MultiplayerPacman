@@ -59,6 +59,8 @@ var ghost2Obj = new character("ghost2id", ghost2StartX, ghost2StartY, "clyde.gif
 var ghost3Obj = new character("ghost3id", ghost3StartX, ghost3StartY, "inky.gif");
 var ghost4Obj = new character("ghost4id", ghost4StartX, ghost4StartY, "pinky.gif");
 
+var ghostsArray = [ghost1Obj, ghost2Obj, ghost3Obj, ghost4Obj];
+
 window.setTimeout(getTableFromServer, 100);
 //document.onkeydown = checkKey;
 
@@ -401,6 +403,15 @@ function connect(){
         //console.log(board);
         handleBoardUpdate(board);
     });
+
+    socket.on('new socket opened', function (cookieManager) {
+        //cookieManager = parseObjectFromSockets(data);
+        console.log(cookieManager);
+        handleUpdatePlayers(cookieManager);
+    });
+    socket.on('restart', function(data){
+        receiveRestart();
+    });
 }
 
 function sendObjectToSockets(updateName, object){
@@ -410,6 +421,43 @@ function sendObjectToSockets(updateName, object){
 
 function parseObjectFromSockets(jsonString){
     return JSON.parse(jsonString);
+}
+
+function handleUpdatePlayers(cookieManager){
+    var cookie = getCookie("pacmanGame");
+    console.log("Who are you?", cookie);
+
+    var pacmanSet = cookieManager.pacman.length > 0;
+    if(pacmanSet && cookieManager.pacman === cookie){
+        console.log("You are pacman");
+    }
+    var ghost1Set = cookieManager.ghost1.length > 0;
+    if(ghost1Set && cookieManager.ghost1 === cookie){
+        console.log("You are ghost1");
+    }
+    var ghost2Set = cookieManager.ghost2.length > 0;
+    if(ghost2Set && cookieManager.ghost2 === cookie){
+        console.log("You are ghost2");
+    }
+    var ghost3Set = cookieManager.ghost3.length > 0;
+    if(ghost3Set && cookieManager.ghost3 === cookie){
+        console.log("You are ghost3");
+    }
+    var ghost4Set = cookieManager.ghost4.length > 0;
+    if(ghost4Set && cookieManager.ghost4 === cookie){
+        console.log("You are ghost4");
+    }
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
 }
 
 function sendPacmanUpdate(){
@@ -472,4 +520,11 @@ function requestUpdates(){
     sendObjectToSockets('request updates', '');
 }
 
+function restartGame(){
+    socket.emit('restart');
+}
 
+function receiveRestart(){
+    console.log("Restart received");
+    window.location.assign(window.location.protocol + '//' + window.location.host);
+}

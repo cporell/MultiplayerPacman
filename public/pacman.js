@@ -5,6 +5,8 @@
 
 // Pacman.js takes care of pacman controls.
 
+
+
 var isStartup = true;
 document.onkeydown = checkKey;
 
@@ -24,6 +26,8 @@ socket.on('new ghost update', function (data) {
     //console.log(ghost);
     handleGhostUpdate(ghost);
 });
+
+pacmanObj.isGameHost = true;
 
 function handleGhostUpdate(ghost){
     if(isActive){
@@ -54,6 +58,31 @@ function sendBoardUpdate(x, y, value){
     //console.log(board);
     sendObjectToSockets('send board update', board);
 }
+
+function sendPacmanWin(){
+    console.log("Pacman has won");
+    restartGame();
+}
+
+function sendPacmanLost(){
+    console.log("Pacman has lost");
+    restartGame();
+}
+
+function isGameWon(){
+    for(var i = 0; i < mazeTable.length; i++){
+        for (var j = 0; j < mazeTable[0].length; j++){
+            var tableData = mazeTable[i][j];
+            if (tableData == PELLET_VALUE || tableData == POWER_PELLET_VALUE){
+                console.log("Pellet at " + i + ", " + j);
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
 
 function checkKey(e) {
 

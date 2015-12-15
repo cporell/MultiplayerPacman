@@ -8,6 +8,9 @@ MovementEnum = {
 }
 
 var pixelsPerTick = 2;
+var POWER_PELLET_TIME = 10000; //10 seconds
+var GHOST_TIMEOUT_TIME = 5000; //10 seconds
+var TOTOAL_GHOSTS = 4;
 
 function character(theID, startingX, startingY, gifName) {
     this.theID = theID;  
@@ -22,6 +25,7 @@ function character(theID, startingX, startingY, gifName) {
     this.tableID = "x_" + this.startingX + "-y_" + this.startingY;
     this.image = null;
     this.animateFunction = null;
+    this.powerPelletStatus = false;
 
     this.distanceToCenter = 0;
 	this.isAdjusting = false;
@@ -33,6 +37,7 @@ function character(theID, startingX, startingY, gifName) {
 	this.now = +new Date;
     this.lastFrame = this.now;
 	this.deltaT = this.now - this.lastFrame;
+	this.isGameHost = false;
 
     this.placeCharacter = function (){
 	    var tableData = document.getElementById("x_" + this.startingX + "-y_" + this.startingY);
@@ -47,6 +52,9 @@ function character(theID, startingX, startingY, gifName) {
 	    this.image.style.position= 'relative';
 	    this.image.style.left = '0px';
 	    this.image.style.top = '0px';
+	    this.now = +new Date;
+	    this.lastFrame = +new Date;
+    	this.deltaT = this.now - this.lastFrame;
 	    this.moveCharacter();
 		//console.log(this);
 	};
@@ -60,6 +68,19 @@ function character(theID, startingX, startingY, gifName) {
 
 		//console.log(this);
 	    this.moveImage();
+
+		if (this.theID == 'pacman-gif'){
+			var ghostHit = {ghost: null};
+			if (hasHitGhost(ghostHit) && !this.powerPelletStatus && this.isGameHost){
+				sendPacmanLost();
+			}
+			else if(hasHitGhost(ghostHit) && this.powerPelletStatus){
+				if(ghostHit.ghost){
+					ghostHit.ghost.restartGhost();
+				}
+			}
+		}
+
 	    this.checkInput();
 
 	    var square = getSquareForObject(this.theID);
@@ -331,21 +352,60 @@ function character(theID, startingX, startingY, gifName) {
 		            squareElement.removeChild(pelletElement);
 		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
 		            //sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
-		            sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+					sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+					if (this.isGameHost && isGameWon()){
+						sendPacmanWin();
+					}
 		        }
 		    }
 		    else if (pacmanSquareData == POWER_PELLET_VALUE){
 		        var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y)
 		        var pelletElement = document.getElementById('power-pellet-x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
 		        if (pelletElement) {
+		        	this.setPowerPelletStatus(true);
 		            squareElement.removeChild(pelletElement);
 		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
 		            //sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
-		            sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+					sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+					if (this.isGameHost && isGameWon()) {
+						sendPacmanWin();
+					}
 		        }
 		    }
 		}
 	};
+
+	this.setPowerPelletStatus = function(status){
+		this.powerPelletStatus = status;
+
+		console.log("Power Pellet:", status);
+		if(status){
+			setTimeout(function(character){
+				character.setPowerPelletStatus(false);
+			}, POWER_PELLET_TIME, this);
+			ghostsArray.forEach(function(g){
+				g.image.src = "assets/blue-ghost.gif";
+			});
+		}
+		else{
+			ghostsArray.forEach(function(g){
+				g.image.src = "assets/" + g.gifName;
+			});
+		}
+	}
+
+	this.restartGhost = function(){
+		console.log("restartGhost");
+		clearTimeout(this.animateFunction);
+	    this.image.style.left = '0px';
+	    this.image.style.top = '0px';
+	    this.imageTop = this.image.style.top;
+	    this.imageLeft = this.image.style.left;
+		setTimeout(function(ghost){
+			console.log("ghost move");
+			ghost.startMove();
+		}, GHOST_TIMEOUT_TIME, this);
+	}
 
 	this.updateCharacter = function(character){
 		//console.log(character.image);
@@ -372,8 +432,7 @@ function character(theID, startingX, startingY, gifName) {
 		if(!this.animateFunction){
 			this.moveCharacter();
 		}
-	}
-
+	};
 }
 
 
@@ -530,5 +589,23 @@ function areDirectionsOpposites(directionA, directionB){
 			break;
 	}
 	return false;
+}
+
+function hasHitGhost(ghostHit){
+    var pacmanElement = document.getElementById('pacman-gif');
+    var pacmanRect = pacmanElement.getBoundingClientRect();
+
+    for (var i = 1; i <= TOTOAL_GHOSTS; i++){
+        var ghostElement = document.getElementById('ghost' + i + 'id');
+        var ghostRect = ghostElement.getBoundingClientRect();
+
+        ghostHit.ghost = ghostsArray[i - 1];
+
+        if (isCollision(pacmanRect, ghostRect)){
+            return true;
+        }
+    }
+
+    return false;
 }
 
