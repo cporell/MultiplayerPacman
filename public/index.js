@@ -270,7 +270,7 @@ function handleTable(req) {
             fillMaze();
             placeCharacters();
 
-            startCharacters();
+            //startCharacters();
             requestUpdates();
 
             isStartup = false;
@@ -403,8 +403,6 @@ function handleUpdatePlayers(cookieManager){
         lobbytext.innerText = "Start the game once at least one ghost has joined."
 
         // add the start button to the game
-        var startbuttonDIV = document.getElementById("startbutton");
-        startbuttonDIV.innerHTML = "<form><button type='submit' id='start' name='go'>START THE GAME!!</button></form>"
     }
     if (pacmanSet)
     {
