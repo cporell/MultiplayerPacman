@@ -49,12 +49,24 @@ function initPage()
 
 }
 
+var pacman = null;
+var ghosts = null;
 var cookieManager;
 function setup(){
-    cookieManager = {pacman: "", ghost1: "", ghost2: "", ghost3: "", ghost4: ""};
+    cookieManager = new cookieManagerObj();
+    pacman = null;
+    ghosts = null;
     console.log(cookieManager);
 }
 setup();
+
+function cookieManagerObj(){
+  this.pacman = "";
+  this.ghost1 = "";
+  this.ghost2 = "";
+  this.ghost3 = "";
+  this.ghost4 = "";
+}
 
 app.use(cookieParser());
 
@@ -223,8 +235,6 @@ function cloneOriginalArray(){
 
 var numUsers = 0;
 var users = [];
-var pacman = null;
-var ghosts = null;
 
 io.on('connection', function (socket) {
   var addedUser = false;
@@ -263,6 +273,7 @@ io.on('connection', function (socket) {
 
     socket.on('restart', function(data){
         console.log("Original Table 1, 4 = " + originalTable[1][4]);
+        setup();
         socket.emit('restart');
         socket.broadcast.emit('restart');
         cloneOriginalArray();
