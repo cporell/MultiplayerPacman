@@ -49,12 +49,32 @@ function initPage()
 
 }
 
+var pacman = null;
+var ghosts = null;
 var cookieManager;
 function setup(){
-    cookieManager = {pacman: "", ghost1: "", ghost2: "", ghost3: "", ghost4: ""};
+    cookieManager = new cookieManagerObj();
+    pacman = null;
+    ghosts = null;
     console.log(cookieManager);
 }
 setup();
+
+function cookieManagerObj(){
+  this.pacman = "";
+  this.ghost1 = "";
+  this.ghost2 = "";
+  this.ghost3 = "";
+  this.ghost4 = "";
+
+  this.clearMatchingCookie = function(cookieStr){
+    if(this.pacman === cookieStr) this.pacman = "";
+    if(this.ghost1 === cookieStr) this.ghost1 = "";
+    if(this.ghost2 === cookieStr) this.ghost2 = "";
+    if(this.ghost3 === cookieStr) this.ghost3 = "";
+    if(this.ghost4 === cookieStr) this.ghost4 = "";
+  };
+}
 
 app.use(cookieParser());
 
@@ -75,6 +95,7 @@ initPage();
 
 app.get('/', function (req, res) {
     initPage();
+    cookieManager.clearMatchingCookie(req.cookies.pacmanGame);
     var pageIndex = page + getStartingPositionsScript() + "<script src='index.js' type='text/javascript'></script>";
     res.send(pageIndex);
 });
@@ -87,6 +108,7 @@ app.get('/ghost', function (req, res) {
         switch(requestedGhost){
             case "1":
                 if(cookieManager.ghost1.length == 0){
+                    cookieManager.clearMatchingCookie(req.cookies.pacmanGame);
                     cookieManager.ghost1 = req.cookies.pacmanGame;
                 }
                 if(cookieManager.ghost1 === req.cookies.pacmanGame){
@@ -96,6 +118,7 @@ app.get('/ghost', function (req, res) {
                 break;
             case "2":
                 if(cookieManager.ghost2.length == 0){
+                    cookieManager.clearMatchingCookie(req.cookies.pacmanGame);
                     cookieManager.ghost2 = req.cookies.pacmanGame;
                 }
                 if(cookieManager.ghost2 === req.cookies.pacmanGame){
@@ -105,6 +128,7 @@ app.get('/ghost', function (req, res) {
                 break;
             case "3":
                 if(cookieManager.ghost3.length == 0){
+                    cookieManager.clearMatchingCookie(req.cookies.pacmanGame);
                     cookieManager.ghost3 = req.cookies.pacmanGame;
                 }
                 if(cookieManager.ghost3 === req.cookies.pacmanGame){
@@ -114,6 +138,7 @@ app.get('/ghost', function (req, res) {
                 break;
             case "4":
                 if(cookieManager.ghost4.length == 0){
+                    cookieManager.clearMatchingCookie(req.cookies.pacmanGame);
                     cookieManager.ghost4 = req.cookies.pacmanGame;
                 }
                 if(cookieManager.ghost4 === req.cookies.pacmanGame){
@@ -140,6 +165,8 @@ app.get('/ghost', function (req, res) {
 app.get('/pacman', function (req, res) {
 
     if(cookieManager.pacman.length == 0){
+
+        cookieManager.clearMatchingCookie(req.cookies.pacmanGame);
         cookieManager.pacman = req.cookies.pacmanGame;
     }
     if(cookieManager.pacman === req.cookies.pacmanGame){
@@ -225,11 +252,12 @@ function cloneOriginalArray(){
 
 var numUsers = 0;
 var users = [];
-var pacman = null;
-var ghosts = null;
 
 io.on('connection', function (socket) {
   var addedUser = false;
+
+  socket.emit('new socket opened', cookieManager);
+  socket.broadcast.emit('new socket opened', cookieManager);
 
   socket.on('request updates', function (data) {
 
@@ -274,6 +302,7 @@ io.on('connection', function (socket) {
 
     socket.on('restart', function(data){
         console.log("Original Table 1, 4 = " + originalTable[1][4]);
+        setup();
         socket.emit('restart');
         socket.broadcast.emit('restart');
         cloneOriginalArray();
