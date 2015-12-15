@@ -11,17 +11,6 @@ var startGhostsSent = 0;
 
 document.onkeydown = checkKey;
 
-var pacbutton = document.getElementById("pacbutton");
-pacbutton.innerHTML = "<img src='assets/pacman-taken.png' />";
-pacbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
-pacbutton.removeEventListener("mousedown", goToPacman);
-var lobbytext = document.getElementById("lobbytext");
-lobbytext.innerText = "Start the game once at least one ghost has joined."
-
-// add the start button to the game
-var startbuttonDIV = document.getElementById("startbutton");
-startbuttonDIV.innerHTML = "<form><button type='submit' id='start' name='go'>START THE GAME!!</button></form>"
-
 window.setInterval(function(){
     sendPacmanUpdate();
     //sendGhostsUpdate();

@@ -391,50 +391,118 @@ function handleUpdatePlayers(cookieManager){
 
     // border around YOUR char, face on ANY TAKEN char
 
+    // PACMAN
+    var pacbutton = document.getElementById("pacbutton");
+
     var pacmanSet = cookieManager.pacman.length > 0;
     if(pacmanSet && cookieManager.pacman === cookie){
         console.log("You are pacman");
         // put border
+        pacbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
+        var lobbytext = document.getElementById("lobbytext");
+        lobbytext.innerText = "Start the game once at least one ghost has joined."
+
+        // add the start button to the game
+        var startbuttonDIV = document.getElementById("startbutton");
+        startbuttonDIV.innerHTML = "<form><button type='submit' id='start' name='go'>START THE GAME!!</button></form>"
     }
     if (pacmanSet)
     {
         // put icon
+        pacbutton.innerHTML = "<img src='assets/pacman-taken.png' />";
+        pacbutton.removeEventListener("mousedown", goToPacman);
     }
+
+    // GHOST 1
     var ghost1Set = cookieManager.ghost1.length > 0;
     if(ghost1Set && cookieManager.ghost1 === cookie){
         console.log("You are ghost1");
         // put border
+        var ghostbutton = document.getElementById("ghost1button");
+        ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
+        var lobbytext = document.getElementById("lobbytext");
+        lobbytext.innerText = "You are a ghost! Pac-Man will start the game when ready...";
     }
     if (ghost1Set)
     {
         // put icon
+        var ghostbutton = document.getElementById("ghost1button");
+        ghostbutton.innerHTML = "<img src='assets/ghost-1-taken.png' />";
+        ghostbutton.removeEventListener("mousedown", goToGhost1);
     }
+    else
+    {
+        var ghostbutton = document.getElementById("ghost1button");
+        ghostbutton.innerHTML = "<img src='assets/ghost-1.png' />";
+    }
+
+    // GHOST 2
     var ghost2Set = cookieManager.ghost2.length > 0;
     if(ghost2Set && cookieManager.ghost2 === cookie){
         console.log("You are ghost2");
         // put border
+        var ghostbutton = document.getElementById("ghost2button");
+        ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
+        var lobbytext = document.getElementById("lobbytext");
+        lobbytext.innerText = "You are a ghost! Pac-Man will start the game when ready...";
     }
     if (ghost2Set)
     {
         // put icon
+        var ghostbutton = document.getElementById("ghost2button");
+        ghostbutton.innerHTML = "<img src='assets/ghost-2-taken.png' />";
+        ghostbutton.removeEventListener("mousedown", goToGhost2);
     }
+    else
+    {
+        var ghostbutton = document.getElementById("ghost2button");
+        ghostbutton.innerHTML = "<img src='assets/ghost-2.png' />";
+    }
+
+    // GHOST 3
     var ghost3Set = cookieManager.ghost3.length > 0;
     if(ghost3Set && cookieManager.ghost3 === cookie){
         console.log("You are ghost3");
         // put border
+        var ghostbutton = document.getElementById("ghost3button");
+        ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
+        var lobbytext = document.getElementById("lobbytext");
+        lobbytext.innerText = "You are a ghost! Pac-Man will start the game when ready...";
     }
     if (ghost3Set)
     {
         // put icon
+        var ghostbutton = document.getElementById("ghost3button");
+        ghostbutton.innerHTML = "<img src='assets/ghost-3-taken.png' />";
+        ghostbutton.removeEventListener("mousedown", goToGhost3);
     }
+    else
+    {
+        var ghostbutton = document.getElementById("ghost3button");
+        ghostbutton.innerHTML = "<img src='assets/ghost-3.png' />";
+    }
+
+    // GHOST 4
     var ghost4Set = cookieManager.ghost4.length > 0;
     if(ghost4Set && cookieManager.ghost4 === cookie){
         console.log("You are ghost4");
         // put border
+        var ghostbutton = document.getElementById("ghost4button");
+        ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
+        var lobbytext = document.getElementById("lobbytext");
+        lobbytext.innerText = "You are a ghost! Pac-Man will start the game when ready...";
     }
     if (ghost4Set)
     {
         // put icon
+        var ghostbutton = document.getElementById("ghost4button");
+        ghostbutton.innerHTML = "<img src='assets/ghost-4-taken.png' />";
+        ghostbutton.removeEventListener("mousedown", goToGhost4);
+    }
+    else
+    {
+        var ghostbutton = document.getElementById("ghost4button");
+        ghostbutton.innerHTML = "<img src='assets/ghost-4.png' />";
     }
 }
 

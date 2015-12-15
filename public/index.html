@@ -19,7 +19,7 @@
             <h1 id="lobbytext">
                 Choose your Character:
             </h1>
-            <form>
+            <form onsubmit="return false">
                 <button type='submit' id='pacbutton' name='pacman'><img src='assets/pacman.jpg' /></button>
                 <button type='submit' id='ghost1button' name='ghost'><img src='assets/ghost-1.png' /></button>
                 <button type='submit' id='ghost2button' name='ghost'><img src='assets/ghost-2.png' /></button>
@@ -50,25 +50,37 @@
 </html>
 <script language="javascript" type="text/javascript">
     var pacButton = document.getElementById("pacbutton");
-    var ghostButton1 = document.getElementById("ghostbutton1");
-    var ghostButton2 = document.getElementById("ghostbutton2");
-    var ghostButton3 = document.getElementById("ghostbutton3");
-    var ghostButton3 = document.getElementById("ghostbutton4");
+    var ghostButton1 = document.getElementById("ghost1button");
+    var ghostButton2 = document.getElementById("ghost2button");
+    var ghostButton3 = document.getElementById("ghost3button");
+    var ghostButton4 = document.getElementById("ghost4button");
 
     pacButton.addEventListener("mousedown", goToPacman);
-    ghostButton1.addEventListener("mousedown", goToGhost);
-    ghostButton2.addEventListener("mousedown", goToGhost);
-    ghostButton3.addEventListener("mousedown", goToGhost);
-    ghostButton4.addEventListener("mousedown", goToGhost);
+    ghostButton1.addEventListener("mousedown", goToGhost1);
+    ghostButton2.addEventListener("mousedown", goToGhost2);
+    ghostButton3.addEventListener("mousedown", goToGhost3);
+    ghostButton4.addEventListener("mousedown", goToGhost4);
 
     function goToPacman()
     {
-        document.location.href += "pacman";
+        document.location = "/pacman";
     }
 
-    function goToGhost()
+    function goToGhost1()
     {
-        document.location.href += "ghost";
+        document.location = "/ghost?ghost=1";
+    }
+    
+    function goToGhost2() {
+        document.location = "/ghost?ghost=2";
+    }
+
+    function goToGhost3() {
+        document.location = "/ghost?ghost=3";
+    }
+
+    function goToGhost4() {
+        document.location = "/ghost?ghost=4";
     }
 
 </script>
