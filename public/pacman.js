@@ -80,12 +80,12 @@ function sendBoardUpdate(x, y, value){
 
 function sendPacmanWin(){
     console.log("Pacman has won");
-    restartGame();
+    restartGame(true);
 }
 
 function sendPacmanLost(){
     console.log("Pacman has lost");
-    restartGame();
+    restartGame(false);
 }
 
 function isGameWon(){
@@ -102,6 +102,10 @@ function isGameWon(){
 }
 
 function checkKey(e) {
+
+    if(!pacmanObj.started){
+        return;
+    }
 
     e = e || window.event;
 

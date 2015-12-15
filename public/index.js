@@ -368,7 +368,7 @@ function connect(){
         handleUpdatePlayers(cookieManager);
     });
     socket.on('restart', function(data){
-        receiveRestart();
+        receiveRestart(data);
     });
     socket.on('start ghost', function(data) {
         startGivenGhostNum(data.ghostNum);
@@ -578,11 +578,17 @@ function requestUpdates(){
     sendObjectToSockets('request updates', '');
 }
 
-function restartGame(){
-    socket.emit('restart');
+function restartGame(pacmanWon){
+    socket.emit('restart', pacmanWon);
 }
 
-function receiveRestart(){
-    console.log("Restart received");
-    window.location.assign(window.location.protocol + '//' + window.location.host);
+function receiveRestart(pacmanWon){
+    console.log("Restart received:", pacmanWon);
+    if(pacmanWon){
+        //window.location.assign(window.location.protocol + '//' + window.location.host);
+        window.location = "/pacmanWon.html";
+    }
+    else{
+        window.location = "/pacmanLost.html";
+    }
 }
