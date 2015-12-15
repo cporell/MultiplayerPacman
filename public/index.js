@@ -146,56 +146,6 @@ function setWallSprite(wallPosY, wallPosX)
     var boundings = [0, 0, 0, 0]; // N E S W
 
     // If the tile is on the map extremeties, set the appropriate boundings
-    
-    // is there a wall to the north? EAST
-    /*if (wallPosY != 0)
-    {
-        if (mazeTable[wallPosX][wallPosY - 1] === WALL_VALUE) {
-            boundings[1] = 1;
-        }
-        else {
-            boundings[1] = 0;
-        }
-    }
-    
-    // is there a wall to the east?
-    if (wallPosX != (gridWidth - 1))
-    {
-        if (mazeTable[wallPosX + 1][wallPosY] === WALL_VALUE) {
-            //boundings[1] = 1;
-        }
-        else {
-           // boundings[1] = 0;
-        }
-    }
-
-    // is there a wall to the south?  WEST
-    if (wallPosY != (gridHeight - 1))
-    {
-        if (mazeTable[wallPosX][wallPosY + 1] === WALL_VALUE) {
-            boundings[3] = 1;
-        }
-        else {
-            boundings[3] = 0;
-        }
-    }
-
-    // is there a wall to the west?
-    if (wallPosX != 0)
-    {
-        if (mazeTable[wallPosX - 1][wallPosY] === WALL_VALUE) {
-            //boundings[3] = 1;
-        }
-        else {
-            //boundings[3] = 0;
-        }
-    }
-
-    if (wallPosY == 0) { boundings[1] = 0; }
-    else if (wallPosY == (gridHeight - 1)) { boundings[3] = 0; }
-    if (wallPosX == 0) { boundings[3] = 0; }
-    else if (wallPosX == (gridWidth - 1)) { boundings[1] = 0; }
-    */
 
     var isTop = wallPosX == 0;
     var isBottom = wallPosX == gridHeight - 1;
@@ -427,25 +377,52 @@ function handleUpdatePlayers(cookieManager){
     var cookie = getCookie("pacmanGame");
     console.log("Who are you?", cookie);
 
+    // border around YOUR char, face on ANY TAKEN char
+
     var pacmanSet = cookieManager.pacman.length > 0;
     if(pacmanSet && cookieManager.pacman === cookie){
         console.log("You are pacman");
+        // put border
+    }
+    if (pacmanSet)
+    {
+        // put icon
     }
     var ghost1Set = cookieManager.ghost1.length > 0;
     if(ghost1Set && cookieManager.ghost1 === cookie){
         console.log("You are ghost1");
+        // put border
+    }
+    if (ghost1Set)
+    {
+        // put icon
     }
     var ghost2Set = cookieManager.ghost2.length > 0;
     if(ghost2Set && cookieManager.ghost2 === cookie){
         console.log("You are ghost2");
+        // put border
+    }
+    if (ghost2Set)
+    {
+        // put icon
     }
     var ghost3Set = cookieManager.ghost3.length > 0;
     if(ghost3Set && cookieManager.ghost3 === cookie){
         console.log("You are ghost3");
+        // put border
+    }
+    if (ghost3Set)
+    {
+        // put icon
     }
     var ghost4Set = cookieManager.ghost4.length > 0;
     if(ghost4Set && cookieManager.ghost4 === cookie){
         console.log("You are ghost4");
+        // put border
+    }
+    if (ghost4Set)
+    {
+        // put icon
     }
 }
 

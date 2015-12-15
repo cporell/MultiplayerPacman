@@ -11,10 +11,15 @@ var isStartup = true;
 document.onkeydown = checkKey;
 
 var pacbutton = document.getElementById("pacbutton");
-pacbutton.innerHTML = "<img src='assets/start.png' />"
+pacbutton.innerHTML = "<img src='assets/pacman-taken.png' />";
+pacbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
 pacbutton.removeEventListener("mousedown", goToPacman);
 var lobbytext = document.getElementById("lobbytext");
-//lobbytext.innerHTML = "You are playing PacMan! Press 'Play' to start the game.";
+lobbytext.innerText = "Start the game once at least one ghost has joined."
+
+// add the start button to the game
+var startbuttonDIV = document.getElementById("startbutton");
+startbuttonDIV.innerHTML = "<form><button type='submit' id='start' name='go'>START THE GAME!!</button></form>"
 
 window.setInterval(function(){
     sendPacmanUpdate();

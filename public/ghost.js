@@ -9,8 +9,12 @@
 
 var myGhostID = "ghost-id";
 
-var lobbyDIV = document.getElementById("lobby");
-lobbyDIV.setAttribute('hidden', true);
+var ghostbutton = document.getElementById("ghostbutton" + ghostNum);
+ghostbutton.innerHTML = "<img src='assets/ghost-" + ghostNum + "-taken.png' />"
+ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
+ghostbutton.removeEventListener("mousedown", goToGhost);
+var lobbytext = document.getElementById("lobbytext");
+lobbytext.innerText = "You are a ghost! Pac-Man will start the game when ready...";
 
 var myGhost;
 
@@ -30,6 +34,7 @@ switch(ghostNum){
         myGhost = ghost4Obj;
         break;
 }
+
 
 function checkKey(e) {
 

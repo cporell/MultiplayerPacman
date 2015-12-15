@@ -2,6 +2,10 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 @import url(https://fonts.googleapis.com/css?family=Raleway);
 @import url(https://fonts.googleapis.com/css?family=Lobster);
+@font-face{
+    font-family: 'Pac-Font';
+    src: url('PAC-FONT.TTF') format('truetype');
+}
 
 body
 {
@@ -171,6 +175,12 @@ img {
   display: block;
   margin-left:auto;
   margin-right:auto;
+}
+
+button
+{
+    font-family: "Pac-Font";
+    font-size: 2em;
 }
 
 button > img
