@@ -24,8 +24,16 @@ header
     top: 0px;
     left: 0px;
     right: 0px;
-    width: 250px;
-    height: 110px;    
+    height: 200px;    
+}
+
+footer {
+  position: fixed;
+    background-color: #7CAC2F; 
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 200px; 
 }
     
 div.lobby

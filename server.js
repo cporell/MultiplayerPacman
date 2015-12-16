@@ -114,7 +114,20 @@ app.use(function (req, res, next) {
 
 initPage();
 
+var usernames = [];
+
+function checkLogin(cookie){
+  return usernames[cookie];
+}
+
 app.get('/', function (req, res) {
+
+    if(!checkLogin(req.cookies.pacmanGame)){
+
+        var loginPage = fs.readFileSync("./public/login.html").toString();
+        res.send(loginPage);
+        return;
+    }
     initPage();
     cookieManager.clearMatchingCookie(req.cookies.pacmanGame);
     var pageIndex = page + getStartingPositionsScript() + "<script src='index.js' type='text/javascript'></script>";
@@ -122,6 +135,13 @@ app.get('/', function (req, res) {
 });
 
 app.get('/ghost', function (req, res) {
+
+    if(!checkLogin(req.cookies.pacmanGame)){
+
+        var loginPage = fs.readFileSync("./public/login.html").toString();
+        res.send(loginPage);
+        return;
+    }
     passed = false;
     var pageGhost = page;
     if(req.query.ghost && req.query.ghost.length > 0){
@@ -184,14 +204,22 @@ app.get('/ghost', function (req, res) {
 });
 
 app.get('/pacman', function (req, res) {
-    pacman = null;
-    ghosts = null;
+
+
+    if(!checkLogin(req.cookies.pacmanGame)){
+
+        var loginPage = fs.readFileSync("./public/login.html").toString();
+        res.send(loginPage);
+        return;
+    }
 
     if(cookieManager.pacman.length == 0){
         cookieManager.clearMatchingCookie(req.cookies.pacmanGame);
         cookieManager.pacman = req.cookies.pacmanGame;
     }
     if(cookieManager.pacman === req.cookies.pacmanGame){
+        pacman = null;
+        ghosts = null;
         var pagePacman = page;
         //var divString = "<div id='lobby'>\n<h1>\nGame Lobby\n</h1>\n<form>\n<button type='submit' id='pacbutton' name='pacman'><img src='assets/button-pacman.jpg' /></button>\n<button type='submit' id='ghostbutton' name='ghost'><img src='assets/button-ghost.png' /></button>\n</form>\n</div>";
         //pagePacman = pagePacman.replace(divString, "");
@@ -291,6 +319,8 @@ var users = [];
 
 io.on('connection', function (socket) {
   var addedUser = false;
+  socket.username = "";
+  socket.cookie = "";
 
   socket.emit('new socket opened', cookieManager);
   socket.broadcast.emit('new socket opened', cookieManager);
@@ -356,4 +386,19 @@ io.on('connection', function (socket) {
       board: JSON.stringify(mazeTable)
     });
   });
+
+
+
+  socket.on('login', function (data) {
+      var username = data.username;
+      var cookie = data.cookie;
+      console.log(username, cookie);
+      usernames[cookie] = username;
+      console.log(usernames[cookie]);
+      socket.username = username;
+      socket.cookie = cookie;
+      socket.emit("logged in");
+      console.log(socket);
+    });
+
 });
