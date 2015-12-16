@@ -13,6 +13,15 @@ var POWER_PELLET_NO_FLASH_TIME = 7000;
 var GHOST_TIMEOUT_TIME = 5000; //10 seconds
 var TOTOAL_GHOSTS = 4;
 
+function stats(){
+	this.pelletsEaten = 0;
+	this.powerPelletsEaten = 0;
+	this.ghostsEaten = 0;
+	this.atePacman = false;
+	this.pacmanWon = false;
+	this.ghostWon = false;
+}
+
 function character(theID, startingX, startingY, gifName) {
     this.theID = theID;  
     this.gifName = gifName;
@@ -29,6 +38,7 @@ function character(theID, startingX, startingY, gifName) {
     this.powerPelletStatus = false;
     this.started = false;
 	this.isControlled = false;
+	this.stats = new stats();
 
     this.distanceToCenter = 0;
 	this.isAdjusting = false;
@@ -84,10 +94,12 @@ function character(theID, startingX, startingY, gifName) {
 		if (this.theID == 'pacman-gif'){
 			var ghostHit = {ghost: null};
 			if (hasHitGhost(ghostHit) && !this.powerPelletStatus && this.isGameHost){
+				ghostHit.ghost.stats.atePacman = true;
 				sendPacmanLost();
 			}
 			else if(hasHitGhost(ghostHit) && this.powerPelletStatus){
 				if(ghostHit.ghost){
+					this.stats.ghostsEaten += 1;
 					ghostHit.ghost.restartGhost();
 				}
 			}
@@ -365,6 +377,7 @@ function character(theID, startingX, startingY, gifName) {
 		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
 		            //sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
 					sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+					this.stats.pelletsEaten += 1;
 					if (this.isGameHost && isGameWon()){
 						sendPacmanWin();
 					}
@@ -379,6 +392,7 @@ function character(theID, startingX, startingY, gifName) {
 		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
 		            //sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
 					sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+					this.stats.powerPelletsEaten += 1;
 					if (this.isGameHost && isGameWon()) {
 						sendPacmanWin();
 					}

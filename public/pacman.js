@@ -101,11 +101,21 @@ function sendBoardUpdate(x, y, value){
 
 function sendPacmanWin(){
     console.log("Pacman has won");
+    pacmanObj.stats.pacmanWon = true;
+    stats = {pacman: pacmanObj.stats, ghost1: ghost1Obj.stats, ghost2: ghost2Obj.stats, ghost3: ghost3Obj.stats, ghost4: ghost4Obj.stats, }
+    sendObjectToSockets('stat update', stats);
     restartGame(true);
 }
 
 function sendPacmanLost(){
     console.log("Pacman has lost");
+    pacmanObj.stats.pacmanWon = false;
+    ghost1Obj.stats.ghostWon = true;
+    ghost2Obj.stats.ghostWon = true;
+    ghost3Obj.stats.ghostWon = true;
+    ghost4Obj.stats.ghostWon = true;
+    stats = {pacman: pacmanObj.stats, ghost1: ghost1Obj.stats, ghost2: ghost2Obj.stats, ghost3: ghost3Obj.stats, ghost4: ghost4Obj.stats, }
+    sendObjectToSockets('stat update', stats);
     restartGame(false);
 }
 

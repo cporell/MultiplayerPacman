@@ -392,13 +392,63 @@ io.on('connection', function (socket) {
   socket.on('login', function (data) {
       var username = data.username;
       var cookie = data.cookie;
-      console.log(username, cookie);
       usernames[cookie] = username;
-      console.log(usernames[cookie]);
       socket.username = username;
       socket.cookie = cookie;
       socket.emit("logged in");
-      console.log(socket);
+      //If someone is logging in, this means they have no cookie - currently not mapping users between sessions
+      statManager.statsForUser.push(new userStats(cookie, username));
     });
 
+  socket.on('stat update', function (data) {
+      console.log(JSON.parse(data));
+      stats = JSON.parse(data);
+      statManager.updateStats(cookieManager.pacman, stats.pacman);
+      statManager.updateStats(cookieManager.ghost1, stats.ghost1);
+      statManager.updateStats(cookieManager.ghost2, stats.ghost2);
+      statManager.updateStats(cookieManager.ghost3, stats.ghost3);
+      statManager.updateStats(cookieManager.ghost4, stats.ghost4);
+      console.log(JSON.stringify(statManager));
+    });
+
+  socket.on('get stats', function (data) {
+    socket.emit('stats received', JSON.stringify(statManager));
+  });
+
 });
+
+var statManager = new statManager();
+function statManager(){
+  this.statsForUser = [];
+
+  this.updateStats = function(cookie, stats){
+    if(cookie.length == 0){
+      return;
+    }
+
+    for(index = 0; index < this.statsForUser.length; index++){
+      var userStat = this.statsForUser[index];
+      if(userStat.cookie === cookie){
+        userStat.timesWonAsPacman += stats.pacmanWon ? 1 : 0;
+        userStat.timesWonAsGhost += stats.ghostWon ? 1 : 0;
+        userStat.pelletsEaten += stats.pelletsEaten;
+        userStat.powerPelletsEaten += stats.powerPelletsEaten;
+        userStat.timesEatenPacman += stats.atePacman ? 1 : 0;
+        userStat.timesEatenGhosts += stats.ghostsEaten;
+        console.log("Updated stats for " + usernames[cookie]);
+      }
+    }
+
+  }
+}
+
+function userStats(cookie, username){
+  this.cookie = cookie;
+  this.username = username;
+  this.timesWonAsPacman = 0;
+  this.timesWonAsGhost = 0;
+  this.timesEatenPacman = 0;
+  this.timesEatenGhosts = 0;
+  this.pelletsEaten = 0;
+  this.powerPelletsEaten = 0;
+}
