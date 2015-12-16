@@ -465,7 +465,12 @@ function connect(){
     socket.on('restart', function(data){
         receiveRestart(data);
     });
-    socket.on('start ghost', function(data) {
+    socket.on('start ghost', function (data) {
+        if (!isGameStarted)
+        {
+            var music = new Audio("audio/pacman_beginning.wav");
+            music.play();
+        }
         isGameStarted = true;
         startGivenGhostNum(data.ghostNum);
         ghostsStarted++;
@@ -496,7 +501,10 @@ function handleUpdatePlayers(cookieManager){
         // put border
         pacbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
         var lobbytext = document.getElementById("lobbytext");
-        lobbytext.innerText = "Start the game once at least one ghost has joined."
+        lobbytext.innerText = "Wait for ghosts, then start!"
+
+        var startmusic = new Audio("audio/pacman_intermission.wav");
+        startmusic.play();
 
         // add the start button to the game
     }
@@ -515,7 +523,10 @@ function handleUpdatePlayers(cookieManager){
         var ghostbutton = document.getElementById("ghost1button");
         ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
         var lobbytext = document.getElementById("lobbytext");
-        lobbytext.innerText = "You are a ghost! Pac-Man will start the game when ready...";
+        lobbytext.innerText = "Pac-Man will start the game when ready";
+        var startmusic = new Audio("audio/pacman_intermission.wav");
+        startmusic.play();
+
     }
     if (ghost1Set)
     {
@@ -540,7 +551,10 @@ function handleUpdatePlayers(cookieManager){
         var ghostbutton = document.getElementById("ghost2button");
         ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
         var lobbytext = document.getElementById("lobbytext");
-        lobbytext.innerText = "You are a ghost! Pac-Man will start the game when ready...";
+        lobbytext.innerText = "Pac-Man will start the game when ready";
+        var startmusic = new Audio("audio/pacman_intermission.wav");
+        startmusic.play();
+
     }
     if (ghost2Set)
     {
@@ -565,7 +579,10 @@ function handleUpdatePlayers(cookieManager){
         var ghostbutton = document.getElementById("ghost3button");
         ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
         var lobbytext = document.getElementById("lobbytext");
-        lobbytext.innerText = "You are a ghost! Pac-Man will start the game when ready...";
+        lobbytext.innerText = "Pac-Man will start the game when ready";
+        var startmusic = new Audio("audio/pacman_intermission.wav");
+        startmusic.play();
+
     }
     if (ghost3Set)
     {
@@ -590,7 +607,10 @@ function handleUpdatePlayers(cookieManager){
         var ghostbutton = document.getElementById("ghost4button");
         ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
         var lobbytext = document.getElementById("lobbytext");
-        lobbytext.innerText = "You are a ghost! Pac-Man will start the game when ready...";
+        lobbytext.innerText = "Pac-Man will start the game when ready";
+        var startmusic = new Audio("audio/pacman_intermission.wav");
+        startmusic.play();
+
     }
     if (ghost4Set)
     {

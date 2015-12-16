@@ -9,9 +9,9 @@
 </head>
 <body id="thebody">
     <div id='lobby' class="lobby">
-        <h3 id="lobbytext">Select a character...</h3>
+        <h3 id="lobbytext" class="lobbytext">Select a character...</h3>
         <form onsubmit="return false">
-            <button type='submit' id='pacbutton' name='pacman'><img src='assets/pacman.jpg' /></button>
+            <button type='submit' id='pacbutton' name='pacman'><img src='assets/pacman.png' /></button>
             <button type='submit' id='ghost1button' name='ghost'><img src='assets/ghost-1.png' /></button>
             <button type='submit' id='ghost2button' name='ghost'><img src='assets/ghost-2.png' /></button>
             <button type='submit' id='ghost3button' name='ghost'><img src='assets/ghost-3.png' /></button>
@@ -22,11 +22,10 @@
     <div id="maze" class="maze"></div>
 
     <div id="ui" class="ui">
-        <div id="startbutton" class="startbutton"></div>
         <div id="timer" class="timer">
-            <h3>Pac-Man wins in...</h3>
-            <h4 id="time">100</h4>
+            <h3>Pac-Man wins in<br /><span id="time">100</span></h3>
         </div>
+        <div id="startbutton" class="startbutton"></div>
     </div>
 </body>
 </html>

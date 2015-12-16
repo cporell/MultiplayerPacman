@@ -13,6 +13,11 @@ var POWER_PELLET_NO_FLASH_TIME = 7000;
 var GHOST_TIMEOUT_TIME = 5000; //10 seconds
 var TOTOAL_GHOSTS = 4;
 
+var audio = new Audio("audio/pacman_siren.wav");
+audio.loop = true;
+var audioPlaying = false;
+//audio.play();
+
 function character(theID, startingX, startingY, gifName) {
     this.theID = theID;  
     this.gifName = gifName;
@@ -81,13 +86,34 @@ function character(theID, startingX, startingY, gifName) {
 		//console.log(this);
 	    this.moveImage();
 
+        
+	    if (this.theID == 'pacman-gif') {
+	        if(this.currentDirection != null && this.currentDirection != MovementEnum.STOPPED)
+	        {
+	            if(!audioPlaying)
+	            {
+	                audio.play();
+	                audioPlaying = true;
+	            }
+	        }
+	        else {
+	            if(audioPlaying)
+	            {
+	                audio.pause();
+	                audioPlaying = false;
+	            }
+	        }
+	    }
+
 		if (this.theID == 'pacman-gif'){
 			var ghostHit = {ghost: null};
-			if (hasHitGhost(ghostHit) && !this.powerPelletStatus && this.isGameHost){
+			if (hasHitGhost(ghostHit) && !this.powerPelletStatus && this.isGameHost) {
 				sendPacmanLost();
 			}
 			else if(hasHitGhost(ghostHit) && this.powerPelletStatus){
-				if(ghostHit.ghost){
+			    if (ghostHit.ghost) {
+			        var ghostEatAudio = new Audio("audio/pacman_eatghost.wav");
+			        ghostEatAudio.play();
 					ghostHit.ghost.restartGhost();
 				}
 			}
@@ -353,11 +379,14 @@ function character(theID, startingX, startingY, gifName) {
 		}
 	};
 
-	this.removePellet = function(pacmanSquare){
+	this.removePellet = function (pacmanSquare) {
+
 		if(this.theID === "pacman-gif" && pacmanSquare.x > -1 && pacmanSquare.y > -1){
 		    // Remove the pellet from this square that Pacman is currently in
 		    var pacmanSquareData = mazeTable[pacmanSquare.x][pacmanSquare.y];
 		    if (pacmanSquareData == PELLET_VALUE) {
+		        var waka = new Audio("audio/pacman_waka.wav");
+		        waka.play();
 		        var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y)
 		        var pelletElement = document.getElementById('pellet-x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
 		        if (pelletElement) {
@@ -370,7 +399,9 @@ function character(theID, startingX, startingY, gifName) {
 					}
 		        }
 		    }
-		    else if (pacmanSquareData == POWER_PELLET_VALUE){
+		    else if (pacmanSquareData == POWER_PELLET_VALUE) {
+		        var waka = new Audio("audio/pacman_waka.wav");
+		        waka.play();
 		        var squareElement = document.getElementById('x_' + pacmanSquare.x + '-y_' + pacmanSquare.y)
 		        var pelletElement = document.getElementById('power-pellet-x_' + pacmanSquare.x + '-y_' + pacmanSquare.y);
 		        if (pelletElement) {
@@ -633,7 +664,8 @@ function hasHitGhost(ghostHit){
 
         ghostHit.ghost = ghostsArray[i - 1];
 
-        if (isCollision(pacmanRect, ghostRect)){
+        if (isCollision(pacmanRect, ghostRect)) {
+            
             return true;
         }
     }

@@ -14,27 +14,22 @@
 body
 {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", 'Montserrat', ssans-serif, 'Raleway', sans-serif, 'Lobster', cursive;
-  background-color: #D8CAA8;
+  background-color: black;
       text-align: center;
 }
 
-header
+.gameover
 {
-    background-color: #7CAC2F; 
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    width: 250px;
-    height: 110px;    
+    font-size: 4em;
 }
-    
+
 div.lobby
 {
     position: absolute;
     float: left;
     top: 0px;
     width: 200px;
-    left: 0px;
+    left: 50px;
     bottom: 0px;
 }
 
@@ -56,8 +51,13 @@ div.ui
     float: right;
     top: 30px;
     bottom: 0px;
-    right: 0px;
+    right: 100px;
     width: 200px;
+}
+
+.lobbytext
+{
+    height: 100px;
 }
 
 .timer
@@ -99,6 +99,17 @@ h2
     font-family: 'Lobster';
     font-size: 1.7em;
     color: #382513;
+}
+
+h3
+{
+    color: white;
+    font-family: Arcade;
+}
+
+h3 > span
+{
+    font-size: 3.0em;
 }
 
 .header-note
@@ -182,7 +193,7 @@ td{
 
 a
 {
-    color: #382513;
+    color: white;
     text-decoration: none;
     font-variant: normal;
     font-style:normal;
@@ -192,7 +203,7 @@ p
 {
     font-family: 'Raleway'
 }
-
+/*
 span
 {
     font-family: 'Montserrat';
@@ -200,7 +211,7 @@ span
     padding-bottom:8px;
     padding-top:0px;
 }
-
+    */
 .bgColor1
 {
     background-color: #284907;
@@ -234,8 +245,11 @@ img {
 
 button
 {
-    font-family: "Pac-Font";
+    font-family: Arcade;
+    color: white;
     font-size: 2em;
+    background-color: black;
+    border-color: #0F0FFF;
 }
 
 button > img
