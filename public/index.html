@@ -8,46 +8,26 @@
     <!---->
 </head>
 <body id="thebody">
-    <article>
-        <header>
-            <h1>Multiplayer Pac-Man!</h1>
-            <p class="header-note">
-                Go head-to-head against your friends in the classic game of Pac-Man! One player will be the titular character, while up to 4 people can be ghosts.
-            </p>
-        </header>
-        <div id='lobby'>
-            <h1 id="lobbytext">
-                Choose your Character:
-            </h1>
-            <form onsubmit="return false">
-                <button type='submit' id='pacbutton' name='pacman'><img src='assets/pacman.jpg' /></button>
-                <button type='submit' id='ghost1button' name='ghost'><img src='assets/ghost-1.png' /></button>
-                <button type='submit' id='ghost2button' name='ghost'><img src='assets/ghost-2.png' /></button>
-                <button type='submit' id='ghost3button' name='ghost'><img src='assets/ghost-3.png' /></button>
-                <button type='submit' id='ghost4button' name='ghost'><img src='assets/ghost-4.png' /></button>
-            </form>
-        </div>
-        <br />
-        <div id="startbutton">
-            <!--<form onsubmit="return false">
-            <button type='button' id='startButton' name='start'><img src='assets/start.png' /></button>-->
+    <div id='lobby' class="lobby">
+        <h3 id="lobbytext">Select a character...</h3>
+        <form onsubmit="return false">
+            <button type='submit' id='pacbutton' name='pacman'><img src='assets/pacman.jpg' /></button>
+            <button type='submit' id='ghost1button' name='ghost'><img src='assets/ghost-1.png' /></button>
+            <button type='submit' id='ghost2button' name='ghost'><img src='assets/ghost-2.png' /></button>
+            <button type='submit' id='ghost3button' name='ghost'><img src='assets/ghost-3.png' /></button>
+            <button type='submit' id='ghost4button' name='ghost'><img src='assets/ghost-4.png' /></button>
         </form>
+    </div>
+
+    <div id="maze" class="maze"></div>
+
+    <div id="ui" class="ui">
+        <div id="startbutton" class="startbutton"></div>
+        <div id="timer" class="timer">
+            <h3>Pac-Man wins in...</h3>
+            <h4 id="time">100</h4>
         </div>
-        <br />
-        <div id="maze">
-            
-        </div>
-        <footer>
-            <p class="copyright">
-                Josh Allard jnallard@wpi.edu<br />
-                Nathan Bryant nmbryant@wpi.edu<br />
-                Connor Porell cgporell@wpi.edu
-            </p>
-            <hr />
-            <p class="copyright">CS 4241: Webware (Fall 2015)</p>
-            <p class="copyright">Worcester Polytechnic Institute</p>
-        </footer>
-    </article>
+    </div>
 </body>
 </html>
 <script language="javascript" type="text/javascript">
@@ -63,16 +43,14 @@
     ghostButton3.addEventListener("mousedown", goToGhost3);
     ghostButton4.addEventListener("mousedown", goToGhost4);
 
-    function goToPacman()
-    {
+    function goToPacman() {
         document.location = "/pacman";
     }
 
-    function goToGhost1()
-    {
+    function goToGhost1() {
         document.location = "/ghost?ghost=1";
     }
-    
+
     function goToGhost2() {
         document.location = "/ghost?ghost=2";
     }

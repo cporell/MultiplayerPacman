@@ -23,25 +23,6 @@ var ghostsStarted = 0;
 
 var mazeTable;
 
-/*
-var pacmanStartingX = 1;
-var pacmanStartingY = 6;
-
-var currentPacmanX = 1;
-var currentPacmanY = 6;
-
-MovementEnum = {
-    UP: 0,
-    RIGHT: 1,
-    DOWN: 2,
-    LEFT: 3,
-    STOPPED: 4
-}
-
-var currentPacmanDirection = MovementEnum.STOPPED;
-var currentPacmanInput = null;
-*/
-
 var isActive;
 
 window.onfocus = function () { 
@@ -52,22 +33,15 @@ window.onblur = function () {
   //isActive = false; 
 }; 
 
-// test
-//setInterval(function () { 
-//  console.log(window.isActive ? 'active' : 'inactive'); 
-//}, 1000);
-
-
 var pacmanObj = new character("pacman-gif", pacmanStartX, pacmanStartY, "pacman.gif");
 var ghost1Obj = new character("ghost1id", ghost1StartX, ghost1StartY, "blinky.gif");
-var ghost2Obj = new character("ghost2id", ghost2StartX, ghost2StartY, "clyde.gif");
+var ghost2Obj = new character("ghost2id", ghost2StartX, ghost2StartY, "pinky.gif");
 var ghost3Obj = new character("ghost3id", ghost3StartX, ghost3StartY, "inky.gif");
-var ghost4Obj = new character("ghost4id", ghost4StartX, ghost4StartY, "pinky.gif");
+var ghost4Obj = new character("ghost4id", ghost4StartX, ghost4StartY, "clyde.gif");
 
 var ghostsArray = [ghost1Obj, ghost2Obj, ghost3Obj, ghost4Obj];
 
 window.setTimeout(getTableFromServer, 100);
-//document.onkeydown = checkKey;
 
 function displayTables()
 {

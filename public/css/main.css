@@ -6,26 +6,73 @@
     font-family: 'Pac-Font';
     src: url('PAC-FONT.TTF') format('truetype');
 }
+@font-face{
+    font-family: 'Arcade';
+    src: url('emulogic.ttf') format('truetype');
+}
 
 body
 {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", 'Montserrat', ssans-serif, 'Raleway', sans-serif, 'Lobster', cursive;
   background-color: #D8CAA8;
+      text-align: center;
 }
 
-body > article
-{
-    text-align: center;
-}
-
-header, footer
+header
 {
     background-color: #7CAC2F; 
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    width: 250px;
+    height: 110px;    
+}
+    
+div.lobby
+{
+    position: absolute;
+    float: left;
+    top: 0px;
+    width: 200px;
+    left: 0px;
+    bottom: 0px;
 }
 
-div
+div.maze
 {
-    visibility: visible;
+    position: absolute;
+    overflow-y: auto;
+    top: 0px;
+    bottom: 0px;
+    left: 200px;
+    right: 200px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+div.ui
+{
+    position: absolute;
+    float: right;
+    top: 30px;
+    bottom: 0px;
+    right: 0px;
+    width: 200px;
+}
+
+.timer
+{
+    
+}
+
+h4
+{
+    font-size: 2em;
+}
+
+.startbutton
+{
+    margin: 10px;
 }
 
 hr
@@ -185,8 +232,8 @@ button
 
 button > img
 {
-    width:175px;
-    height:175px;
+    width:100px;
+    height:100px;
 }
 
 .grid-square
