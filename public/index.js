@@ -427,11 +427,13 @@ function handleUpdatePlayers(cookieManager){
         var ghostbutton = document.getElementById("ghost1button");
         ghostbutton.innerHTML = "<img src='assets/ghost-1-taken.png' />";
         ghostbutton.removeEventListener("mousedown", goToGhost1);
+        ghost1Obj.isControlled = true;
     }
     else
     {
         var ghostbutton = document.getElementById("ghost1button");
         ghostbutton.innerHTML = "<img src='assets/ghost-1.png' />";
+        ghost1Obj.isControlled = false;
     }
 
     // GHOST 2
@@ -450,11 +452,13 @@ function handleUpdatePlayers(cookieManager){
         var ghostbutton = document.getElementById("ghost2button");
         ghostbutton.innerHTML = "<img src='assets/ghost-2-taken.png' />";
         ghostbutton.removeEventListener("mousedown", goToGhost2);
+        ghost2Obj.isControlled = true;
     }
     else
     {
         var ghostbutton = document.getElementById("ghost2button");
         ghostbutton.innerHTML = "<img src='assets/ghost-2.png' />";
+        ghost2Obj.isControlled = false;
     }
 
     // GHOST 3
@@ -473,11 +477,13 @@ function handleUpdatePlayers(cookieManager){
         var ghostbutton = document.getElementById("ghost3button");
         ghostbutton.innerHTML = "<img src='assets/ghost-3-taken.png' />";
         ghostbutton.removeEventListener("mousedown", goToGhost3);
+        ghost3Obj.isControlled = true;
     }
     else
     {
         var ghostbutton = document.getElementById("ghost3button");
         ghostbutton.innerHTML = "<img src='assets/ghost-3.png' />";
+        ghost3Obj.isControlled = false;
     }
 
     // GHOST 4
@@ -496,11 +502,13 @@ function handleUpdatePlayers(cookieManager){
         var ghostbutton = document.getElementById("ghost4button");
         ghostbutton.innerHTML = "<img src='assets/ghost-4-taken.png' />";
         ghostbutton.removeEventListener("mousedown", goToGhost4);
+        ghost4Obj.isControlled = true;
     }
     else
     {
         var ghostbutton = document.getElementById("ghost4button");
         ghostbutton.innerHTML = "<img src='assets/ghost-4.png' />";
+        ghost4Obj.isControlled = false;
     }
 }
 

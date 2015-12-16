@@ -27,6 +27,7 @@ function character(theID, startingX, startingY, gifName) {
     this.animateFunction = null;
     this.powerPelletStatus = false;
     this.started = false;
+	this.isControlled = false;
 
     this.distanceToCenter = 0;
 	this.isAdjusting = false;
@@ -643,6 +644,32 @@ function moveImageToSquare(imageElementId, newSquareX, newSquareY){
 	imageElement.style.left = parseInt(imageElement.style.left) + yPixels + 'px';
 }
 
-function startGivenGhostNum(ghostNum){
-	ghostsArray[ghostNum].startMove();
+function startGivenGhostNum(num){
+	var isGhostControlled;
+	console.log("Starting ghost " + num);
+	switch(num){
+		case '0':
+			console.log("Ghost 1");
+			isGhostControlled = ghost1Obj.isControlled;
+			break;
+		case '1':
+			console.log("Ghost 2");
+			isGhostControlled = ghost2Obj.isControlled;
+			break;
+		case '2':
+			console.log("Ghost 3");
+			isGhostControlled = ghost3Obj.isControlled;
+			break;
+		case '3':
+			console.log("Ghost 4");
+			isGhostControlled = ghost4Obj.isControlled;
+			break;
+		default:
+			console.log("FAILED");
+			break;
+	}
+	console.log("IsGhostControlled = " + isGhostControlled);
+	if (isGhostControlled) {
+		ghostsArray[num].startMove();
+	}
 }
