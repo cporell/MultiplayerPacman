@@ -9,6 +9,7 @@ MovementEnum = {
 
 var pixelsPerTick = 2;
 var POWER_PELLET_TIME = 10000; //10 seconds
+var POWER_PELLET_NO_FLASH_TIME = 7000;
 var GHOST_TIMEOUT_TIME = 5000; //10 seconds
 var TOTOAL_GHOSTS = 4;
 
@@ -27,6 +28,7 @@ function character(theID, startingX, startingY, gifName) {
     this.animateFunction = null;
     this.powerPelletStatus = false;
     this.started = false;
+	this.isControlled = false;
 
     this.distanceToCenter = 0;
 	this.isAdjusting = false;
@@ -391,10 +393,10 @@ function character(theID, startingX, startingY, gifName) {
 		console.log("Power Pellet:", status);
 		if(status){
 			setTimeout(function(character){
-				character.setPowerPelletStatus(false);
+				character.changeGhostsToFlashing();
 			}, POWER_PELLET_TIME, this);
 			ghostsArray.forEach(function(g){
-				g.image.src = "assets/blue-ghost.gif";
+				g.image.src = "assets/blue-ghost-no-flash.gif";
 			});
 		}
 		else{
@@ -402,7 +404,16 @@ function character(theID, startingX, startingY, gifName) {
 				g.image.src = "assets/" + g.gifName;
 			});
 		}
-	}
+	};
+
+	this.changeGhostsToFlashing = function(){
+		ghostsArray.forEach(function(g){
+			g.image.src = "assets/blue-ghost.gif";
+		});
+		setTimeout(function (character){
+			character.setPowerPelletStatus(false);
+		}, POWER_PELLET_TIME - POWER_PELLET_NO_FLASH_TIME, this);
+	};
 
 	this.restartGhost = function(){
 		console.log("restartGhost");
@@ -413,7 +424,7 @@ function character(theID, startingX, startingY, gifName) {
 	    this.imageLeft = this.image.style.left;
 	    this.currentDirection = null;
 		setTimeout(function(ghost){
-			console.log("ghost move");
+			console.log("ghost move (movable 427)");
 			ghost.startMove();
 		}, GHOST_TIMEOUT_TIME, this);
 	}
@@ -439,13 +450,15 @@ function character(theID, startingX, startingY, gifName) {
 
 		}
 
-		if(!this.started){
-			this.startMove();
-		}
+		if (this.theID == 'pacman-gif' && isGameStarted) {
+			if (!this.started) {
+				console.log("StartMove Movable 455");
+				this.startMove();
+			}
 
-
-		if(!this.animateFunction){
-			this.moveCharacter();
+			if (!this.animateFunction) {
+				this.moveCharacter();
+			}
 		}
 
 		if(this.powerPelletStatus != character.powerPelletStatus){
@@ -497,8 +510,8 @@ function isCollision(rect1, rect2){
 function getSquareForObject(elementId){
     var coordinate;
     var givenElement = document.getElementById(elementId);
-    for (var i = 0; i < gridWidth; i++){
-        for (var j = 0; j < gridHeight; j++){
+    for (var i = 0; i < gridHeight; i++){
+        for (var j = 0; j < gridWidth; j++){
             var squareElement = document.getElementById("x_" + i + "-y_" + j);
             gridSquare = squareElement.getBoundingClientRect();
             givenRect = givenElement.getBoundingClientRect();
@@ -643,6 +656,33 @@ function moveImageToSquare(imageElementId, newSquareX, newSquareY){
 	imageElement.style.left = parseInt(imageElement.style.left) + yPixels + 'px';
 }
 
-function startGivenGhostNum(ghostNum){
-	ghostsArray[ghostNum].startMove();
+function startGivenGhostNum(num){
+	var isGhostControlled;
+	console.log("Starting ghost " + num);
+	switch(num){
+		case '0':
+			console.log("Ghost 1");
+			isGhostControlled = ghost1Obj.isControlled;
+			break;
+		case '1':
+			console.log("Ghost 2");
+			isGhostControlled = ghost2Obj.isControlled;
+			break;
+		case '2':
+			console.log("Ghost 3");
+			isGhostControlled = ghost3Obj.isControlled;
+			break;
+		case '3':
+			console.log("Ghost 4");
+			isGhostControlled = ghost4Obj.isControlled;
+			break;
+		default:
+			console.log("FAILED");
+			break;
+	}
+	console.log("IsGhostControlled = " + isGhostControlled);
+	if (isGhostControlled) {
+		console.log("Starting ghost (movable 685)");
+		ghostsArray[num].startMove();
+	}
 }
