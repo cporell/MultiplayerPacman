@@ -9,6 +9,7 @@ MovementEnum = {
 
 var pixelsPerTick = 2;
 var POWER_PELLET_TIME = 10000; //10 seconds
+var POWER_PELLET_NO_FLASH_TIME = 7000;
 var GHOST_TIMEOUT_TIME = 5000; //10 seconds
 var TOTOAL_GHOSTS = 4;
 
@@ -392,10 +393,10 @@ function character(theID, startingX, startingY, gifName) {
 		console.log("Power Pellet:", status);
 		if(status){
 			setTimeout(function(character){
-				character.setPowerPelletStatus(false);
+				character.changeGhostsToFlashing();
 			}, POWER_PELLET_TIME, this);
 			ghostsArray.forEach(function(g){
-				g.image.src = "assets/blue-ghost.gif";
+				g.image.src = "assets/blue-ghost-no-flash.gif";
 			});
 		}
 		else{
@@ -403,7 +404,16 @@ function character(theID, startingX, startingY, gifName) {
 				g.image.src = "assets/" + g.gifName;
 			});
 		}
-	}
+	};
+
+	this.changeGhostsToFlashing = function(){
+		ghostsArray.forEach(function(g){
+			g.image.src = "assets/blue-ghost.gif";
+		});
+		setTimeout(function (character){
+			character.setPowerPelletStatus(false);
+		}, POWER_PELLET_TIME - POWER_PELLET_NO_FLASH_TIME, this);
+	};
 
 	this.restartGhost = function(){
 		console.log("restartGhost");

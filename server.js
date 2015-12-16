@@ -188,7 +188,6 @@ app.get('/pacman', function (req, res) {
     ghosts = null;
 
     if(cookieManager.pacman.length == 0){
-
         cookieManager.clearMatchingCookie(req.cookies.pacmanGame);
         cookieManager.pacman = req.cookies.pacmanGame;
     }
