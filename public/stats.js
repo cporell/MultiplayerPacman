@@ -15,7 +15,20 @@ function connect(){
         console.log(statManager);
 
         statManager.statsForUser.sort(function(a, b) {
-          return b.timesWonAsPacman - a.timesWonAsPacman;
+          var result = b.timesWonAsPacman - a.timesWonAsPacman;
+          if(result == 0){
+            result = a.timesPlayedAsPacman - b.timesPlayedAsPacman;
+          }
+          if(result == 0){
+            result = b.timesEatenGhosts - b.timesEatenGhosts;
+          }
+          if(result == 0){
+            result = b.powerPelletsEaten - b.powerPelletsEaten;
+          }
+          if(result == 0){
+            result = b.pelletsEaten - b.pelletsEaten;
+          }
+          return result;
         })
         var pacmanTable = "<h1>Pacman Stats</h1><table class='stats'><thead><tr><td>Username</td><td>Times Won</td><td>Times Played</td><td>Ghosts Eaten</td><td>Pellets Eaten</td><td>Power Pellets Eaten</td></tr></thead>";
         for(statIndex = 0; statIndex < statManager.statsForUser.length; statIndex++){
@@ -26,7 +39,13 @@ function connect(){
         statDiv.innerHTML += pacmanTable + "</table>";
 
         statManager.statsForUser.sort(function(a, b) {
-          return b.timesWonAsGhost - a.timesWonAsGhost;
+          var result = b.timesWonAsGhost - a.timesWonAsGhost;
+          if(result == 0){
+            result = a.timesPlayedAsGhost - b.timesPlayedAsGhost;
+          }
+          if(result == 0){
+            result = b.timesEatenPacman - a.timesEatenPacman;
+          }
         })
         var ghostTable = "<h1>Ghosts Stats</h1><table class='stats'><thead><tr><td>Username</td><td>Times Won</td><td>Times Played</td><td>Pacman Caught</td></tr></thead>";
         for(statIndex = 0; statIndex < statManager.statsForUser.length; statIndex++){

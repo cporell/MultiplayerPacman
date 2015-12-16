@@ -53,10 +53,22 @@ function connect(){
 
 var usernameEl = document.getElementById("username");
 var usernameSubmit = document.getElementById("usernameSubmit");
-usernameSubmit.addEventListener('click', function(){
-    socket.emit('login', {username: usernameEl.value,
-                            cookie: getCookie("pacmanGame")});
-}, true);
+usernameSubmit.addEventListener('click', submitUsername, true);
+usernameEl.addEventListener('keypress', submitUsername, true);
+
+
+
+function submitUsername(evt){
+    console.log(evt);
+    if(evt.keyCode && evt.keyCode !== 13){
+        return;
+    }
+
+    if(usernameEl.value.length > 0){
+        socket.emit('login', {username: usernameEl.value,
+                                cookie: getCookie("pacmanGame")});
+    }
+}
 
 function getCookie(cname) {
     var name = cname + "=";
