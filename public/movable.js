@@ -18,6 +18,15 @@ audio.loop = true;
 var audioPlaying = false;
 //audio.play();
 
+function stats(){
+	this.pelletsEaten = 0;
+	this.powerPelletsEaten = 0;
+	this.ghostsEaten = 0;
+	this.atePacman = false;
+	this.pacmanWon = false;
+	this.ghostWon = false;
+}
+
 function character(theID, startingX, startingY, gifName) {
     this.theID = theID;  
     this.gifName = gifName;
@@ -34,6 +43,7 @@ function character(theID, startingX, startingY, gifName) {
     this.powerPelletStatus = false;
     this.started = false;
 	this.isControlled = false;
+	this.stats = new stats();
 
     this.distanceToCenter = 0;
 	this.isAdjusting = false;
@@ -46,6 +56,7 @@ function character(theID, startingX, startingY, gifName) {
     this.lastFrame = this.now;
 	this.deltaT = this.now - this.lastFrame;
 	this.isGameHost = false;
+	this.powerPelletTimeout = null;
 
     this.placeCharacter = function (){
 	    var tableData = document.getElementById("x_" + this.startingX + "-y_" + this.startingY);
@@ -107,13 +118,15 @@ function character(theID, startingX, startingY, gifName) {
 
 		if (this.theID == 'pacman-gif'){
 			var ghostHit = {ghost: null};
-			if (hasHitGhost(ghostHit) && !this.powerPelletStatus && this.isGameHost) {
+			if (hasHitGhost(ghostHit) && !this.powerPelletStatus && this.isGameHost){
+				ghostHit.ghost.stats.atePacman = true;
 				sendPacmanLost();
 			}
 			else if(hasHitGhost(ghostHit) && this.powerPelletStatus){
-			    if (ghostHit.ghost) {
-			        var ghostEatAudio = new Audio("audio/pacman_eatghost.wav");
-			        ghostEatAudio.play();
+				if(ghostHit.ghost){
+				    this.stats.ghostsEaten += 1;
+				    var ghostEatAudio = new Audio("audio/pacman_eatghost.wav");
+				    ghostEatAudio.play();
 					ghostHit.ghost.restartGhost();
 				}
 			}
@@ -394,6 +407,7 @@ function character(theID, startingX, startingY, gifName) {
 		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
 		            //sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
 					sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+					this.stats.pelletsEaten += 1;
 					if (this.isGameHost && isGameWon()){
 						sendPacmanWin();
 					}
@@ -410,6 +424,7 @@ function character(theID, startingX, startingY, gifName) {
 		            mazeTable[pacmanSquare.x][pacmanSquare.y] = FLOOR_VALUE;
 		            //sendNewTableData(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
 					sendBoardUpdate(pacmanSquare.x, pacmanSquare.y, FLOOR_VALUE);
+					this.stats.powerPelletsEaten += 1;
 					if (this.isGameHost && isGameWon()) {
 						sendPacmanWin();
 					}
@@ -423,7 +438,10 @@ function character(theID, startingX, startingY, gifName) {
 
 		console.log("Power Pellet:", status);
 		if(status){
-			setTimeout(function(character){
+			if(this.powerPelletTimeout){
+				clearTimeout(this.powerPelletTimeout);
+			}
+			this.powerPelletTimeout = setTimeout(function(character){
 				character.changeGhostsToFlashing();
 			}, POWER_PELLET_TIME, this);
 			ghostsArray.forEach(function(g){
@@ -438,10 +456,13 @@ function character(theID, startingX, startingY, gifName) {
 	};
 
 	this.changeGhostsToFlashing = function(){
+		if(this.powerPelletTimeout){
+			clearTimeout(this.powerPelletTimeout);
+		}
 		ghostsArray.forEach(function(g){
 			g.image.src = "assets/blue-ghost.gif";
 		});
-		setTimeout(function (character){
+		this.powerPelletTimeout = setTimeout(function (character){
 			character.setPowerPelletStatus(false);
 		}, POWER_PELLET_TIME - POWER_PELLET_NO_FLASH_TIME, this);
 	};

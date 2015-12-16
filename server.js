@@ -114,7 +114,20 @@ app.use(function (req, res, next) {
 
 initPage();
 
+var usernames = [];
+
+function checkLogin(cookie){
+  return usernames[cookie];
+}
+
 app.get('/', function (req, res) {
+
+    if(!checkLogin(req.cookies.pacmanGame)){
+
+        var loginPage = fs.readFileSync("./public/login.html").toString();
+        res.send(loginPage);
+        return;
+    }
     initPage();
     cookieManager.clearMatchingCookie(req.cookies.pacmanGame);
     var pageIndex = page + getStartingPositionsScript() + "<script src='index.js' type='text/javascript'></script>";
@@ -122,6 +135,13 @@ app.get('/', function (req, res) {
 });
 
 app.get('/ghost', function (req, res) {
+
+    if(!checkLogin(req.cookies.pacmanGame)){
+
+        var loginPage = fs.readFileSync("./public/login.html").toString();
+        res.send(loginPage);
+        return;
+    }
     passed = false;
     var pageGhost = page;
     if(req.query.ghost && req.query.ghost.length > 0){
@@ -184,14 +204,22 @@ app.get('/ghost', function (req, res) {
 });
 
 app.get('/pacman', function (req, res) {
-    pacman = null;
-    ghosts = null;
+
+
+    if(!checkLogin(req.cookies.pacmanGame)){
+
+        var loginPage = fs.readFileSync("./public/login.html").toString();
+        res.send(loginPage);
+        return;
+    }
 
     if(cookieManager.pacman.length == 0){
         cookieManager.clearMatchingCookie(req.cookies.pacmanGame);
         cookieManager.pacman = req.cookies.pacmanGame;
     }
     if(cookieManager.pacman === req.cookies.pacmanGame){
+        pacman = null;
+        ghosts = null;
         var pagePacman = page;
         //var divString = "<div id='lobby'>\n<h1>\nGame Lobby\n</h1>\n<form>\n<button type='submit' id='pacbutton' name='pacman'><img src='assets/button-pacman.jpg' /></button>\n<button type='submit' id='ghostbutton' name='ghost'><img src='assets/button-ghost.png' /></button>\n</form>\n</div>";
         //pagePacman = pagePacman.replace(divString, "");
@@ -291,6 +319,8 @@ var users = [];
 
 io.on('connection', function (socket) {
   var addedUser = false;
+  socket.username = "";
+  socket.cookie = "";
 
   socket.emit('new socket opened', cookieManager);
   socket.broadcast.emit('new socket opened', cookieManager);
@@ -356,4 +386,77 @@ io.on('connection', function (socket) {
       board: JSON.stringify(mazeTable)
     });
   });
+
+
+
+  socket.on('login', function (data) {
+      var username = data.username;
+      var cookie = data.cookie;
+      usernames[cookie] = username;
+      socket.username = username;
+      socket.cookie = cookie;
+      socket.emit("logged in");
+      //If someone is logging in, this means they have no cookie - currently not mapping users between sessions
+      statManager.statsForUser.push(new userStats(cookie, username));
+    });
+
+  socket.on('stat update', function (data) {
+      console.log(JSON.parse(data));
+      stats = JSON.parse(data);
+      statManager.updateStats(cookieManager.pacman, stats.pacman, true);
+      statManager.updateStats(cookieManager.ghost1, stats.ghost1, false);
+      statManager.updateStats(cookieManager.ghost2, stats.ghost2, false);
+      statManager.updateStats(cookieManager.ghost3, stats.ghost3, false);
+      statManager.updateStats(cookieManager.ghost4, stats.ghost4, false);
+      console.log(JSON.stringify(statManager));
+    });
+
+  socket.on('get stats', function (data) {
+    socket.emit('stats received', statManager);
+  });
+
 });
+
+var statManager = new statManager();
+function statManager(){
+  this.statsForUser = [];
+
+  this.updateStats = function(cookie, stats, isPacman){
+    if(cookie.length == 0){
+      return;
+    }
+
+    for(index = 0; index < this.statsForUser.length; index++){
+      var userStat = this.statsForUser[index];
+      if(userStat.cookie === cookie){
+        userStat.timesWonAsPacman += stats.pacmanWon ? 1 : 0;
+        userStat.timesWonAsGhost += stats.ghostWon ? 1 : 0;
+        userStat.pelletsEaten += stats.pelletsEaten;
+        userStat.powerPelletsEaten += stats.powerPelletsEaten;
+        userStat.timesEatenPacman += stats.atePacman ? 1 : 0;
+        userStat.timesEatenGhosts += stats.ghostsEaten;
+        if(isPacman){
+          userStat.timesPlayedAsPacman += 1;
+        }
+        else{
+          userStat.timesPlayedAsGhost += 1;
+        }
+        console.log("Updated stats for " + usernames[cookie]);
+      }
+    }
+
+  }
+}
+
+function userStats(cookie, username){
+  this.cookie = cookie;
+  this.username = username;
+  this.timesWonAsPacman = 0;
+  this.timesPlayedAsPacman = 0
+  this.timesWonAsGhost = 0;
+  this.timesPlayedAsGhost = 0
+  this.timesEatenPacman = 0;
+  this.timesEatenGhosts = 0;
+  this.pelletsEaten = 0;
+  this.powerPelletsEaten = 0;
+}

@@ -9,8 +9,6 @@ var isStartup = true;
 
 var startGhostsSent = 0;
 
-var timerLength = 100;
-
 document.onkeydown = checkKey;
 
 
@@ -20,7 +18,7 @@ var mc = new Hammer(document.getElementById("maze"));
 mc.on("panend", checkSwipe);
 
 var startGhostInterval = null;
-var timerInterval = null;
+
 //document.getElementById("startButtonDiv").hidden = false;
 //var startButton = document.getElementById("startbutton");
 
@@ -37,13 +35,6 @@ startbuttonDIV.addEventListener('mousedown', function(){
             stopStartGhostInterval();
         }
     }, 2000);
-
-    timerInterval = window.setInterval(function(){
-        timerLength--;
-        if (timerLength <= 0){
-            stopGameWithTimer();
-        }
-    }, 1000)
 }, true);
 
 window.setInterval(function(){
@@ -101,11 +92,21 @@ function sendBoardUpdate(x, y, value){
 
 function sendPacmanWin(){
     console.log("Pacman has won");
+    pacmanObj.stats.pacmanWon = true;
+    stats = {pacman: pacmanObj.stats, ghost1: ghost1Obj.stats, ghost2: ghost2Obj.stats, ghost3: ghost3Obj.stats, ghost4: ghost4Obj.stats, }
+    sendObjectToSockets('stat update', stats);
     restartGame(true);
 }
 
 function sendPacmanLost(){
     console.log("Pacman has lost");
+    pacmanObj.stats.pacmanWon = false;
+    ghost1Obj.stats.ghostWon = true;
+    ghost2Obj.stats.ghostWon = true;
+    ghost3Obj.stats.ghostWon = true;
+    ghost4Obj.stats.ghostWon = true;
+    stats = {pacman: pacmanObj.stats, ghost1: ghost1Obj.stats, ghost2: ghost2Obj.stats, ghost3: ghost3Obj.stats, ghost4: ghost4Obj.stats, }
+    sendObjectToSockets('stat update', stats);
     restartGame(false);
 }
 

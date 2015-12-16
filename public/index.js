@@ -27,6 +27,9 @@ var isGameStarted = false;
 
 var isActive;
 
+var timerInterval;
+var timerLength = 100;
+
 window.onfocus = function () { 
   isActive = true; 
 }; 
@@ -465,11 +468,29 @@ function connect(){
     socket.on('restart', function(data){
         receiveRestart(data);
     });
+<<<<<<< HEAD
     socket.on('start ghost', function (data) {
         if (!isGameStarted)
         {
             var music = new Audio("audio/pacman_beginning.wav");
             music.play();
+=======
+    socket.on('start ghost', function(data) {
+        if (!isGameStarted){
+            timerInterval = window.setInterval(function(){
+                timerLength--;
+                var timerElement = document.getElementById('timer');
+                timerElement.innerText = timerLength;
+                if (timerLength <= 0){
+                    try {
+                        stopGameWithTimer();
+                    }
+                    catch(err){
+                        clearInterval(timerInterval);
+                    }
+                }
+            }, 1000)
+>>>>>>> fb8a9b12e4fce6a08c14d0da1f3a9fe88719c489
         }
         isGameStarted = true;
         startGivenGhostNum(data.ghostNum);

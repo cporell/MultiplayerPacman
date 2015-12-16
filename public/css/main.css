@@ -21,6 +21,20 @@ body
 .gameover
 {
     font-size: 4em;
+    background-color: #7CAC2F; 
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 200px;    
+}
+
+footer {
+  position: fixed;
+    background-color: #7CAC2F; 
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 200px; 
 }
 
 div.lobby
@@ -188,8 +202,23 @@ td{
   padding: 0;
   border-collapse: collapse;
   margin: 0;
-  border: none;
+  border: 1px solid black;
 }
+
+
+table.stats {
+    border-collapse: collapse;
+    width: 75%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+table.stats th, table.stats td {
+    text-align: left;
+    padding: 8px;
+}
+
+table.stats tr:nth-child(even){background-color: #f2f2f2}
 
 a
 {
