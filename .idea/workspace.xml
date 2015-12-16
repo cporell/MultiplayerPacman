@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d4f20047-f73e-4b59-9882-30be6e7dea5d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/assets/wall-t-RBL.png" afterPath="$PROJECT_DIR$/public/assets/wall-t-RBL.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/index.js" afterPath="$PROJECT_DIR$/public/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/movable.js" afterPath="$PROJECT_DIR$/public/movable.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/pacman.js" afterPath="$PROJECT_DIR$/public/pacman.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js" afterPath="$PROJECT_DIR$/server.js" />
     </list>
     <ignored path="MultiplayerPacman.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,8 +32,8 @@
       <file leaf-file-name="server.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.107142" vertical-offset="5621" max-vertical-offset="6188">
-              <caret line="344" column="10" selection-start-line="344" selection-start-column="9" selection-end-line="344" selection-end-column="10" />
+            <state vertical-scroll-proportion="-9.321428" vertical-offset="334" max-vertical-offset="6188">
+              <caret line="35" column="71" selection-start-line="35" selection-start-column="71" selection-end-line="35" selection-end-column="71" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -40,11 +41,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pacman.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="pacman.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/pacman.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.892857" vertical-offset="317" max-vertical-offset="3332">
-              <caret line="30" column="22" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="22" />
+            <state vertical-scroll-proportion="-0.20517242" vertical-offset="306" max-vertical-offset="3587">
+              <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -55,8 +56,8 @@
       <file leaf-file-name="movable.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/movable.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.535714" vertical-offset="7291" max-vertical-offset="11781">
-              <caret line="438" column="22" selection-start-line="438" selection-start-column="22" selection-end-line="438" selection-end-column="22" />
+            <state vertical-scroll-proportion="-6.142857" vertical-offset="8532" max-vertical-offset="11781">
+              <caret line="512" column="41" selection-start-line="512" selection-start-column="41" selection-end-line="512" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -65,7 +66,7 @@
       <file leaf-file-name="ghost.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/ghost.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.892857" vertical-offset="963" max-vertical-offset="1564">
+            <state vertical-scroll-proportion="-41.285713" vertical-offset="0" max-vertical-offset="1564">
               <caret line="68" column="23" selection-start-line="68" selection-start-column="17" selection-end-line="68" selection-end-column="23" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
@@ -74,11 +75,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.41379312" vertical-offset="5472" max-vertical-offset="12342">
-              <caret line="336" column="89" selection-start-line="336" selection-start-column="89" selection-end-line="336" selection-end-column="89" />
+            <state vertical-scroll-proportion="-6.678571" vertical-offset="0" max-vertical-offset="12427">
+              <caret line="11" column="19" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -125,10 +126,10 @@
       <list>
         <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/public/css/main.css" />
-        <option value="$PROJECT_DIR$/public/pacman.js" />
         <option value="$PROJECT_DIR$/server.js" />
-        <option value="$PROJECT_DIR$/public/movable.js" />
         <option value="$PROJECT_DIR$/public/index.js" />
+        <option value="$PROJECT_DIR$/public/movable.js" />
+        <option value="$PROJECT_DIR$/public/pacman.js" />
       </list>
     </option>
   </component>
@@ -691,44 +692,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/ghost.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.892857" vertical-offset="963" max-vertical-offset="1564">
-          <caret line="68" column="23" selection-start-line="68" selection-start-column="17" selection-end-line="68" selection-end-column="23" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.107142" vertical-offset="5621" max-vertical-offset="6188">
-          <caret line="344" column="10" selection-start-line="344" selection-start-column="9" selection-end-line="344" selection-end-column="10" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/pacman.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.892857" vertical-offset="317" max-vertical-offset="3332">
-          <caret line="30" column="22" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="22" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/movable.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.535714" vertical-offset="7291" max-vertical-offset="11781">
-          <caret line="438" column="22" selection-start-line="438" selection-start-column="22" selection-end-line="438" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/assets/wall-t-RBL.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -754,10 +717,48 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/ghost.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-41.285713" vertical-offset="0" max-vertical-offset="1564">
+          <caret line="68" column="23" selection-start-line="68" selection-start-column="17" selection-end-line="68" selection-end-column="23" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.321428" vertical-offset="334" max-vertical-offset="6188">
+          <caret line="35" column="71" selection-start-line="35" selection-start-column="71" selection-end-line="35" selection-end-column="71" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41379312" vertical-offset="5472" max-vertical-offset="12342">
-          <caret line="336" column="89" selection-start-line="336" selection-start-column="89" selection-end-line="336" selection-end-column="89" />
+        <state vertical-scroll-proportion="-6.678571" vertical-offset="0" max-vertical-offset="12427">
+          <caret line="11" column="19" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/movable.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.142857" vertical-offset="8532" max-vertical-offset="11781">
+          <caret line="512" column="41" selection-start-line="512" selection-start-column="41" selection-end-line="512" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/pacman.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.20517242" vertical-offset="306" max-vertical-offset="3587">
+          <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>

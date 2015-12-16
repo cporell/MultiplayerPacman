@@ -510,8 +510,8 @@ function isCollision(rect1, rect2){
 function getSquareForObject(elementId){
     var coordinate;
     var givenElement = document.getElementById(elementId);
-    for (var i = 0; i < gridWidth; i++){
-        for (var j = 0; j < gridHeight; j++){
+    for (var i = 0; i < gridHeight; i++){
+        for (var j = 0; j < gridWidth; j++){
             var squareElement = document.getElementById("x_" + i + "-y_" + j);
             gridSquare = squareElement.getBoundingClientRect();
             givenRect = givenElement.getBoundingClientRect();

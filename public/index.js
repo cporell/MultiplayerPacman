@@ -8,7 +8,7 @@
 var isStartup = true;
 var socket = null;
 
-var gridWidth = 20;
+var gridWidth = 19;
 var gridHeight = 20;
 
 var gridSquareWidth = 30;
@@ -302,7 +302,6 @@ function setWallSprite(wallPosY, wallPosX)
             wallType = "l-NE";
         }
         else {
-            console.log("Adding special NE");
             wallType = "NE";
         }
     }
@@ -311,7 +310,6 @@ function setWallSprite(wallPosY, wallPosX)
             wallType = "l-SE";
         }
         else {
-            console.log("Adding special SE");
             wallType = "SE";
         }
     }
@@ -320,7 +318,6 @@ function setWallSprite(wallPosY, wallPosX)
             wallType = "l-NW";
         }
         else {
-            console.log("Adding special NW");
             wallType = "NW";
         }
     }
@@ -329,7 +326,6 @@ function setWallSprite(wallPosY, wallPosX)
             wallType = "l-SW";
         }
         else {
-            console.log("Adding special SW");
             wallType = "SW";
         }
     }
@@ -352,6 +348,15 @@ function setWallSprite(wallPosY, wallPosX)
         else {
             wallType = "4way";
         }
+    }
+
+    if (wallPosX == 10){
+        console.log("WallPosY = " + wallPosY);
+    }
+
+    if (wallPosX == 10 && wallPosY == 9){
+        console.log("GHOST BOX");
+        wallType = "ghost-box";
     }
 
     var strHTML = "<img src='assets/wall-" + wallType + ".png' class='wall-square'>";
