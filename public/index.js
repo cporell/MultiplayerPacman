@@ -27,6 +27,9 @@ var isGameStarted = false;
 
 var isActive;
 
+var timerInterval;
+var timerLength = 100;
+
 window.onfocus = function () { 
   isActive = true; 
 }; 
@@ -466,6 +469,21 @@ function connect(){
         receiveRestart(data);
     });
     socket.on('start ghost', function(data) {
+        if (!isGameStarted){
+            timerInterval = window.setInterval(function(){
+                timerLength--;
+                var timerElement = document.getElementById('timer');
+                timerElement.innerText = timerLength;
+                if (timerLength <= 0){
+                    try {
+                        stopGameWithTimer();
+                    }
+                    catch(err){
+                        clearInterval(timerInterval);
+                    }
+                }
+            }, 1000)
+        }
         isGameStarted = true;
         startGivenGhostNum(data.ghostNum);
         ghostsStarted++;
