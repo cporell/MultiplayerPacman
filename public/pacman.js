@@ -11,21 +11,33 @@ var startGhostsSent = 0;
 
 document.onkeydown = checkKey;
 
+var startGhostInterval = null;
+//document.getElementById("startButtonDiv").hidden = false;
+//var startButton = document.getElementById("startbutton");
+
+
+var startbuttonDIV = document.getElementById("startbutton");
+startbuttonDIV.innerHTML = "<form><button type='button' id='start' name='go'>START THE GAME!!</button></form>"
+
+startbuttonDIV.addEventListener('mousedown', function(){
+    pacmanObj.startMove();
+    startGhostInterval = window.setInterval(function() {
+        sendStartGhost();
+        startGhostsSent++;
+        if (startGhostsSent >= 4){
+            stopStartGhostInterval();
+        }
+    }, 2000);
+}, true);
+
 window.setInterval(function(){
     sendPacmanUpdate();
     //sendGhostsUpdate();
     }, 500);
 
-var startGhostInterval = window.setInterval(function() {
-    sendStartGhost();
-    startGhostsSent++;
-    if (startGhostsSent >= 4){
-        stopStartGhostInterval();
-    }
-}, 2000);
 
 function stopStartGhostInterval(){
-    clearInterval(startGhostInterval);
+    if(startGhostInterval) clearInterval(startGhostInterval);
 }
 
 socket.on('new ghost update', function (data) {
@@ -68,12 +80,12 @@ function sendBoardUpdate(x, y, value){
 
 function sendPacmanWin(){
     console.log("Pacman has won");
-    restartGame();
+    restartGame(true);
 }
 
 function sendPacmanLost(){
     console.log("Pacman has lost");
-    restartGame();
+    restartGame(false);
 }
 
 function isGameWon(){
@@ -90,6 +102,10 @@ function isGameWon(){
 }
 
 function checkKey(e) {
+
+    if(!pacmanObj.started){
+        return;
+    }
 
     e = e || window.event;
 

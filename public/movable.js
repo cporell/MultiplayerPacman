@@ -26,6 +26,7 @@ function character(theID, startingX, startingY, gifName) {
     this.image = null;
     this.animateFunction = null;
     this.powerPelletStatus = false;
+    this.started = false;
 
     this.distanceToCenter = 0;
 	this.isAdjusting = false;
@@ -65,6 +66,7 @@ function character(theID, startingX, startingY, gifName) {
 		}
 
 	    this.moveCharacter();
+	    this.started = true;
 	};
 
 	this.moveCharacter = function(){
@@ -409,6 +411,7 @@ function character(theID, startingX, startingY, gifName) {
 	    this.image.style.top = '0px';
 	    this.imageTop = this.image.style.top;
 	    this.imageLeft = this.image.style.left;
+	    this.currentDirection = null;
 		setTimeout(function(ghost){
 			console.log("ghost move");
 			ghost.startMove();
@@ -436,9 +439,17 @@ function character(theID, startingX, startingY, gifName) {
 
 		}
 
+		if(!this.started){
+			this.startMove();
+		}
+
 
 		if(!this.animateFunction){
 			this.moveCharacter();
+		}
+
+		if(this.powerPelletStatus != character.powerPelletStatus){
+			this.setPowerPelletStatus(character.powerPelletStatus);
 		}
 	};
 }

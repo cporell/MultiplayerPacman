@@ -270,7 +270,7 @@ function handleTable(req) {
             fillMaze();
             placeCharacters();
 
-            startCharacters();
+            //startCharacters();
             requestUpdates();
 
             isStartup = false;
@@ -368,7 +368,7 @@ function connect(){
         handleUpdatePlayers(cookieManager);
     });
     socket.on('restart', function(data){
-        receiveRestart();
+        receiveRestart(data);
     });
     socket.on('start ghost', function(data) {
         startGivenGhostNum(data.ghostNum);
@@ -403,8 +403,6 @@ function handleUpdatePlayers(cookieManager){
         lobbytext.innerText = "Start the game once at least one ghost has joined."
 
         // add the start button to the game
-        var startbuttonDIV = document.getElementById("startbutton");
-        startbuttonDIV.innerHTML = "<form><button type='submit' id='start' name='go'>START THE GAME!!</button></form>"
     }
     if (pacmanSet)
     {
@@ -580,11 +578,17 @@ function requestUpdates(){
     sendObjectToSockets('request updates', '');
 }
 
-function restartGame(){
-    socket.emit('restart');
+function restartGame(pacmanWon){
+    socket.emit('restart', pacmanWon);
 }
 
-function receiveRestart(){
-    console.log("Restart received");
-    window.location.assign(window.location.protocol + '//' + window.location.host);
+function receiveRestart(pacmanWon){
+    console.log("Restart received:", pacmanWon);
+    if(pacmanWon){
+        //window.location.assign(window.location.protocol + '//' + window.location.host);
+        window.location = "/pacmanWon.html";
+    }
+    else{
+        window.location = "/pacmanLost.html";
+    }
 }
