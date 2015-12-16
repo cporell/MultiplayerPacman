@@ -424,7 +424,7 @@ function character(theID, startingX, startingY, gifName) {
 	    this.imageLeft = this.image.style.left;
 	    this.currentDirection = null;
 		setTimeout(function(ghost){
-			console.log("ghost move");
+			console.log("ghost move (movable 427)");
 			ghost.startMove();
 		}, GHOST_TIMEOUT_TIME, this);
 	}
@@ -450,13 +450,15 @@ function character(theID, startingX, startingY, gifName) {
 
 		}
 
-		if(!this.started){
-			this.startMove();
-		}
+		if (this.theID == 'pacman-gif' && isGameStarted) {
+			if (!this.started) {
+				console.log("StartMove Movable 455");
+				this.startMove();
+			}
 
-
-		if(!this.animateFunction){
-			this.moveCharacter();
+			if (!this.animateFunction) {
+				this.moveCharacter();
+			}
 		}
 
 		if(this.powerPelletStatus != character.powerPelletStatus){
@@ -680,6 +682,7 @@ function startGivenGhostNum(num){
 	}
 	console.log("IsGhostControlled = " + isGhostControlled);
 	if (isGhostControlled) {
+		console.log("Starting ghost (movable 685)");
 		ghostsArray[num].startMove();
 	}
 }

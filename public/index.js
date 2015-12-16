@@ -23,6 +23,8 @@ var ghostsStarted = 0;
 
 var mazeTable;
 
+var isGameStarted = false;
+
 /*
 var pacmanStartingX = 1;
 var pacmanStartingY = 6;
@@ -284,6 +286,7 @@ function handleTable(req) {
 
 
 function startCharacters(){
+    console.log("Starting Pacman (index 287)");
     pacmanObj.startMove();
 
     /*
@@ -371,6 +374,7 @@ function connect(){
         receiveRestart(data);
     });
     socket.on('start ghost', function(data) {
+        isGameStarted = true;
         startGivenGhostNum(data.ghostNum);
         ghostsStarted++;
     });
@@ -531,6 +535,7 @@ function sendPacmanUpdate(){
 
 function handlePacmanUpdate(pacman){
     //console.log(pacman);
+    console.log("Handling pacman update");
     pacmanObj.updateCharacter(pacman.pacman);
 }
 
