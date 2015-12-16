@@ -13,6 +13,11 @@ var myGhost;
 
 document.onkeydown = checkKey;
 
+var mc = new Hammer(document.getElementById("maze"));
+
+// listen to events...
+mc.on("panend", checkSwipe);
+
 switch(ghostNum){
     case 1:
         myGhost = ghost1Obj;
@@ -28,6 +33,31 @@ switch(ghostNum){
         break;
 }
 
+
+function checkSwipe(e){
+    e.preventDefault();
+    console.log(e);
+    console.log(e.direction);
+
+    switch(e.direction){
+        case 8: 
+            checkKey({keyCode: '38'});
+            console.log("up");
+            break;
+        case 16: 
+            checkKey({keyCode: '40'});
+            console.log("down");
+            break;
+        case 2: 
+            checkKey({keyCode: '37'});
+            console.log("left");
+            break;
+        case 4: 
+            checkKey({keyCode: '39'});
+            console.log("right");
+            break;
+    }
+}
 
 function checkKey(e) {
 

@@ -163,6 +163,8 @@ app.get('/ghost', function (req, res) {
 });
 
 app.get('/pacman', function (req, res) {
+    pacman = null;
+    ghosts = null;
 
     if(cookieManager.pacman.length == 0){
 
@@ -308,6 +310,7 @@ io.on('connection', function (socket) {
         socket.emit('restart', data);
         socket.broadcast.emit('restart', data);
         cloneOriginalArray();
+        setTimeout(setup, 1000);
     });
 
   socket.on('send board update', function (data) {

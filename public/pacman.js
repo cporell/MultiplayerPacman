@@ -11,6 +11,12 @@ var startGhostsSent = 0;
 
 document.onkeydown = checkKey;
 
+
+var mc = new Hammer(document.getElementById("maze"));
+
+// listen to events...
+mc.on("panend", checkSwipe);
+
 var startGhostInterval = null;
 //document.getElementById("startButtonDiv").hidden = false;
 //var startButton = document.getElementById("startbutton");
@@ -99,6 +105,42 @@ function isGameWon(){
         }
     }
     return true;
+}
+
+
+
+function checkSwipe(e){
+    //e.preventDefault();
+    //console.log(e);
+    //console.log(e.direction);
+
+    var state = MovementEnum.UP;
+    if(Math.abs(e.deltaY) >= Math.abs(e.deltaX)){
+        state = (e.deltaY < 0) ?  MovementEnum.UP :  MovementEnum.DOWN;
+    }
+    else{
+        state = (e.deltaX < 0) ?  MovementEnum.LEFT :  MovementEnum.RIGHT;
+    }
+
+    switch(state){
+        case MovementEnum.UP: 
+            checkKey({keyCode: '38'});
+            console.log("up");
+            break;
+        case MovementEnum.DOWN: 
+            checkKey({keyCode: '40'});
+            console.log("down");
+            break;
+        case MovementEnum.LEFT: 
+            checkKey({keyCode: '37'});
+            console.log("left");
+            break;
+        case MovementEnum.RIGHT: 
+            checkKey({keyCode: '39'});
+            console.log("right");
+            break;
+    }
+    //document.getElementById("joystickDiv").innerHTML += state + "<br />";
 }
 
 function checkKey(e) {
