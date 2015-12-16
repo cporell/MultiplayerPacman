@@ -51,6 +51,7 @@ function character(theID, startingX, startingY, gifName) {
     this.lastFrame = this.now;
 	this.deltaT = this.now - this.lastFrame;
 	this.isGameHost = false;
+	this.powerPelletTimeout = null;
 
     this.placeCharacter = function (){
 	    var tableData = document.getElementById("x_" + this.startingX + "-y_" + this.startingY);
@@ -406,7 +407,10 @@ function character(theID, startingX, startingY, gifName) {
 
 		console.log("Power Pellet:", status);
 		if(status){
-			setTimeout(function(character){
+			if(this.powerPelletTimeout){
+				clearTimeout(this.powerPelletTimeout);
+			}
+			this.powerPelletTimeout = setTimeout(function(character){
 				character.changeGhostsToFlashing();
 			}, POWER_PELLET_TIME, this);
 			ghostsArray.forEach(function(g){
@@ -421,10 +425,13 @@ function character(theID, startingX, startingY, gifName) {
 	};
 
 	this.changeGhostsToFlashing = function(){
+		if(this.powerPelletTimeout){
+			clearTimeout(this.powerPelletTimeout);
+		}
 		ghostsArray.forEach(function(g){
 			g.image.src = "assets/blue-ghost.gif";
 		});
-		setTimeout(function (character){
+		this.powerPelletTimeout = setTimeout(function (character){
 			character.setPowerPelletStatus(false);
 		}, POWER_PELLET_TIME - POWER_PELLET_NO_FLASH_TIME, this);
 	};
