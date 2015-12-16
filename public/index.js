@@ -150,7 +150,7 @@ function setWallSprite(wallPosY, wallPosX)
 {
     // Check the N, S, E, and W tils adjacent to this one to determine which maze sprite to place.
     // Checks for being at map bounds are done at this time as well.
-    var boundings = [0, 0, 0, 0]; // N E S W
+    var boundings = [0, 0, 0, 0, 0, 0, 0, 0]; // N E S W NE NW SW SE
 
     // If the tile is on the map extremeties, set the appropriate boundings
 
@@ -189,6 +189,34 @@ function setWallSprite(wallPosY, wallPosX)
         boundings[1] = mazeTable[wallPosX][wallPosY + 1] === WALL_VALUE ? 1 : 0;
     }
 
+    if (isTop || isRight){
+        boundings[4] = 0;
+    }
+    else {
+        boundings[4] = mazeTable[wallPosX - 1][wallPosY + 1] === WALL_VALUE ? 1 : 0;
+    }
+
+    if (isTop || isLeft){
+        boundings[5] = 0;
+    }
+    else {
+        boundings[5] = mazeTable[wallPosX - 1][wallPosY - 1] === WALL_VALUE ? 1 : 0;
+    }
+
+    if (isBottom || isLeft){
+        boundings[6] = 0;
+    }
+    else {
+        boundings[6] = mazeTable[wallPosX + 1][wallPosY - 1] === WALL_VALUE ? 1 : 0;
+    }
+
+    if (isBottom || isRight){
+        boundings[7] = 0;
+    }
+    else {
+        boundings[7] = mazeTable[wallPosX + 1][wallPosY + 1] === WALL_VALUE ? 1 : 0;
+    }
+
     var wallType = "";
     // now run through the boundings array to see which wall we should draw
     if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 0)
@@ -214,31 +242,116 @@ function setWallSprite(wallPosY, wallPosX)
         wallType = "long-vert";
     } //
     if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 0) {
-        wallType = "t-TRB";
+        if (boundings[4] != 1 && boundings[7] == 1) {
+            wallType = "b-LT";
+        }
+        else if (boundings[4] == 1 && boundings[7] != 1) {
+            wallType = "b-LB";
+        }
+        else if (boundings[4] == 1 && boundings[7] == 1){
+            wallType = "TRB";
+        }
+        else {
+            wallType = "t-TRB";
+        }
     } // 
     if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 1) {
-        wallType = "t-RBL";
+        if (boundings[6] != 1 && boundings[7] == 1){
+            wallType = "b-TL";
+        }
+        else if (boundings[6] == 1 && boundings[7] != 1){
+            wallType = "b-TR";
+        }
+        else if (boundings[6] == 1 && boundings[7] == 1){
+            wallType = "RBL";
+        }
+        else {
+            wallType = "t-RBL";
+        }
     }
     if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 1) {
-        wallType = "t-TBL";
+        if (boundings[5] != 1 && boundings[6] == 1){
+            wallType = "b-RT";
+        }
+        else if (boundings[5] == 1 && boundings[6] != 1){
+            wallType = "b-RB";
+        }
+        else if (boundings[5] == 1 && boundings[6] == 1){
+            wallType = "TBL";
+        }
+        else {
+            wallType = "t-TBL";
+        }
     }
     if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 1) {
-        wallType = "t-TRL";
+        if (boundings[4] != 1 && boundings[5] == 1){
+            wallType = "b-BR";
+        }
+        else if (boundings[4] == 1 && boundings[5] != 1){
+            wallType = "b-BL";
+        }
+        else if (boundings[4] == 1 && boundings[5] == 1){
+            wallType = "TRL";
+        }
+        else {
+            wallType = "t-TRL";
+        }
     }
     if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 0 && boundings[3] == 0) {
-        wallType = "l-NE";
+        if (boundings[4] != 1) {
+            wallType = "l-NE";
+        }
+        else {
+            console.log("Adding special NE");
+            wallType = "NE";
+        }
     }
     if (boundings[0] == 0 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 0) {
-        wallType = "l-SE";
+        if (boundings[7] != 1) {
+            wallType = "l-SE";
+        }
+        else {
+            console.log("Adding special SE");
+            wallType = "SE";
+        }
     }
     if (boundings[0] == 1 && boundings[1] == 0 && boundings[2] == 0 && boundings[3] == 1) {
-        wallType = "l-NW";
+        if (boundings[5] != 1) {
+            wallType = "l-NW";
+        }
+        else {
+            console.log("Adding special NW");
+            wallType = "NW";
+        }
     }
     if (boundings[0] == 0 && boundings[1] == 0 && boundings[2] == 1 && boundings[3] == 1) {
-        wallType = "l-SW";
+        if (boundings[6] != 1) {
+            wallType = "l-SW";
+        }
+        else {
+            console.log("Adding special SW");
+            wallType = "SW";
+        }
     }
     if (boundings[0] == 1 && boundings[1] == 1 && boundings[2] == 1 && boundings[3] == 1) {
-        wallType = "4way";
+        if (boundings[4] == 1 && boundings[5] == 1 && boundings[6] == 1 && boundings[7] == 1){
+            wallType = "blank";
+        }
+        else if (boundings[4] != 1) {
+            wallType = "4way-TR";
+        }
+        else if (boundings[5] != 1){
+            wallType = "4way-TL";
+        }
+        else if (boundings[6] != 1){
+            wallType = "4way-BL";
+        }
+        else if (boundings[7] != 1){
+            wallType = "4way-BR";
+        }
+        else {
+            wallType = "4way";
+        }
     }
 
     var strHTML = "<img src='assets/wall-" + wallType + ".png' class='wall-square'>";
