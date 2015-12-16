@@ -403,16 +403,16 @@ io.on('connection', function (socket) {
   socket.on('stat update', function (data) {
       console.log(JSON.parse(data));
       stats = JSON.parse(data);
-      statManager.updateStats(cookieManager.pacman, stats.pacman);
-      statManager.updateStats(cookieManager.ghost1, stats.ghost1);
-      statManager.updateStats(cookieManager.ghost2, stats.ghost2);
-      statManager.updateStats(cookieManager.ghost3, stats.ghost3);
-      statManager.updateStats(cookieManager.ghost4, stats.ghost4);
+      statManager.updateStats(cookieManager.pacman, stats.pacman, true);
+      statManager.updateStats(cookieManager.ghost1, stats.ghost1, false);
+      statManager.updateStats(cookieManager.ghost2, stats.ghost2, false);
+      statManager.updateStats(cookieManager.ghost3, stats.ghost3, false);
+      statManager.updateStats(cookieManager.ghost4, stats.ghost4, false);
       console.log(JSON.stringify(statManager));
     });
 
   socket.on('get stats', function (data) {
-    socket.emit('stats received', JSON.stringify(statManager));
+    socket.emit('stats received', statManager);
   });
 
 });
@@ -421,7 +421,7 @@ var statManager = new statManager();
 function statManager(){
   this.statsForUser = [];
 
-  this.updateStats = function(cookie, stats){
+  this.updateStats = function(cookie, stats, isPacman){
     if(cookie.length == 0){
       return;
     }
@@ -435,6 +435,12 @@ function statManager(){
         userStat.powerPelletsEaten += stats.powerPelletsEaten;
         userStat.timesEatenPacman += stats.atePacman ? 1 : 0;
         userStat.timesEatenGhosts += stats.ghostsEaten;
+        if(isPacman){
+          userStat.timesPlayedAsPacman += 1;
+        }
+        else{
+          userStat.timesPlayedAsGhost += 1;
+        }
         console.log("Updated stats for " + usernames[cookie]);
       }
     }
@@ -446,7 +452,9 @@ function userStats(cookie, username){
   this.cookie = cookie;
   this.username = username;
   this.timesWonAsPacman = 0;
+  this.timesPlayedAsPacman = 0
   this.timesWonAsGhost = 0;
+  this.timesPlayedAsGhost = 0
   this.timesEatenPacman = 0;
   this.timesEatenGhosts = 0;
   this.pelletsEaten = 0;
