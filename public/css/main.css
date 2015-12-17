@@ -39,17 +39,16 @@ footer {
 
 div.lobby
 {
-    position: absolute;
-    float: left;
+    position: fixed;
     top: 0px;
     width: 200px;
-    left: 50px;
+    left: 0px;
     bottom: 0px;
 }
 
 div.maze
 {
-    position: absolute;
+    position: fixed;
     overflow-y: auto;
     top: 0px;
     bottom: 0px;
@@ -61,12 +60,11 @@ div.maze
 
 div.ui
 {
-    position: absolute;
-    float: right;
-    top: 30px;
+    position: fixed;
+    top: 0px;
     bottom: 0px;
-    right: 100px;
-    width: 200px;
+    right: 0px;
+    width: 250px;
 }
 
 .lobbytext
