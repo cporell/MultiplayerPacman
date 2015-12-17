@@ -21,11 +21,23 @@ body
 .gameover
 {
     font-size: 4em;
-    background-color: #7CAC2F; 
+    background-color: black; 
     top: 0px;
     left: 0px;
     right: 0px;
-    height: 200px;    
+    height: 100px;    
+}
+
+input[type="text"], input[type="button"]
+{
+    font-family: Arcade;
+    color: black;
+}
+
+header > h1
+{
+    font-family: Arcade;
+    color: white;
 }
 
 footer {
@@ -35,6 +47,12 @@ footer {
     left: 0px;
     right: 0px;
     height: 200px; 
+}
+
+.stats
+{
+    font-family: Arcade;
+    color: white;
 }
 
 div.lobby
@@ -127,9 +145,9 @@ h3 > span
 .header-note
 {
   margin: 5px 0 0 0;
-  font-family: 'Raleway';
-  color: #284907;
-  font-size: 1.25em;
+  font-family: Arcade;
+  color: white;
+  font-size: 1.2em;
 }
 
 .copyright
@@ -212,8 +230,16 @@ table.stats {
 }
 
 table.stats th, table.stats td {
+    font-family: Arcade;
+    font-size: 0.7em;
     text-align: left;
     padding: 8px;
+}
+
+div > h1 {
+    font-size: 1.5em;
+    font-family: Arcade;
+    color: white;
 }
 
 table.stats tr:nth-child(even){background-color: #f2f2f2}
