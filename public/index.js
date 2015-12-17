@@ -28,7 +28,7 @@ var isGameStarted = false;
 var isActive;
 
 var timerInterval;
-var timerLength = 100;
+var timerLength = 150;
 
 window.onfocus = function () { 
   isActive = true; 
@@ -328,11 +328,11 @@ function setWallSprite(wallPosY, wallPosX)
     }
 
     if (wallPosX == 10){
-        console.log("WallPosY = " + wallPosY);
+        //console.log("WallPosY = " + wallPosY);
     }
 
     if (wallPosX == 10 && wallPosY == 9){
-        console.log("GHOST BOX");
+        //console.log("GHOST BOX");
         wallType = "ghost-box";
     }
 
@@ -359,10 +359,10 @@ function handleTable(req) {
     }
 
     if(req.status === 200) {
-        //console.log("Handling table");
+        ////console.log("Handling table");
         if (isStartup) {
             mazeTable = eval(req.responseText);
-            //console.log(mazeTable);
+            ////console.log(mazeTable);
             createMaze();
             fillMaze();
             placeCharacters();
@@ -381,7 +381,7 @@ function handleTable(req) {
 
 
 function startCharacters(){
-    console.log("Starting Pacman (index 287)");
+    //console.log("Starting Pacman (index 287)");
     pacmanObj.startMove();
 
     /*
@@ -442,27 +442,27 @@ function connect(){
 
     socket.on('new pacman update', function (data) {
         pacman = parseObjectFromSockets(data.pacman);
-        //console.log(pacman);
+        ////console.log(pacman);
         if(pacman){
             handlePacmanUpdate(pacman);
         }
     });
     socket.on('new ghosts update', function (data) {
         ghosts = parseObjectFromSockets(data.ghosts);
-        //console.log(ghosts);
+        ////console.log(ghosts);
         if(ghosts){
             handleGhostsUpdate(ghosts);
         }
     });
     socket.on('new board update', function (data) {
         board = parseObjectFromSockets(data.board);
-        //console.log(board);
+        ////console.log(board);
         handleBoardUpdate(board);
     });
 
     socket.on('new socket opened', function (cookieManager) {
         //cookieManager = parseObjectFromSockets(data);
-        console.log(cookieManager);
+        //console.log(cookieManager);
         handleUpdatePlayers(cookieManager);
     });
     socket.on('restart', function(data){
@@ -493,7 +493,7 @@ function connect(){
 }
 
 function sendObjectToSockets(updateName, object){
-    //console.log(object);
+    ////console.log(object);
     socket.emit(updateName, JSON.stringify(object));
 }
 
@@ -503,7 +503,7 @@ function parseObjectFromSockets(jsonString){
 
 function handleUpdatePlayers(cookieManager){
     var cookie = getCookie("pacmanGame");
-    console.log("Who are you?", cookie);
+    //console.log("Who are you?", cookie);
 
     // border around YOUR char, face on ANY TAKEN char
 
@@ -512,7 +512,7 @@ function handleUpdatePlayers(cookieManager){
 
     var pacmanSet = cookieManager.pacman.length > 0;
     if(pacmanSet && cookieManager.pacman === cookie){
-        console.log("You are pacman");
+        //console.log("You are pacman");
         // put border
         pacbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
         var lobbytext = document.getElementById("lobbytext");
@@ -533,7 +533,7 @@ function handleUpdatePlayers(cookieManager){
     // GHOST 1
     var ghost1Set = cookieManager.ghost1.length > 0;
     if(ghost1Set && cookieManager.ghost1 === cookie){
-        console.log("You are ghost1");
+        //console.log("You are ghost1");
         // put border
         var ghostbutton = document.getElementById("ghost1button");
         ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
@@ -561,7 +561,7 @@ function handleUpdatePlayers(cookieManager){
     // GHOST 2
     var ghost2Set = cookieManager.ghost2.length > 0;
     if(ghost2Set && cookieManager.ghost2 === cookie){
-        console.log("You are ghost2");
+        //console.log("You are ghost2");
         // put border
         var ghostbutton = document.getElementById("ghost2button");
         ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
@@ -589,7 +589,7 @@ function handleUpdatePlayers(cookieManager){
     // GHOST 3
     var ghost3Set = cookieManager.ghost3.length > 0;
     if(ghost3Set && cookieManager.ghost3 === cookie){
-        console.log("You are ghost3");
+        //console.log("You are ghost3");
         // put border
         var ghostbutton = document.getElementById("ghost3button");
         ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
@@ -617,7 +617,7 @@ function handleUpdatePlayers(cookieManager){
     // GHOST 4
     var ghost4Set = cookieManager.ghost4.length > 0;
     if(ghost4Set && cookieManager.ghost4 === cookie){
-        console.log("You are ghost4");
+        //console.log("You are ghost4");
         // put border
         var ghostbutton = document.getElementById("ghost4button");
         ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
@@ -661,8 +661,8 @@ function sendPacmanUpdate(){
 //sendghostUpdate();
 
 function handlePacmanUpdate(pacman){
-    //console.log(pacman);
-    console.log("Handling pacman update");
+    ////console.log(pacman);
+    //console.log("Handling pacman update");
     pacmanObj.updateCharacter(pacman.pacman);
 }
 
@@ -693,7 +693,7 @@ function sendGhostsUpdate(){
 //sendGhostsUpdate();
 
 function handleGhostsUpdate(ghosts){
-    //console.log("test");
+    ////console.log("test");
     ghost1Obj.updateCharacter(ghosts.ghost1);
     ghost2Obj.updateCharacter(ghosts.ghost2);
     ghost3Obj.updateCharacter(ghosts.ghost3);
@@ -704,7 +704,7 @@ function handleGhostsUpdate(ghosts){
 function sendBoardUpdate(x, y, value){
     
     /*board = {x: x, y: y, value: value};
-    console.log(board);
+    //console.log(board);
     sendObjectToSockets('send board update', board);*/
 }
 
@@ -723,7 +723,7 @@ function restartGame(pacmanWon){
 }
 
 function receiveRestart(pacmanWon){
-    console.log("Restart received:", pacmanWon);
+    //console.log("Restart received:", pacmanWon);
     if(pacmanWon){
         //window.location.assign(window.location.protocol + '//' + window.location.host);
         window.location = "/pacmanWon.html";

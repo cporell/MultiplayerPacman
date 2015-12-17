@@ -31,7 +31,7 @@ startbuttonDIV.addEventListener('mousedown', function(){
     startGhostInterval = window.setInterval(function() {
         sendStartGhost();
         startGhostsSent++;
-        console.log("Ghost sent", startGhostsSent);
+        //console.log("Ghost sent", startGhostsSent);
         if (startGhostsSent >= 4){
             stopStartGhostInterval();
         }
@@ -55,17 +55,17 @@ function stopStartGhostInterval(){
 
 socket.on('new ghost update', function (data) {
     ghost = parseObjectFromSockets(data.ghost);
-    //console.log(ghost);
+    ////console.log(ghost);
     handleGhostUpdate(ghost);
 });
 
 pacmanObj.isGameHost = true;
 
 function handleGhostUpdate(ghost){
-    console.log("test", ghost);
+    //console.log("test", ghost);
     switch(ghost.number){
         case 1:
-            console.log("In ghost 1");
+            //console.log("In ghost 1");
             ghost1Obj.setInput(ghost.direction);
             break;
         case 2:
@@ -87,12 +87,12 @@ function handleGhostsUpdate(ghosts){
 function sendBoardUpdate(x, y, value){
     
     board = {x: x, y: y, value: value};
-    //console.log(board);
+    ////console.log(board);
     sendObjectToSockets('send board update', board);
 }
 
 function sendPacmanWin(){
-    console.log("Pacman has won");
+    //console.log("Pacman has won");
     pacmanObj.stats.pacmanWon = true;
     stats = {pacman: pacmanObj.stats, ghost1: ghost1Obj.stats, ghost2: ghost2Obj.stats, ghost3: ghost3Obj.stats, ghost4: ghost4Obj.stats, }
     sendObjectToSockets('stat update', stats);
@@ -100,7 +100,7 @@ function sendPacmanWin(){
 }
 
 function sendPacmanLost(){
-    console.log("Pacman has lost");
+    //console.log("Pacman has lost");
     pacmanObj.stats.pacmanWon = false;
     ghost1Obj.stats.ghostWon = true;
     ghost2Obj.stats.ghostWon = true;
@@ -116,7 +116,7 @@ function isGameWon(){
         for (var j = 0; j < mazeTable[0].length; j++){
             var tableData = mazeTable[i][j];
             if (tableData == PELLET_VALUE || tableData == POWER_PELLET_VALUE){
-                console.log("Pellet at " + i + ", " + j);
+                //console.log("Pellet at " + i + ", " + j);
                 return false;
             }
         }
@@ -128,8 +128,8 @@ function isGameWon(){
 
 function checkSwipe(e){
     //e.preventDefault();
-    //console.log(e);
-    //console.log(e.direction);
+    ////console.log(e);
+    ////console.log(e.direction);
 
     var state = MovementEnum.UP;
     if(Math.abs(e.deltaY) >= Math.abs(e.deltaX)){
@@ -142,19 +142,19 @@ function checkSwipe(e){
     switch(state){
         case MovementEnum.UP: 
             checkKey({keyCode: '38'});
-            console.log("up");
+            //console.log("up");
             break;
         case MovementEnum.DOWN: 
             checkKey({keyCode: '40'});
-            console.log("down");
+            //console.log("down");
             break;
         case MovementEnum.LEFT: 
             checkKey({keyCode: '37'});
-            console.log("left");
+            //console.log("left");
             break;
         case MovementEnum.RIGHT: 
             checkKey({keyCode: '39'});
-            console.log("right");
+            //console.log("right");
             break;
     }
     //document.getElementById("joystickDiv").innerHTML += state + "<br />";

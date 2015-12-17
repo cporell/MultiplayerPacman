@@ -68,7 +68,7 @@ function character(theID, startingX, startingY, gifName) {
 
 
 	this.startMove = function(){
-		console.log(this.theID);
+		//console.log(this.theID);
 
 	    this.image.style.position= 'relative';
 	    this.image.style.left = '0px';
@@ -78,7 +78,7 @@ function character(theID, startingX, startingY, gifName) {
     	this.deltaT = this.now - this.lastFrame;
 
 		if (this.theID !== 'pacman-gif'){
-			console.log("Moving to square");
+			//console.log("Moving to square");
 			moveImageToSquare(this.theID, ghostSpawnPointX, ghostSpawnPointY);
 			this.currentDirection = chooseRandomDirection(ghostSpawnPointX, ghostSpawnPointY, MovementEnum.DOWN);
 		}
@@ -92,9 +92,9 @@ function character(theID, startingX, startingY, gifName) {
 
 		this.now = +new Date;
     	this.deltaT = this.now - this.lastFrame;
-    	//console.log(this.deltaT);
+    	////console.log(this.deltaT);
 
-		//console.log(this);
+		////console.log(this);
 	    this.moveImage();
 
         
@@ -204,16 +204,16 @@ function character(theID, startingX, startingY, gifName) {
 	    */
 	    switch(this.currentDirection){
 	        case MovementEnum.UP:
-	            this.image.style.top = parseInt(this.image.style.top) - (pixelsPerTick * this.deltaT/20) + 'px';
+	            this.image.style.top = parseInt(this.image.style.top) - parseInt(pixelsPerTick * this.deltaT/20) + 'px';
 	            break;
 	        case MovementEnum.RIGHT:
-	            this.image.style.left = parseInt(this.image.style.left) +  (pixelsPerTick * this.deltaT/20) + 'px';
+	            this.image.style.left = parseInt(this.image.style.left) +  parseInt(pixelsPerTick * this.deltaT/20) + 'px';
 	            break;
 	        case MovementEnum.DOWN:
-	            this.image.style.top = parseInt(this.image.style.top) +  (pixelsPerTick * this.deltaT/20) + 'px';
+	            this.image.style.top = parseInt(this.image.style.top) +  parseInt(pixelsPerTick * this.deltaT/20) + 'px';
 	            break;
 	        case MovementEnum.LEFT:
-	            this.image.style.left = parseInt(this.image.style.left) -  (pixelsPerTick * this.deltaT/20) + 'px';
+	            this.image.style.left = parseInt(this.image.style.left) -  parseInt(pixelsPerTick * this.deltaT/20) + 'px';
 	            break;
 	    }
 
@@ -229,17 +229,17 @@ function character(theID, startingX, startingY, gifName) {
 						this.currentDirection = MovementEnum.STOPPED;
 					}
 					else {
-						console.log(this.currentInput, this.isHittingWall(this.currentInput), areDirectionsOpposites(this.currentDirection, this.currentInput));
+						//console.log(this.currentInput, this.isHittingWall(this.currentInput), areDirectionsOpposites(this.currentDirection, this.currentInput));
 						if (this.currentInput == null || this.isHittingWall(this.currentInput) || areDirectionsOpposites(this.currentDirection, this.currentInput)) {
 
 							this.currentDirection = chooseRandomDirection(this.currentX, this.currentY, this.currentDirection);
 							this.currentInput = null;
-							console.log("ghost moved random");
+							//console.log("ghost moved random");
 						}
 						else {
 							this.currentDirection = this.currentInput;
 							this.currentInput = null;
-							console.log("ghost moved input");
+							//console.log("ghost moved input");
 						}
 					}
 				}
@@ -299,7 +299,7 @@ function character(theID, startingX, startingY, gifName) {
 	this.checkInput = function(){
 	    if (this.currentDirection == MovementEnum.STOPPED) {
 			if (this.currentInput != null) {
-				//console.log("Changing ghost direction")
+				////console.log("Changing ghost direction")
 				this.changeDirection(this.currentInput);
 				this.currentInput = null;
 			}
@@ -309,7 +309,7 @@ function character(theID, startingX, startingY, gifName) {
 
 
 	this.setInput = function(input){
-		console.log("Setting input", input);
+		//console.log("Setting input", input);
 		this.currentInput = input;
 		this.lastInput = input;
 		//this.moveCharacter();
@@ -335,7 +335,7 @@ function character(theID, startingX, startingY, gifName) {
 
 	this.getDistanceToCenter = function(pacmanId, squareX, squareY){
 	    var pacmanElement = document.getElementById(pacmanId);
-	    //console.log(pacmanId, squareX, squareY);
+	    ////console.log(pacmanId, squareX, squareY);
 	    var gridSquareElement = document.getElementById("x_" + squareX + "-y_" + squareY);
 	    if(gridSquareElement == null) return;
 	    var pacmanRect = pacmanElement.getBoundingClientRect();
@@ -370,7 +370,7 @@ function character(theID, startingX, startingY, gifName) {
 	    if (!this.isAdjusting || !this.isAdjustingIntersection) {
 
 	        if (!this.isHittingWall(newDirection)) {
-	        	//console.log("Here");
+	        	////console.log("Here");
 	            this.currentDirection = newDirection;
 	            this.changeImageRotation(newDirection);
 	        }
@@ -441,7 +441,7 @@ function character(theID, startingX, startingY, gifName) {
 	this.setPowerPelletStatus = function(status){
 		this.powerPelletStatus = status;
 
-		console.log("Power Pellet:", status);
+		//console.log("Power Pellet:", status);
 		if(status){
 			if(this.powerPelletTimeout){
 				clearTimeout(this.powerPelletTimeout);
@@ -473,7 +473,7 @@ function character(theID, startingX, startingY, gifName) {
 	};
 
 	this.restartGhost = function(){
-		console.log("restartGhost");
+		//console.log("restartGhost");
 		clearTimeout(this.animateFunction);
 	    this.image.style.left = '0px';
 	    this.image.style.top = '0px';
@@ -481,13 +481,13 @@ function character(theID, startingX, startingY, gifName) {
 	    this.imageLeft = this.image.style.left;
 	    this.currentDirection = null;
 		setTimeout(function(ghost){
-			console.log("ghost move (movable 427)");
+			//console.log("ghost move (movable 427)");
 			ghost.startMove();
 		}, GHOST_TIMEOUT_TIME, this);
 	}
 
 	this.updateCharacter = function(character){
-		//console.log(character.image);
+		////console.log(character.image);
 		//this.imageTop = character.imageTop;
 		//this.imageLeft = character.imageLeft;
 
@@ -502,14 +502,14 @@ function character(theID, startingX, startingY, gifName) {
 		this.setInput(character.lastInput);
 		this.currentDirection = character.currentDirection;
 		if(this.theID === 'pacman-gif'){
-			//console.log("Pacman changing: " + character.lastInput);
+			////console.log("Pacman changing: " + character.lastInput);
 			if(this.areOpposites) this.changeDirection(character.lastInput);
 
 		}
 
 		if (this.theID == 'pacman-gif' && isGameStarted) {
 			if (!this.started) {
-				console.log("StartMove Movable 455");
+				//console.log("StartMove Movable 455");
 				this.startMove();
 			}
 
@@ -704,9 +704,9 @@ function hasHitGhost(ghostHit){
 }
 
 function moveImageToSquare(imageElementId, newSquareX, newSquareY){
-	console.log(imageElementId);
-	console.log(newSquareX);
-	console.log(newSquareY);
+	//console.log(imageElementId);
+	//console.log(newSquareX);
+	//console.log(newSquareY);
 	var imageElement = document.getElementById(imageElementId);
 	var imageSquare = getSquareForObject(imageElementId);
 	var xDistance = newSquareX - imageSquare.x;
@@ -720,31 +720,31 @@ function moveImageToSquare(imageElementId, newSquareX, newSquareY){
 
 function startGivenGhostNum(num){
 	var isGhostControlled;
-	console.log("Starting ghost " + num);
+	//console.log("Starting ghost " + num);
 	switch(num){
 		case '0':
-			console.log("Ghost 1");
+			//console.log("Ghost 1");
 			isGhostControlled = ghost1Obj.isControlled;
 			break;
 		case '1':
-			console.log("Ghost 2");
+			//console.log("Ghost 2");
 			isGhostControlled = ghost2Obj.isControlled;
 			break;
 		case '2':
-			console.log("Ghost 3");
+			//console.log("Ghost 3");
 			isGhostControlled = ghost3Obj.isControlled;
 			break;
 		case '3':
-			console.log("Ghost 4");
+			//console.log("Ghost 4");
 			isGhostControlled = ghost4Obj.isControlled;
 			break;
 		default:
-			console.log("FAILED");
+			//console.log("FAILED");
 			break;
 	}
-	console.log("IsGhostControlled = " + isGhostControlled);
+	//console.log("IsGhostControlled = " + isGhostControlled);
 	if (isGhostControlled) {
-		console.log("Starting ghost (movable 685)");
+		//console.log("Starting ghost (movable 685)");
 		ghostsArray[num].startMove();
 	}
 }

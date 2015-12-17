@@ -12,7 +12,7 @@ function connect(){
     }
 
     socket.on('stats received', function (statManager) {
-        console.log(statManager);
+        //console.log(statManager);
 
         statManager.statsForUser.sort(function(a, b) {
           var result = b.timesWonAsPacman - a.timesWonAsPacman;
