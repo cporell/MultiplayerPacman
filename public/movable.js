@@ -739,3 +739,7 @@ function startGivenGhostNum(num){
 		ghostsArray[num].startMove();
 	}
 }
+
+function getPathToSpawn(){
+
+}
