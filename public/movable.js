@@ -601,6 +601,10 @@ function setPixelsPerTick(){
 }
 
 function chooseRandomDirection(squareX, squareY, currentDirection){
+	if(squareX == -1 || squareY == -1){
+		return MovementEnum.STOPPED;
+	}
+
 	var squareAbove = getNextSquare(squareX, squareY, MovementEnum.UP);
 	var squareAboveData = mazeTable[squareAbove.x][squareAbove.y];
 
