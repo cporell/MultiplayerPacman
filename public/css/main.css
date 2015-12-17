@@ -202,7 +202,7 @@ td{
   padding: 0;
   border-collapse: collapse;
   margin: 0;
-  border: 1px solid black;
+  border: none;
 }
 
 
@@ -295,6 +295,8 @@ button > img
     max-width: 30px;
     min-height: 30px;
     min-width: 30px;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 .wall-square
@@ -307,11 +309,12 @@ button > img
     min-height: 30px;
     min-width: 30px;
     */
-    height: 28px;
-    width: 28px;
-    overflow: hidden;
+    height: 30px;
+    width: 30px;
     border: none;
     border-collapse: none;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 .wall
