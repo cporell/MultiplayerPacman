@@ -310,6 +310,9 @@ function setWallSprite(wallPosY, wallPosX)
         if (boundings[4] == 1 && boundings[5] == 1 && boundings[6] == 1 && boundings[7] == 1){
             wallType = "blank";
         }
+        else if (boundings[4] != 1 && boundings[5] != 1){
+            wallType = "4way-T";
+        }
         else if (boundings[4] != 1) {
             wallType = "4way-TR";
         }

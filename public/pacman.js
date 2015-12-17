@@ -51,6 +51,7 @@ function stopGameWithTimer(){
 
 function stopStartGhostInterval(){
     if(startGhostInterval) clearInterval(startGhostInterval);
+    console.log("Ghost interval stopped");
 }
 
 socket.on('new ghost update', function (data) {
