@@ -8,8 +8,8 @@ MovementEnum = {
 }
 
 var pixelsPerTick = 2;
-var POWER_PELLET_TIME = 10000; //10 seconds
-var POWER_PELLET_NO_FLASH_TIME = 7000;
+var POWER_PELLET_TIME = 6000; //6 seconds
+var POWER_PELLET_NO_FLASH_TIME = 4000;
 var GHOST_TIMEOUT_TIME = 5000; //10 seconds
 var TOTOAL_GHOSTS = 4;
 
