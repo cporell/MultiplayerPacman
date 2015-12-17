@@ -62,23 +62,23 @@ socket.on('new ghost update', function (data) {
 pacmanObj.isGameHost = true;
 
 function handleGhostUpdate(ghost){
-    if(isActive){
-        switch(ghost.number){
-            case 1:
-                ghost1Obj.setInput(ghost.direction);
-                break;
-            case 2:
-                ghost2Obj.setInput(ghost.direction);
-                break;
-            case 3:
-                ghost3Obj.setInput(ghost.direction);
-                break;
-            case 4:
-                ghost4Obj.setInput(ghost.direction);
-                break;
-        }
-        sendGhostsUpdate();
+    console.log("test", ghost);
+    switch(ghost.number){
+        case 1:
+            console.log("In ghost 1");
+            ghost1Obj.setInput(ghost.direction);
+            break;
+        case 2:
+            ghost2Obj.setInput(ghost.direction);
+            break;
+        case 3:
+            ghost3Obj.setInput(ghost.direction);
+            break;
+        case 4:
+            ghost4Obj.setInput(ghost.direction);
+            break;
     }
+    sendGhostsUpdate();
 }
 
 function handleGhostsUpdate(ghosts){

@@ -229,13 +229,17 @@ function character(theID, startingX, startingY, gifName) {
 						this.currentDirection = MovementEnum.STOPPED;
 					}
 					else {
+						console.log(this.currentInput, this.isHittingWall(this.currentInput), areDirectionsOpposites(this.currentDirection, this.currentInput));
 						if (this.currentInput == null || this.isHittingWall(this.currentInput) || areDirectionsOpposites(this.currentDirection, this.currentInput)) {
+
 							this.currentDirection = chooseRandomDirection(this.currentX, this.currentY, this.currentDirection);
 							this.currentInput = null;
+							console.log("ghost moved random");
 						}
 						else {
 							this.currentDirection = this.currentInput;
 							this.currentInput = null;
+							console.log("ghost moved input");
 						}
 					}
 				}
@@ -305,6 +309,7 @@ function character(theID, startingX, startingY, gifName) {
 
 
 	this.setInput = function(input){
+		console.log("Setting input", input);
 		this.currentInput = input;
 		this.lastInput = input;
 		//this.moveCharacter();
