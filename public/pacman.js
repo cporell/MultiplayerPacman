@@ -31,6 +31,7 @@ startbuttonDIV.addEventListener('mousedown', function(){
     startGhostInterval = window.setInterval(function() {
         sendStartGhost();
         startGhostsSent++;
+        console.log("Ghost sent", startGhostsSent);
         if (startGhostsSent >= 4){
             stopStartGhostInterval();
         }
