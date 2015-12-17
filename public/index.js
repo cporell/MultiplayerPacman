@@ -539,7 +539,7 @@ function handleUpdatePlayers(cookieManager){
         ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
         var lobbytext = document.getElementById("lobbytext");
         lobbytext.innerText = "Pac-Man will start the game when ready";
-        var startmusic = new Audio("audio/pacman_intermission.wav");
+        var startmusic = new Audio("audio/pacman_eatghost.wav");
         startmusic.play();
 
     }
@@ -567,7 +567,7 @@ function handleUpdatePlayers(cookieManager){
         ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
         var lobbytext = document.getElementById("lobbytext");
         lobbytext.innerText = "Pac-Man will start the game when ready";
-        var startmusic = new Audio("audio/pacman_intermission.wav");
+        var startmusic = new Audio("audio/pacman_eatghost.wav");
         startmusic.play();
 
     }
@@ -595,7 +595,7 @@ function handleUpdatePlayers(cookieManager){
         ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
         var lobbytext = document.getElementById("lobbytext");
         lobbytext.innerText = "Pac-Man will start the game when ready";
-        var startmusic = new Audio("audio/pacman_intermission.wav");
+        var startmusic = new Audio("audio/pacman_eatghost.wav");
         startmusic.play();
 
     }
@@ -623,7 +623,7 @@ function handleUpdatePlayers(cookieManager){
         ghostbutton.setAttribute("style", "border-style: ridge; border-width: 10px");
         var lobbytext = document.getElementById("lobbytext");
         lobbytext.innerText = "Pac-Man will start the game when ready";
-        var startmusic = new Audio("audio/pacman_intermission.wav");
+        var startmusic = new Audio("audio/pacman_eatghost.wav");
         startmusic.play();
 
     }
